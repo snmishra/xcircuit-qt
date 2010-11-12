@@ -15,6 +15,7 @@
 #include <cstring>
 #include <ctime>
 #include <cctype>
+#include <stdint.h>
 #include <pwd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -441,7 +442,7 @@ void getfile(QAction* a, void* mode, void* crashfn)
    };
 
    char *promptstr = NULL;
-   int idx = (long)mode;
+   int idx = (intptr_t)mode;
 
    if (is_page(topobject) == -1) {
       Wprintf("Can only read file into top-level page!");
