@@ -441,7 +441,7 @@ void getfile(QAction* a, void* mode, void* crashfn)
    };
 
    char *promptstr = NULL;
-   int idx = (int)mode;
+   int idx = (long)mode;
 
    if (is_page(topobject) == -1) {
       Wprintf("Can only read file into top-level page!");
@@ -1508,7 +1508,7 @@ bool loadfile(short mode, int libnum, const QString & filename)
 
          /* Check for file extension, and remove if "ps". */
 
-         if ((pdchar = strchr(str, '.')) != NULL)
+         if ((pdchar = strchr(str.data(), '.')) != NULL)
 	    if (!strcmp(pdchar + 1, "ps")) *pdchar = '\0';
 
          xobjs.pagelist[areawin->page].filename = str;
@@ -1516,7 +1516,7 @@ bool loadfile(short mode, int libnum, const QString & filename)
          /* If the name has a path component, use only the root		*/
          /* for the object name, but the full path for the filename.	*/
 
-         if ((pdchar = strrchr(str, '/')) != NULL)
+         if ((pdchar = strrchr(str.data(), '/')) != NULL)
             sprintf(topobject->name, "%s", pdchar + 1);
          else
             sprintf(topobject->name, "%s", str.data());
