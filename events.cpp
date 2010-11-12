@@ -91,14 +91,12 @@ bool recursefind(objectptr parent, objectptr suspect)
 void transferselects()
 {
    short locselects;
-   objinstptr tobj;
    XPoint newpos;
 
    if (areawin->editstack->parts == 0) return;
 
    if (eventmode == MOVE_MODE || eventmode == COPY_MODE || 
-		eventmode == UNDO_MODE || eventmode == CATMOVE_MODE) {
-      short ps = topobject->parts;
+                eventmode == UNDO_MODE || eventmode == CATMOVE_MODE) {
 
       freeselects();
 
@@ -147,7 +145,6 @@ void setpage(bool killselects)
 
 int changepage(short pagenumber)
 {
-   short npage;
    objectptr pageobj;
    u_char undo_type;
 
@@ -468,10 +465,8 @@ void resetbutton(QAction*, void* pageno_, void*)
 
 void trackpan(int x, int y)
 {
-   long newpx, newpy;
    XPoint newpos;
-   short savey = areawin->pcorner.y;
-   short savex = areawin->pcorner.x;
+   XPoint save = areawin->pcorner;
 
    newpos.x = areawin->origin.x - x;
    newpos.y = y - areawin->origin.y;
@@ -479,15 +474,13 @@ void trackpan(int x, int y)
    areawin->pcorner.x += newpos.x / areawin->vscale;
    areawin->pcorner.y += newpos.y / areawin->vscale;
 
-   /// \todo
+   /// \todo trackpan
+   Q_UNUSED(save);
 #if 0
    areawin->scrollbarh->update();
    areawin->scrollbarv->update();
-#endif
 
-#if 0
-   areawin->pcorner.x = savex;
-   areawin->pcorner.y = savey;
+   areawin->pcorner = save;
 #endif
 }
 
@@ -506,6 +499,8 @@ void postzoom()
 
 void zoominbox(int x, int y)
 {
+   Q_UNUSED(x);
+   Q_UNUSED(y);
    float savescale;
    float delxscale, delyscale;
    XPoint savell;
@@ -579,6 +574,8 @@ void zoominrefresh(int x, int y)
 
 void zoomoutbox(int x, int y)
 {
+   Q_UNUSED(x);
+   Q_UNUSED(y);
    float savescale;
    float delxscale, delyscale, scalefac;
    XPoint savell;
@@ -2652,7 +2649,7 @@ void drag(int x, int y)
 /* Wrapper for drag() for xlib callback compatibility.	*/
 /*------------------------------------------------------*/
 
-void xlib_drag(Widget w, caddr_t clientdata, QEvent* *event)
+void xlib_drag(Widget, caddr_t, QEvent* *event)
 {
    XButtonEvent *bevent = (XButtonEvent *)event;
    drag(bevent->x(), bevent->y());
@@ -2892,7 +2889,7 @@ void edit(int x, int y)
    if (areawin->selects == 0)
       return;
    else if (areawin->selects != 1) { /* Multiple object edit */
-      int seltype, selnum;
+      int selnum;
       short *selectlist, selrefno;
 
       /* Find the closest part to use as a reference */
@@ -3546,6 +3543,7 @@ void elementvflip(XPoint *position)
 
 void deletebutton(int x, int y)
 {
+   Q_UNUSED(x); Q_UNUSED(y);
    if (checkselect(ALL_TYPES)) {
       standard_element_delete();
       calcbbox(areawin->topinstance);
@@ -3780,6 +3778,7 @@ short *xc_undelete(objinstptr thisinstance, objectptr delobj, 	short *olist)
 
 void printname(objectptr curobject)
 {
+    Q_UNUSED(curobject);
 #if 0
    char editstr[10], pagestr[10];
    short ispage;
@@ -4289,16 +4288,14 @@ void splineeditpush(splineptr lastspline)
 
 void polyeditpush(polyptr lastpoly)
 {
-   polyptr *newpoly;
-
-   newpoly = areawin->editstack->append(new polygon(*lastpoly));
+   areawin->editstack->append(new polygon(*lastpoly));
 }
 
 /*--------------------------------------*/
 
 void patheditpush(pathptr lastpath)
 {
-   pathptr *newpath = areawin->editstack->append(new path(*lastpath));
+   areawin->editstack->append(new path(*lastpath));
 }
 
 /*--------------------------------------------------------------*/
@@ -4560,8 +4557,6 @@ void copydrag()
 
 void copy_op(int op, int x, int y)
 {
-   short *csel;
-
    if (op == XCF_Copy) {
       window_to_user(x, y, &areawin->save);
       createcopies();	/* This function does all the hard work */
@@ -4571,13 +4566,8 @@ void copy_op(int op, int x, int y)
       eventmode = NORMAL_MODE;
       areawin->attachto = -1;
       W3printf("");
-#ifdef TCL_WRAPPER
-      xcRemoveEventHandler(areawin->viewport, PointerMotionMask, false,
-	    (XtEventHandler)xctk_drag, NULL);
-#else
       xcRemoveEventHandler(areawin->viewport, PointerMotionMask, false,
 	    (XtEventHandler)xlib_drag, NULL);
-#endif
       XDefineCursor(areawin->viewport, DEFAULTCURSOR);
       u2u_snap(areawin->save);
       if (op == XCF_Cancel) {
@@ -4871,6 +4861,7 @@ void finish_op(int op, int x, int y)
 
 void inst_op(genericptr editpart, int op, int x, int y)
 {
+    Q_UNUSED(editpart); Q_UNUSED(op); Q_UNUSED(x); Q_UNUSED(y);
 }
 
 /*--------------------------------------------------------------*/
@@ -4879,11 +4870,10 @@ void inst_op(genericptr editpart, int op, int x, int y)
 
 void path_op(genericptr editpart, int op, int x, int y)
 {
+   Q_UNUSED(x); Q_UNUSED(y);
    polyptr newpoly;
    splineptr newspline;
-   genericptr *ggen;
    bool donecycles = false;
-   XPoint *refpt, *cptr;
 
    /* Don't allow point cycling in a multi-part edit.	*/
    /* Allowing it is just confusing.  Instead, we treat	*/

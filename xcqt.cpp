@@ -357,6 +357,7 @@ void xcAddEventHandler(Widget w, EventMask event_mask, bool, XtEventHandler
 void xcRemoveEventHandler(Widget w, EventMask event_mask, bool nonmaskable, XtEventHandler
               proc, XtPointer data)
 {
+    Q_UNUSED(nonmaskable);
     Q_ASSERT(w != NULL);
     if (! w->property("hasEvents").isValid()) return;
 
@@ -481,6 +482,7 @@ void FillPolygon(QPainter* gc, XPoint *points, int npoints)
 
 void XClearArea(Window win, int x, int y, unsigned w, unsigned h, bool exposures)
 {
+    Q_UNUSED(exposures);
     QPalette pal;
     QPainter p(win);
     p.fillRect(x, y, w, h, pal.color(QPalette::Background));
@@ -497,10 +499,14 @@ void SetForeground(QPainter* gc, unsigned long foreground)
 void SetFunction(QPainter* gc, int function)
 {
     Q_ASSERT(gc);
+    Q_UNUSED(function);
 }
 
 int XTextWidth(XFontStruct *font_struct, const char *string, int count)
 {
+    Q_UNUSED(font_struct);
+    Q_UNUSED(string);
+    Q_UNUSED(count);
     return 0;
 }
 
@@ -515,6 +521,7 @@ void SetStipple(QPainter* gc, int stipple_index, bool opaque)
 void XDrawRectangle(Drawable, QPainter* gc, int x, int y, unsigned int w, unsigned int h)
 {
     Q_ASSERT(gc);
+    Q_UNUSED(x); Q_UNUSED(y); Q_UNUSED(w); Q_UNUSED(h);
 }
 
 void DrawLine(QPainter* gc, int x1, int y1, int x2, int y2)
@@ -541,6 +548,7 @@ void XFillRectangle(Drawable, QPainter* gc, int x, int y, int w, int h)
 void XCopyArea(Drawable, Drawable, QPainter* gc, int sx, int sy, int w, int h, int dx, int dy)
 {
     Q_ASSERT(gc);
+    Q_UNUSED(sx); Q_UNUSED(sy); Q_UNUSED(w); Q_UNUSED(h); Q_UNUSED(dx); Q_UNUSED(dy);
 }
 
 void XDrawString(Drawable, QPainter* gc, int x, int y, const char *str, int len)
@@ -554,49 +562,54 @@ void XDrawString(Drawable, QPainter* gc, int x, int y, const char *str, int len)
 //
 //
 
-void XtGetValues(Widget w, ArgList args, Cardinal num_args)
+void XtGetValues(Widget, ArgList, Cardinal)
 {
-
 }
 
-void XtSetValues(Widget w, ArgList args, Cardinal num_args)
+void XtSetValues(Widget, ArgList, Cardinal)
 {
-
 }
 
 Widget XtNameToWidget(Widget reference, String names)
 {
+    Q_UNUSED(reference); Q_UNUSED(names);
     return NULL;
 }
 
 Widget XtCreateManagedWidget(String name, WidgetClass, Widget parent, ArgList args, Cardinal num_args)
 {
+    Q_UNUSED(name); Q_UNUSED(parent); Q_UNUSED(args); Q_UNUSED(num_args);
     return NULL;
 }
 
 Widget XtCreateWidget(String name, WidgetClass cls, Widget parent, ArgList args, Cardinal num_args)
 {
+    Q_UNUSED(name); Q_UNUSED(cls); Q_UNUSED(args); Q_UNUSED(num_args);
     //if (cls == XwmenubuttonWidgetClass) return NULL;
     return new QWidget(parent);
 }
 
-Widget XtCreatePopupShell(String name, WidgetClass widget_class, Widget parent, ArgList args, Cardinal num_args)
+Widget XtCreatePopupShell(String name, WidgetClass cls, Widget parent, ArgList args, Cardinal num_args)
 {
+    Q_UNUSED(name); Q_UNUSED(cls); Q_UNUSED(parent); Q_UNUSED(args); Q_UNUSED(num_args);
     return NULL;
 }
 
 void XtPopup(Widget popup_shell, XtGrabKind grab_kind)
 {
+    Q_UNUSED(popup_shell); Q_UNUSED(grab_kind);
 
 }
 
 char *XKeysymToString(KeySym keysym)
 {
+    Q_UNUSED(keysym);
     return NULL;
 }
 
 void XChangeProperty(Window w, Atom prop, Atom type, int format, int mode, const unsigned char *data, int nelements)
 {
+    Q_UNUSED(w); Q_UNUSED(prop); Q_UNUSED(type); Q_UNUSED(format); Q_UNUSED(mode); Q_UNUSED(data); Q_UNUSED(nelements);
 
 }
 
@@ -622,20 +635,24 @@ int XDefineCursor(Window w, Cursor cursor)
 void XTextExtents(XFontStruct *font_struct, const char *string, int nchars, int *direction_return,
               int *font_ascent_return, int *font_descent_return, XCharStruct *overall_return)
 {
+    Q_UNUSED(font_struct); Q_UNUSED(string); Q_UNUSED(nchars); Q_UNUSED(direction_return);
+    Q_UNUSED(font_ascent_return); Q_UNUSED(font_descent_return); Q_UNUSED(overall_return);
 
 }
 
 void XtTranslateCoords(Widget w, Position x, Position y, Position *rootx_return, Position *rooty_return)
 {
+    Q_UNUSED(w); Q_UNUSED(x); Q_UNUSED(y); Q_UNUSED(rootx_return); Q_UNUSED(rooty_return);
 
 }
 
 Atom XInternAtom(const char * name, bool only_if_exists)
 {
+    Q_UNUSED(name); Q_UNUSED(only_if_exists);
     return 0;
 }
 
-char *XwTextCopyBuffer(XwTextEditWidget w)
+char *XwTextCopyBuffer(XwTextEditWidget)
 {
     return NULL;
 }

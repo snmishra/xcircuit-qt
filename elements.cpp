@@ -159,8 +159,7 @@ bool labeltext(int keypressed, char *clientdata)
    stringpart *curpos, *labelbuf;
    int locpos;
    bool r = true, do_redraw = false;
-   short tmplength, tmpheight, cfont;
-   TextExtents tmpext;
+   short cfont;
 
    curlabel = TOLABEL(EDITPART);
 
@@ -777,7 +776,7 @@ void arcbutton(int x, int y)
 /* Track an arc during mouse motion */
 /*----------------------------------*/
 
-void trackarc(Widget w, caddr_t clientdata, caddr_t calldata)
+void trackarc(Widget, caddr_t, caddr_t)
 {
    XPoint newpos;
    arcptr newarc;
@@ -891,7 +890,7 @@ void trackbox(Widget, caddr_t, caddr_t)
 /* wire redraw is correct.						*/
 /*----------------------------------------------------------------------*/
 
-void trackwire(Widget w, caddr_t clientdata, caddr_t calldata)
+void trackwire(Widget, caddr_t, caddr_t)
 {
    XPoint newpos, upos, *tpoint;
    polyptr	newwire;
@@ -1211,11 +1210,10 @@ void removep(short *selectobj, short add)
 void unjoin()
 {
    short *selectobj;
-   genericptr *genp, *newg;
    pathptr oldpath;
    polyptr oldpoly, *newpoly;
    bool preselected;
-   short i, cycle;
+   short cycle;
 
    if (areawin->selects == 0) {
       select_element(PATH | POLYGON);

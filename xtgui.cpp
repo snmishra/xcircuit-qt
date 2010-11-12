@@ -58,8 +58,9 @@ extern float version;
 
 /*----------------------------------------------------------------------*/
 /* Initial Resource Management						*/
-/*----------------------------------------------------------------------*/
+/*--------------------B--------------------------------------------------*/
 
+#if 0
 static XtResource resources[] = {
 
   /* schematic layout colors */
@@ -148,6 +149,7 @@ static XtResource resources[] = {
   { "timeout", "TimeOut", XtRInt, sizeof(int),
       XtOffset(ApplicationDataPtr, timeout), XtRString, (void*)"10"}
 };
+#endif
 
 /*----------------------------------------------*/
 /* Check for conditions to approve program exit */
@@ -288,12 +290,10 @@ void getproptext(Widget button, void *callstruct_, void*)
 void updatetext(QObject*, void* callstruct_, void*)
 {
    WidgetList callstruct = (WidgetList)callstruct_;
-   float oscale, psscale;
    char  edit[3][50];
    short i, n, posit;
    char  *pdptr;
    Arg	 wargs[2];
-   int   width, height;
 
    /* auto-fit may override any changes to the scale */
 
@@ -317,7 +317,6 @@ void updatename(Widget, void* callstruct_, void*)
 {
    WidgetList callstruct = (WidgetList)callstruct_;
    short n, posit;
-   char  *rootptr;
    Arg   wargs[2]; 
       
    if (strstr(topobject->name, "Page ") != NULL || strstr(topobject->name,
@@ -682,7 +681,7 @@ void outputpopup(Widget button, void* clientdata, void* calldata)
 /* For formatted strings, format first into _STR   */
 /*-------------------------------------------------*/
 
-void clrmessage(XtPointer clientdata, XtIntervalId *id)
+void clrmessage(XtPointer, XtIntervalId *)
 {
    char buf1[50], buf2[50];
 
@@ -841,8 +840,10 @@ void mappinghandler(Widget w, caddr_t clientdata, QEvent* *event)
 
 /*----------------------------------------------------------------------*/
 
-void clientmessagehandler(Widget w, caddr_t, QEvent* *event)
+void clientmessagehandler(QWidget* w, caddr_t, QEvent* *event)
 {
+    Q_UNUSED(w);
+    Q_UNUSED(event);
 #if 0
    if (event->type == ClientMessage) {
       if (render_client(event))
@@ -862,7 +863,7 @@ void clientmessagehandler(Widget w, caddr_t, QEvent* *event)
 /* Event handler for WM_DELETE_WINDOW message.                          */
 /*----------------------------------------------------------------------*/
 
-void delwin(Widget w, popupstruct *bstruct, void *)
+void delwin(Widget w, popupstruct *, void *)
 {
     Q_ASSERT(w == top);
     quitcheck((QAction*)1, NULL, NULL);

@@ -427,7 +427,6 @@ int installowncmap()
 void makecursors()
 {
    QRgb fgcolor, bgcolor;
-   Window win = areawin->viewport;
 
    bgcolor = BACKGROUND;
    fgcolor = FOREGROUND;

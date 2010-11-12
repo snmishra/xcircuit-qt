@@ -461,7 +461,7 @@ void setcolor(QAction*, void*, void*);
 void makenewfontbutton(void);  /* either here or menucalls.c */
 void setfloat(QAction*, const QString&, void*);
 void autoset(QObject*, WidgetList, caddr_t);
-void autostop(QAction*, caddr_t, caddr_t);
+void autostop(QAction*, void*, void*);
 void getkern(QAction*, void*, void*);
 void setfill(QAction*, void*, void*);
 void makebbox(QAction*, void*, void*);

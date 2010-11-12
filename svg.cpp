@@ -498,11 +498,10 @@ static void SVGDrawString(Context* ctx, labelptr drawlabel, int passcolor, objin
    stringpart *strptr;
    char *textptr;
    short  fstyle, ffont, tmpjust, baseline, deltay;
-   int    pos, defaultcolor, curcolor, scolor;
+   int    pos, defaultcolor, curcolor;
    short  oldx, oldfont, oldstyle;
    int olinerise = 4;
    float  tmpscale = 1.0, natscale = 1.0;
-   float  tmpthick = xobjs.pagelist[areawin->page].wirewidth;
    XPoint newpoint;
    TextExtents tmpext;
    QVector<short> tabstops;

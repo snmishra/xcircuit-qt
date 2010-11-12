@@ -270,10 +270,8 @@ void setpinjustbit(QAction* w, void* value_, void*)
 /* Enable or Disable the toolbar				*/
 /*--------------------------------------------------------------*/
 
-void dotoolbar(QAction* w, void* clientdata, void* calldata)
+void dotoolbar(QAction*, void*, void*)
 {
-   Arg wargs[1];
-
    if (areawin->toolbar_on) {
       areawin->toolbar_on = false;
       toolbar->hide();
@@ -409,7 +407,7 @@ void autoset(QObject* w, WidgetList entertext, caddr_t nulldata)
 
 /*--------------------------------------------------------------*/
 
-void autostop(Widget w, caddr_t clientdata, caddr_t nulldata)
+void autostop(QWidget*, void*, void*)
 {
    xobjs.pagelist[areawin->page].pmode &= 1;
 }
@@ -1359,7 +1357,7 @@ void setcolor(QAction* a, void* value_, void*)
 /* Generate popup dialog for adding a new color                   */
 /*----------------------------------------------------------------*/
 
-void addnewcolor(QAction* a, void*, void*)
+void addnewcolor(QAction*, void*, void*)
 {
     QColor c = QColorDialog::getColor();
     if (c.isValid()) addnewcolorentry(c.rgb());
@@ -1430,11 +1428,12 @@ void promptparam(QAction* a, void*, void*)
 /* Set polygon editing style */
 /*---------------------------*/
 
-void boxedit(QAction* a, void* value_, void*)
+void boxedit(QAction*, void* value_, void*)
 {
+    unsigned int value = (uintptr_t)value_;
+    Q_UNUSED(value);
     /// \todo
 #if 0
-   unsigned int value = (uintptr_t)value_;
    if (w == NULL) {
       switch (value) {
          case MANHATTAN: w = PolygonEditManhattanBoxEditButton; break;

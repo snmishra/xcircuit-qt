@@ -939,7 +939,7 @@ void refresh(QAction*, void*, void*)
 /* Center the current page in the viewing window	*/
 /*------------------------------------------------------*/
 
-void zoomview(QAction* w, void* clientdata, void* calldata)
+void zoomview(QAction*, void*, void*)
 {
    if (eventmode == NORMAL_MODE || eventmode == COPY_MODE ||
 	 eventmode == MOVE_MODE || eventmode == CATALOG_MODE ||

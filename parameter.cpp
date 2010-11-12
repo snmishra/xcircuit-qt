@@ -330,7 +330,7 @@ void setparammarks(genericptr thiselem)
 void setparammarks(genericptr thiselem)
 {
    const int rlength = sizeof(param_buttons) / sizeof(param_buttons[0]);
-   int i, j, paramno;
+   int i;
    oparamptr ops;
    eparamptr epp;
 
@@ -1176,6 +1176,7 @@ void resolveparams(objinstptr thisinst)
 
 eparamptr copyeparam(eparamptr cepp, const generic * thiselem)
 {
+   Q_UNUSED(thiselem);
    eparamptr newepp;
 
    newepp = make_new_eparam(cepp->key);
@@ -1748,7 +1749,7 @@ void insertparam()
 {
    labelptr tlab;
    oparamptr ops;
-   int result, nparms;
+   int nparms;
    char *selparm;
    char *newstr, *sptr;
    char *sstart = (char *)malloc(1024);
@@ -2187,6 +2188,7 @@ void parameterize(int mode, char *key, short cycle)
 
 bool paramcross(objectptr tobj, labelptr tlab)
 {
+   Q_UNUSED(tobj);
    stringpart *firstptr, *lastptr;
    int locpos;
 

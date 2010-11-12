@@ -514,6 +514,7 @@ bool xc_tilde_expand(QString & filename)
 
 bool xc_variable_expand(QString & filename)
 {
+   Q_UNUSED(filename);
    /// \todo
 #if 0
    char *expanded, *sptr, tmpchar, *varpos, *varsub;
@@ -660,6 +661,7 @@ bool nextfilename()	/* extract next filename from _STR2 into _STR */
 
 void loadglib(bool lflag, short ilib, short tlib, const QString & filestr)
 {
+   Q_UNUSED(tlib);
    QStringList files = filestr.split(',', QString::SkipEmptyParts);
    foreach (QString file, files) {
       if (lflag)
@@ -5209,6 +5211,7 @@ short printparams(FILE *ps, objinstptr sinst, short stcount)
 	 }
       }
       if (epp == NULL) {	/* No indirection */
+#if 0
          bool nondefault = true;
 	 char *deflt_expr = NULL;
 	
@@ -5251,6 +5254,7 @@ short printparams(FILE *ps, objinstptr sinst, short stcount)
 //	       continue;
 //	    }
 //	 }
+#endif
 
 	 if (instances++ == 0) {
 	    fprintf(ps, "<<");		/* begin PostScript dictionary */

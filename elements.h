@@ -160,12 +160,12 @@ public:
     void getBbox(XPoint* pts, float scale = 0.0) const;
     void getBbox(XPoint* pts, int extend, float scale = 0.0) const;
     void getBbox(XPoint* pts, objinst* callinst, float scale = 0.0) const;
-    virtual float rescaleBox(const XPoint & corner, XPoint newpoints[5]) const { return 0.0; }
+    virtual float rescaleBox(const XPoint & corner, XPoint newpoints[5]) const { Q_UNUSED(corner); Q_UNUSED(newpoints); return 0.0; }
     virtual void calc() {}
     virtual void reverse() {}
     bool operator==(const generic&) const;
 protected:
-    virtual void doGetBbox(XPoint*, float scale, int extend, objinst* callinst) const {}
+    virtual void doGetBbox(XPoint*, float scale, int extend, objinst* callinst) const { Q_UNUSED(scale); Q_UNUSED(extend); Q_UNUSED(callinst); }
     inline generic(Type _type) : type(_type), color(DEFAULTCOLOR), passed(NULL) {}
     generic(const generic&);
     generic & operator=(const generic &);

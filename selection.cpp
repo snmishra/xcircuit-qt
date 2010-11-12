@@ -809,6 +809,7 @@ selection *genselectelement(short class_, u_char mode, objectptr selobj,
 
 bool areaelement(genericptr *curgen, bool is_path, short level)
 {
+   Q_UNUSED(is_path);
    bool selected;
    XPoint* currentpt;
    short cycle;
@@ -1070,7 +1071,7 @@ bool selectarea(objectptr selobj, short level)
 /* start deselection mode */
 /*------------------------*/
 
-void startdesel(QAction* w, void* clientdata, void* calldata)
+void startdesel(QAction*, void*, void*)
 {
    if (eventmode == NORMAL_MODE) {
       if (areawin->selects == 0)

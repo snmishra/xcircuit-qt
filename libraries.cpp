@@ -469,6 +469,8 @@ void pagecat_op(int op, int x, int y)
 void pageinstpos(short mode, short tpage, objinstptr drawinst, int gxsize,
 	int gysize, int xdel, int ydel)
 {
+   Q_UNUSED(mode);
+   Q_UNUSED(gysize);
    objectptr libobj = drawinst->thisobject;
    float scalex, scaley;
 
@@ -616,7 +618,7 @@ void composepagelib(short mode)
 void updatepagelib(short mode, short tpage)
 {
    objectptr compobj, libinst = xobjs.libtop[mode]->thisobject;
-   int i, xdel, ydel, gxsize, gysize, lpage;
+   int xdel, ydel, gxsize, gysize, lpage;
 
    /* lpage is the number of the page as found on the directory page */
    lpage = (mode == PAGELIB) ? tpage : tpage - LIBRARY;
@@ -668,7 +670,6 @@ void pagecatmove(int x, int y)
 
    /* If one object selected; find place to put from cursor position */
    else if ((bpage = pageposition(PAGELIB, x, y, 1)) >= 0) {
-      int k;
 
       /* move page (page) to position between current pages */
       /* (bpage - 2) and (bpage - 1) by shifting pointers.   */
@@ -1288,7 +1289,7 @@ void copycat()
    objectptr *newobj, *curlib, oldobj;
    objinstptr libobj;
    oparamptr ops, newops;
-   int i, libnum;
+   int libnum;
 
    libnum = is_library(topobject);
    if (libnum < 0) libnum = USERLIB - LIBRARY;  /* default */

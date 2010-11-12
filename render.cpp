@@ -97,6 +97,7 @@ void ghostinit_local()
 
 bool render_client(QEvent* *eventPtr)
 {
+    Q_UNUSED(eventPtr);
 #if 0
    if (eventPtr->xclient.message_type == gvpage) {
 #ifdef GS_DEBUG
@@ -165,6 +166,7 @@ void ghostinit()
 
 void send_client(Atom msg)
 {
+    Q_UNUSED(msg);
 #if 0
    QEvent* event;
 
@@ -211,6 +213,7 @@ void ask_for_next()
 void start_gs()
 {
    int std_out[2], std_err[2], ret;
+   Q_UNUSED(std_err);
 #ifdef HAVE_PUTENV
    static char env_str1[128], env_str2[64];
 #endif

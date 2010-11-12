@@ -1274,6 +1274,7 @@ void gencalls(objectptr thisobject)
 
 int translatedown(int rnet, int portid, objectptr nextobj)
 {
+   Q_UNUSED(rnet);
    PortlistPtr nport;
    int downnet = 0;
 
@@ -1759,6 +1760,7 @@ labelptr new_global_pin(labelptr clabel, objinstptr cinst)
 Genericlist *make_tmp_pin(objectptr cschem, objinstptr cinst, XPoint *pinpt,
 		Genericlist *sublist)
 {
+   Q_UNUSED(sublist);
    LabellistPtr lseek;
    objectptr pschem;
    char *pinstring = NULL;
@@ -4075,6 +4077,7 @@ bool HierNameToObject(objinstptr cinst, char *hiername, pushlistptr *stack)
 
 void writeflat(objectptr cschem, CalllistPtr cfrom, const char *prefix, FILE *fp, const char *mode)
 {
+   Q_UNUSED(cfrom);
    CalllistPtr calls = cschem->calls;
    char *newprefix = (char *)malloc(sizeof(char));
 
@@ -4173,6 +4176,7 @@ static void topflat(objectptr cschem, objinstptr thisinst, CalllistPtr cfrom,
 
 void writeglobals(objectptr cschem, FILE *fp)
 {
+   Q_UNUSED(cschem);
    LabellistPtr llist;
    labelptr gpin;
    char *snew;
@@ -5338,6 +5342,7 @@ void writenet(objectptr thisobject, const char *mode, const char *suffix)
 bool writepcb(struct Ptab **ptableptr, objectptr cschem, CalllistPtr cfrom,
                 const char *prefix, const char *mode)
 {
+   Q_UNUSED(cfrom);
    PolylistPtr plist;
    LabellistPtr llist;
    CalllistPtr calls;

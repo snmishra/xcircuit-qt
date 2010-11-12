@@ -41,6 +41,8 @@ short del;
 
 char *evaluate_expr(objectptr thisobj, oparamptr ops, objinstptr pinst)
 {
+   Q_UNUSED(thisobj);
+   Q_UNUSED(pinst);
    if (ops->type != XC_EXPR) return NULL;
    return strdup(ops->parameter.expr);
 }
@@ -655,6 +657,7 @@ char *textprintsubnet(stringpart *strtop, objinstptr localinst, int subnet)
 
 char *textprintnet(const char *prefix, char *pinstring, Genericlist *sublist)
 {
+   Q_UNUSED(pinstring);
    char *newstr, *sptr;
    buslist *sbus;
    int i;

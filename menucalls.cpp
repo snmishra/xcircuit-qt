@@ -90,8 +90,7 @@ void setgrid(QAction*, const QString & str, void *dataptr_)
 	 else *dataptr = fval * IN_CM_CONVERT / (iscale * oscale);
 	 break;
       case DEC_INCH: case FRAC_INCH: {
-	 short parts;
-	 char *sptr;
+         short parts;
 	 int f2, f3;
          QString str2 = str;
 
@@ -1190,7 +1189,7 @@ void setdefaultfontmarks()
 /* Pick up font name from _STR2 and pass it to loadfontfile()	  */
 /*----------------------------------------------------------------*/
 
-void locloadfont(QAction*, const QString& str, void* value)
+void locloadfont(QAction*, const QString& str, void*)
 {
    loadfontfile(str.toLocal8Bit());
 }
