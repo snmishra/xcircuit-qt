@@ -723,7 +723,7 @@ void callwritenet(QAction*, void*, void*);
 void startconnect(QAction*, void*, void*);
 void connectivity(QAction*, void*, void*);
 bool setobjecttype(objectptr);
-void pinconvert(labelptr, void*);
+void pinconvert(labelptr, unsigned int);
 void dopintype(QAction*, void*, void*);
 void setsymschem(void);
 int findpageobj(objectptr);
@@ -738,9 +738,7 @@ void dobeforeswap(QAction*, void*, void*);
 void schemdisassoc(void);
 void startschemassoc(QAction*, void*, void*);
 bool schemassoc(objectptr, objectptr);
-#ifndef TCL_WRAPPER
-void xlib_swapschem(Widget, void*, caddr_t);
-#endif
+void xlib_swapschem(Widget, void*, void*);
 
 /* from selection.c: */
 

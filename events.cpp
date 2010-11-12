@@ -352,7 +352,7 @@ void pushobject(objinstptr thisinst)
 /* Pop edit hierarchy stack */
 /*--------------------------*/
 
-void popobject(QAction* w, pointertype no_undo, void* calldata)
+void popobject(QAction*, void* no_undo, void*)
 {
    u_char undo_type = UNDO_DONE;
 
@@ -377,7 +377,7 @@ void popobject(QAction* w, pointertype no_undo, void* calldata)
    /* If coming from the library, don't register an undo action, because */
    /* it has already been registered as type XCF_Library_Pop.		 */
 
-   if (no_undo == (pointertype)0)
+   if ((intptr_t)no_undo == 0)
       register_for_undo(XCF_Pop, undo_type, areawin->topinstance);
 
    topobject->viewscale = areawin->vscale;
@@ -406,10 +406,10 @@ void popobject(QAction* w, pointertype no_undo, void* calldata)
 /* Destructive reset of entire object		 			   */
 /*-------------------------------------------------------------------------*/
 
-void resetbutton(QAction* button, pointertype pageno_, void* calldata)
+void resetbutton(QAction*, void* pageno_, void*)
 {
    short page;
-   unsigned int pageno = (unsigned int)pageno_;
+   unsigned int pageno = (intptr_t)pageno_;
    objectptr pageobj;
    objinstptr pageinst;
 
@@ -1127,13 +1127,9 @@ short getkeynum()
 /* Register a "press" event */
 /*--------------------------*/
 
-#ifdef TCL_WRAPPER
-void makepress(ClientData clientdata)
-#else
-void makepress(XtPointer clientdata, XtIntervalId *id) 
-#endif
+void makepress(XtPointer clientdata, XtIntervalId *)
 {
-   int keywstate = (int)((pointertype)clientdata);
+   int keywstate = (intptr_t)clientdata;
 
    /* Button/Key was pressed long enough to make a "press", not a "tap" */
    areawin->time_id = 0;
@@ -2067,7 +2063,7 @@ void keyhandler(Widget w, caddr_t clientdata, XKeyEvent *event)
             areawin->save.x = event->x();
             areawin->save.y = event->y();
             areawin->time_id = xcAddTimeout(app, PRESSTIME,
-			makepress, (ClientData)((pointertype)keywstate));
+                        makepress, Number(keywstate));
             return;
 	 }
 

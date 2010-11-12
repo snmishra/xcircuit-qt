@@ -704,14 +704,14 @@ void loadblib(QAction*, const QString& str, void*)
 
 /*---------------------------------------------------------*/
 
-void getlib(QAction* a, pointertype, pointertype)
+void getlib(QAction* a, void*, void*)
 {
    popupFile(a, "Enter library to load:", "\0", "lps", loadblib);
 }
 
 /*---------------------------------------------------------*/
 
-void getuserlib(QAction* a, pointertype, pointertype)
+void getuserlib(QAction* a, void*, void*)
 {
    popupFile(a, "Enter library to load:", "\0", "lps", loadulib);
 }
@@ -4174,7 +4174,7 @@ void setassaved(objectptr *wroteobjs, short written)
 /* the current page is a library.  If not, save the user library */
 /*---------------------------------------------------------------*/
 
-void savelibpopup(QAction* a, pointertype technology, pointertype)
+void savelibpopup(QAction* a, void* technology, void*)
 {
    TechPtr nsptr;
 

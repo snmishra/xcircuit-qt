@@ -775,7 +775,7 @@ nexthier:
 	   p = end + 1;
 	   *end = '/';
 	   refinst = (newstack == NULL) ? areawin->topinstance : newstack->thisinst;
-	   chkinst = (objinstptr)((pointertype)(newLong));
+           chkinst = (objinstptr)((intptr_t)(newLong));
 	   /* Ensure that chkinst is in the plist of			*/
 	   /* refinst->thisobject, and that it is type objinst.	*/
 	   for (rgen = refinst->thisobject->plist; rgen < refinst->thisobject->plist

@@ -833,7 +833,7 @@ static PyObject *xc_getobject(PyObject *self, PyObject *args)
 
 static PyObject *xc_reset()
 {
-   resetbutton(NULL, (pointertype)0, NULL);
+   resetbutton(NULL, Number(0), NULL);
    return PyInt_FromLong(0L);
 }
 
@@ -1408,15 +1408,15 @@ static PyObject *xc_set(PyObject *self, PyObject *args)
    }
    else if (!strcmp(sarg1, "axis") || !strcmp(sarg1, "axes")) {
       areawin->axeson = a;
-      toggle(GridAxesButton, (pointertype)&areawin->axeson, NULL);
+      toggle(GridAxesButton, &areawin->axeson, NULL);
    }
    else if (!strcmp(sarg1, "grid")) {
       areawin->gridon = a;
-      toggle(GridGridButton, (pointertype)&areawin->gridon, NULL);
+      toggle(GridGridButton, &areawin->gridon, NULL);
    }  
    else if (!strcmp(sarg1, "snap") || !strcmp(sarg1, "snap-to")) {
       areawin->snapto = a;
-      toggle(SnaptoSnaptoButton, (pointertype)&areawin->snapto, NULL);
+      toggle(SnaptoSnaptoButton, &areawin->snapto, NULL);
    }
    else if (!strcmp(sarg1, "gridspace")) {
       sscanf(sarg2, "%f", &xobjs.pagelist[cpage]->gridspace);
@@ -1443,7 +1443,7 @@ static PyObject *xc_set(PyObject *self, PyObject *args)
    else if (!strcmp(sarg1, "colorscheme")) {
       if (!strcmp(sarg2, "inverse"))
          areawin->invert = false;
-      inversecolor(NULL, (pointertype)&areawin->invert, NULL);
+      inversecolor(NULL, &areawin->invert, NULL);
    }
    else if (!strcmp(sarg1, "coordstyle")) {
       if (!strcmp(sarg2, "cm") || !strcmp(sarg2, "centimeters")) {

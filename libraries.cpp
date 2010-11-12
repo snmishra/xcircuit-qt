@@ -75,7 +75,7 @@ void catreturn()
 {
    /* Pop the object being edited from the push stack. */
 
-   popobject(NULL, (pointertype)1, NULL);
+   popobject(NULL, Number(1), NULL);
 }
 
 /*------------------------------------------------------*/
@@ -432,7 +432,7 @@ void pagecat_op(int op, int x, int y)
 	    }
 	    else {
 	       areawin->lastlibrary = bpage;
-	       startcatalog(NULL, (pointertype)(LIBRARY + bpage), NULL);
+               startcatalog(NULL, Number(LIBRARY + bpage), NULL);
 	    }
 	    return;
          }
@@ -449,7 +449,7 @@ void pagecat_op(int op, int x, int y)
 	       newpage(bpage);
 	    }
 	    else {
-	       startcatalog(NULL, (pointertype)(LIBRARY + bpage), NULL);
+               startcatalog(NULL, Number(LIBRARY + bpage), NULL);
 	    }
 	    return;
 	 }
@@ -1372,7 +1372,7 @@ void copycat()
 
    if (areawin->topinstance == xobjs.libtop[USERLIB])
       areawin->update();
-   else startcatalog(NULL, (pointertype)USERLIB, NULL);
+   else startcatalog(NULL, Number(USERLIB), NULL);
 }
 
 /*--------------------------------------------------------*/
@@ -1562,7 +1562,7 @@ void changecat()
    if (eventmode == CATMOVE_MODE)
       delete_for_xfer(areawin->selectlist, areawin->selects);
 
-   startcatalog(NULL, (pointertype)(j + LIBRARY), NULL);
+   startcatalog(NULL, Number(j + LIBRARY), NULL);
 }
 
 void changecat_call(QAction*, void*, void*)
@@ -1574,7 +1574,7 @@ void changecat_call(QAction*, void*, void*)
 /* Begin catalog viewing mode		*/
 /*--------------------------------------*/
 
-void startcatalog(QAction*, pointertype libmod_, void*)
+void startcatalog(QAction*, void* libmod_, void*)
 {
    if (xobjs.libtop == NULL) return;	/* No libraries defined */
 

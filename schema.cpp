@@ -37,9 +37,9 @@ extern Tcl_Interp *xcinterp;
 /* Menu calls (procedure wrappers)			  */
 /*--------------------------------------------------------*/
 
-void callwritenet(QAction* w, pointertype mode_, void* calldata)
+void callwritenet(QAction*, void* mode_, void*)
 {
-   unsigned int mode = (unsigned int)mode_;
+   unsigned int mode = (uintptr_t)mode_;
    switch(mode) {
      case 0:
         writenet(topobject, "spice", "spc");
@@ -360,9 +360,8 @@ bool setobjecttype(objectptr cschem)
 /* Pin conversion subroutine for dopintype()		*/
 /*------------------------------------------------------*/
 
-void pinconvert(labelptr thislab, pointertype mode_)
+void pinconvert(labelptr thislab, unsigned int mode)
 {
-   unsigned int mode = (unsigned int)mode_;
    thislab->pin = mode;
    switch (mode) {
       case NORMAL:
@@ -384,7 +383,7 @@ void pinconvert(labelptr thislab, pointertype mode_)
 /* Change a label's type to NORMAL, GLOBAL, INFO, or LOCAL */
 /*---------------------------------------------------------*/
 
-void dopintype(QAction* w, pointertype mode_, void* calldata)
+void dopintype(QAction*, void* mode_, void*)
 {
    short *gsel;
    char typestr[40];
@@ -395,7 +394,7 @@ void dopintype(QAction* w, pointertype mode_, void* calldata)
       return;
    }
 
-   unsigned int mode = (unsigned int)mode_;
+   unsigned int mode = (uintptr_t)mode_;
 
    strcpy(typestr, "Changed label to ");
    switch(mode) {
@@ -418,7 +417,7 @@ void dopintype(QAction* w, pointertype mode_, void* calldata)
       if (SELECTTYPE(gsel) == LABEL) {
 	 labelptr glab = SELTOLABEL(gsel);
 	 savetype = glab->pin;
-         pinconvert(glab, (void*)mode);
+         pinconvert(glab, mode);
 	 setobjecttype(topobject);
       }
 
@@ -763,9 +762,9 @@ int changeotherpins(labelptr newlabel, stringpart *oldstring)
 /* Xt wrapper for swapschem()						*/
 /*----------------------------------------------------------------------*/
 
-void xlib_swapschem(Widget, pointertype mode, caddr_t)
+void xlib_swapschem(Widget, void* mode, void*)
 {
-   swapschem((int)mode, -1, NULL);
+   swapschem((uintptr_t)mode, -1, NULL);
 }
 
 /*----------------------------------------------------------------------*/
@@ -1018,9 +1017,9 @@ void schemdisassoc()
 /* context (toggle)						*/
 /*--------------------------------------------------------------*/
 
-void startschemassoc(QAction* w, pointertype mode_, void*)
+void startschemassoc(QAction* w, void* mode_, void*)
 {
-   unsigned int mode = (unsigned int)mode_;
+   unsigned int mode = (uintptr_t)mode_;
    if ((topobject->symschem != NULL) && (mode == 1))
       schemdisassoc();
    else if ((topobject->symschem != NULL) && (mode == 0)) {

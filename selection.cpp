@@ -83,9 +83,9 @@ void enable_selects(objectptr thisobject, short *selectlist, int selects)
 /* Change filter to determine what types can be selected		*/
 /*----------------------------------------------------------------------*/
 
-void selectfilter(QAction * a, pointertype value, void* calldata)
+void selectfilter(QAction * a, void* value, void*)
 {
-   short bitwise = (int)value;
+   short bitwise = (intptr_t)value;
    bool bval = areawin->filter & bitwise;
 
    if (bval)
@@ -93,9 +93,7 @@ void selectfilter(QAction * a, pointertype value, void* calldata)
    else
       areawin->filter |= bitwise;
 
-#ifndef TCL_WRAPPER
-   toggle(a, (pointertype)(-1), &bval);
-#endif
+   toggle(a, Number(-1), &bval);
 }
 
 /*----------------------------------------------------------------------*/

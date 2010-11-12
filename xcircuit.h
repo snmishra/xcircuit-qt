@@ -35,21 +35,7 @@ typedef unsigned long	u_long;
 #define Fprintf fprintf
 #define Flush fflush
 
-/*----------------------------------------------------------------------*/
-/* Deal with 32/64 bit processors based on autoconf results.		*/
-/*----------------------------------------------------------------------*/
-
-typedef void *pointertype;
-
-#if SIZEOF_VOID_P == SIZEOF_UNSIGNED_INT
-#define Number(a)		(void *)((u_int) a)
-//typedef u_int pointertype;
-#elif SIZEOF_VOID_P == SIZEOF_UNSIGNED_LONG
-#define Number(a)		(void *)((u_long) a)
-//typedef u_long pointertype;
-#else
-ERROR: Cannot compile without knowing the size of a pointer.  See xcircuit.h.
-#endif
+#define Number(a) reinterpret_cast<void*>(static_cast<intptr_t>(a))
 
 /*----------------------------------------------------------------------*/
 /* Definition shortcuts 						*/

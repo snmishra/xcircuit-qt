@@ -626,12 +626,12 @@ void togglegrid(u_short type)
 /* measurement units						  */
 /*----------------------------------------------------------------*/
 
-void getgridtype(QAction* a, pointertype value_, void*)
+void getgridtype(QAction* a, void* value_, void*)
 {
    short oldtype = xobjs.pagelist[areawin->page].coordstyle;
    float scalefac = getpsscale(1.0, areawin->page) / INCHSCALE;
 
-   unsigned int value = (unsigned int)value_;
+   unsigned int value = (uintptr_t)value_;
 
    toggleexcl(a);
    xobjs.pagelist[areawin->page].coordstyle = value;
@@ -702,9 +702,9 @@ int findemptylib()
 /* (wrapper for routine events.c:newpage())	*/
 /*----------------------------------------------*/
 
-void newpagemenu(QAction*, pointertype value, pointertype)
+void newpagemenu(QAction*, void* value, void*)
 {
-   newpage((unsigned int)value);
+   newpage((uintptr_t)value);
 }
 
 #ifdef TCL_WRAPPER
@@ -1154,24 +1154,24 @@ void stringparam(QAction*, const QString &str, void*)
 /* Numerical parameterization (wrapper for parameterize()).	*/
 /*--------------------------------------------------------------*/
 
-void startparam(QAction* w, pointertype value, void* calldata)
+void startparam(QAction* w, void* value, void* calldata)
 {
-   if (value == (pointertype)P_SUBSTRING) {
+   if (value == Number(P_SUBSTRING)) {
       QString str2 = (calldata != NULL) ? (char *)calldata : "substring";
       stringparam(w, str2, NULL);
    }
    else if ((eventmode != NORMAL_MODE) || (areawin->selects > 0))
-	 parameterize((int)value, (char *)calldata, -1);
+         parameterize((intptr_t)value, (char *)calldata, -1);
 }
 
 /*---------------------------------------------------------------*/
 /* Unparameterize a label string (wrapper for unparameterize()). */
 /*---------------------------------------------------------------*/
 
-void startunparam(QAction*, pointertype value, void*)
+void startunparam(QAction*, void* value, void*)
 {
    if (areawin->selects > 0)
-      unparameterize((int)value);
+      unparameterize((intptr_t)value);
    unselect_all();
    setparammarks(NULL);
 }
@@ -1299,7 +1299,7 @@ short findbestfont(short curfont, short newfont, short style, short encoding) {
 /* or as the default font to begin new labels.			  */
 /*----------------------------------------------------------------*/
 
-void setfontval(QAction* w, pointertype value, labelptr settext)
+void setfontval(QAction* w, void* value, labelptr settext)
 {
    int newfont;
    short i, tc;
@@ -1315,7 +1315,7 @@ void setfontval(QAction* w, pointertype value, labelptr settext)
 			areawin->topinstance);
 	 if (strptr->type == FONT_NAME) {
 	    tc = strptr->data.font;
-            i = findbestfont(tc, (int)value, -1, -1);
+            i = findbestfont(tc, (intptr_t)value, -1, -1);
             if (i >= 0) {
                strptr->data.font = i;
 	       if (w != NULL) {
@@ -1353,7 +1353,7 @@ void setfontval(QAction* w, pointertype value, labelptr settext)
 /* Wrapper for routine setfontval()				  */
 /*----------------------------------------------------------------*/
 
-void setfont(QAction* w, pointertype value, void* calldata)
+void setfont(QAction* w, void* value, void*)
 {
    short *fselect;
    labelptr settext;
@@ -1393,7 +1393,7 @@ void setfont(QAction* w, pointertype value, void* calldata)
 /* to the above routine setfontval().				  */
 /*----------------------------------------------------------------*/
 
-void setfontstyle(QAction* w, pointertype value, labelptr settext)
+void setfontstyle(QAction* w, void* value, labelptr settext)
 {
    int newfont;
    short i, tc;
@@ -1412,7 +1412,7 @@ void setfontstyle(QAction* w, pointertype value, labelptr settext)
 
 	    /* find font which matches family and style, if available */
 
-            i = findbestfont(tc, -1, (int)value, -1);
+            i = findbestfont(tc, -1, (intptr_t)value, -1);
             if (i >= 0) {
                strptr->data.font = i;
 	       if (w != NULL) {
@@ -1432,7 +1432,7 @@ void setfontstyle(QAction* w, pointertype value, labelptr settext)
    }
    else tc = areawin->psfont;
 
-   if ((newfont = (int)findbestfont(tc, -1, (int)value, -1)) < 0) return;
+   if ((newfont = (int)findbestfont(tc, -1, (intptr_t)value, -1)) < 0) return;
 
    if (eventmode == TEXT_MODE || eventmode == ETEXT_MODE) {
       Wprintf("Font is now %s", fonts[newfont].psname);
@@ -1453,7 +1453,7 @@ void setfontstyle(QAction* w, pointertype value, labelptr settext)
 /* Wrapper for routine setfontstyle()				  */
 /*----------------------------------------------------------------*/
 
-void fontstyle(QAction* w, pointertype value, void*)
+void fontstyle(QAction* w, void* value, void*)
 {
    short *fselect;
    labelptr settext;
@@ -1493,7 +1493,7 @@ void fontstyle(QAction* w, pointertype value, void*)
 /* similarly to the above routine setfontval().			  */
 /*----------------------------------------------------------------*/
 
-void setfontencoding(QAction* w, pointertype value, void* settext_)
+void setfontencoding(QAction* w, void* value, void* settext_)
 {
    int newfont;
    short i, tc;
@@ -1511,7 +1511,7 @@ void setfontencoding(QAction* w, pointertype value, void* settext_)
 	 if (strptr->type == FONT_NAME) {
 	    tc = strptr->data.font;
 
-            i = findbestfont(tc, -1, -1, (int)value);
+            i = findbestfont(tc, -1, -1, (intptr_t)value);
             if (i >= 0) {
                strptr->data.font = i;
 	       if (w != NULL) {
@@ -1552,7 +1552,7 @@ void setfontencoding(QAction* w, pointertype value, void* settext_)
 /* Wrapper for routine setfontencoding()			  */
 /*----------------------------------------------------------------*/
 
-void fontencoding(QAction* w, pointertype value, void*)
+void fontencoding(QAction* w, void* value, void*)
 {
    short *fselect;
    labelptr settext;

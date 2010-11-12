@@ -165,7 +165,7 @@ void findcrashfiles()
 		"{filerecover; wm withdraw .query}; wm deiconify .query");
       free(cfile);
 #else
-      getfile(NULL, (pointertype)RECOVER, &filename);   /* Crash recovery mode */
+      getfile(NULL, Number(RECOVER), &filename);   /* Crash recovery mode */
 #endif
    }
 }

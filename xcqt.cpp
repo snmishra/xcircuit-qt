@@ -1019,8 +1019,8 @@ XCWindowData *GUI_init(int *argc, char *argv[])
 
    XtAddCallback(top, XtNclose, (WidgetCallback)delwin, NULL);
 
-   XtAddCallback(wsymb, XtNselect, (WidgetCallback)xlib_swapschem, Number(0));
-   XtAddCallback(wschema, XtNselect, (WidgetCallback)xlib_swapschem, Number(0));
+   XtAddCallback(wsymb, XtNselect, xlib_swapschem, Number(0));
+   XtAddCallback(wschema, XtNselect, xlib_swapschem, Number(0));
 
    top->setWindowIcon(QIcon(QPixmap(xcircuit_xpm)));
 

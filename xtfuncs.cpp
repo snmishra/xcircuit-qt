@@ -79,7 +79,7 @@ void dojustifybit(QObject* w, labelptr settext, short bitfield)
 	 boolval = (settext->justify & bitfield) ? 0 : 1;
       else
 	 boolval = (areawin->justify & bitfield) ? 0 : 1;
-      toggle(qobject_cast<QAction*>(w), (pointertype)(-1), &boolval);
+      toggle(qobject_cast<QAction*>(w), Number(-1), &boolval);
    }
 }
 
@@ -103,7 +103,7 @@ void dopinjustbit(QObject* w, labelptr settext, short bitfield)
 
       if (w != NULL) {
 	 bool boolval = (settext->justify & bitfield) ? 0 : 1;
-         toggle(qobject_cast<QAction*>(w), (pointertype)(-1), &boolval);
+         toggle(qobject_cast<QAction*>(w), Number(-1), &boolval);
       }
    }
 }
@@ -112,11 +112,11 @@ void dopinjustbit(QObject* w, labelptr settext, short bitfield)
 /* Set the justification for the label passed as 3rd parameter	  */
 /*----------------------------------------------------------------*/
 
-void setjust(QAction* w, pointertype value_, labelptr settext, short mode)
+void setjust(QAction* w, void* value_, labelptr settext, short mode)
 {
    short newjust, oldjust;
 
-   unsigned int value = (unsigned int)value_;
+   unsigned int value = (uintptr_t)value_;
 
    if (settext != NULL) {
 
@@ -153,7 +153,7 @@ void setjust(QAction* w, pointertype value_, labelptr settext, short mode)
 /* selected labels						  */
 /*----------------------------------------------------------------*/
 
-void setvjust(QAction* w, pointertype value, void* nulldata)
+void setvjust(QAction* w, void* value, void*)
 {
    short *fselect;
    labelptr settext;
@@ -182,7 +182,7 @@ void setvjust(QAction* w, pointertype value, void* nulldata)
 /* selected labels						  */
 /*----------------------------------------------------------------*/
 
-void sethjust(QAction* w, pointertype value, void*)
+void sethjust(QAction* w, void* value, void*)
 {
    short *fselect;
    labelptr settext;
@@ -211,12 +211,12 @@ void sethjust(QAction* w, pointertype value, void*)
 /* (flip invariance, latex mode, etc.)				*/
 /*--------------------------------------------------------------*/
 
-void setjustbit(QAction* w, pointertype value_, void*)
+void setjustbit(QAction* w, void* value_, void*)
 {
    short *fselect;
    labelptr settext;
    short labelcount = 0;
-   int value = (int)value_;
+   int value = (intptr_t)value_;
 
    if (eventmode == TEXT_MODE || eventmode == ETEXT_MODE) {
       settext = *((labelptr *)EDITPART);
@@ -241,11 +241,11 @@ void setjustbit(QAction* w, pointertype value_, void*)
 /* (e.g., pin visibility)					*/
 /*--------------------------------------------------------------*/
 
-void setpinjustbit(QAction* w, pointertype value_, void* nulldata)
+void setpinjustbit(QAction* w, void* value_, void*)
 {
    short *fselect;
    labelptr settext;
-   int value = (int)value_;
+   int value = (intptr_t)value_;
 
    if (eventmode == TEXT_MODE || eventmode == ETEXT_MODE) {
       settext = *((labelptr *)EDITPART);
@@ -758,10 +758,10 @@ void setpagelabel(Widget, const QString &str, void *dataptr_)
 /* Change to indicated tool (key binding w/o value) */
 /*--------------------------------------------------------------*/
 
-void changetool(QAction* w, pointertype value, void*)
+void changetool(QAction* w, void* value, void*)
 {
-   mode_rebinding((int)value, (short)-1);
-   highlightexcl(w, (int)value, (int)-1);
+   mode_rebinding((intptr_t)value, -1);
+   highlightexcl(w, (intptr_t)value, -1);
 }
 
 /*--------------------------------------------------------------*/
@@ -769,13 +769,13 @@ void changetool(QAction* w, pointertype value, void*)
 /* is selected;  otherwise, change to the indicated tool mode.	*/
 /*--------------------------------------------------------------*/
 
-void exec_or_changetool(QAction* w, pointertype value, void* nulldata)
+void exec_or_changetool(QAction* w, void* value, void*)
 {
    if (areawin->selects > 0)
-      mode_tempbinding((int)value, -1);
+      mode_tempbinding((intptr_t)value, -1);
    else {
-      mode_rebinding((int)value, -1);
-      highlightexcl(w, (int)value, -1);
+      mode_rebinding((intptr_t)value, -1);
+      highlightexcl(w, (intptr_t)value, -1);
    }
 }
 
@@ -785,13 +785,13 @@ void exec_or_changetool(QAction* w, pointertype value, void* nulldata)
 /* type of flip operation.					*/
 /*--------------------------------------------------------------*/
 
-void rotatetool(QAction* w, pointertype value, void* nulldata)
+void rotatetool(QAction* w, void* value, void*)
 {
    if (areawin->selects > 0)
-      mode_tempbinding(XCF_Rotate, (int)value);
+      mode_tempbinding(XCF_Rotate, (intptr_t)value);
    else {
-      mode_rebinding(XCF_Rotate, (int)value);
-      highlightexcl(w, (int)XCF_Rotate, (int)value);
+      mode_rebinding(XCF_Rotate, (intptr_t)value);
+      highlightexcl(w, XCF_Rotate, (intptr_t)value);
    }
 }
 
@@ -800,10 +800,10 @@ void rotatetool(QAction* w, pointertype value, void* nulldata)
 /* required to pass to the key binding routine.			*/
 /*--------------------------------------------------------------*/
 
-void pantool(QAction* w, pointertype value, void*)
+void pantool(QAction* w, void* value, void*)
 {
-   mode_rebinding(XCF_Pan, (int)value);
-   highlightexcl(w, (int)XCF_Pan, (int)value);
+   mode_rebinding(XCF_Pan, (intptr_t)value);
+   highlightexcl(w, XCF_Pan, (intptr_t)value);
 }
 
 /*--------------------------------------------------------------*/
@@ -1035,10 +1035,10 @@ void highlightexcl(QAction* action, int func, int value)
 /* Toggle a menu item */
 /*--------------------*/
 
-void toggle(QAction* a, pointertype soffset_, void *setdata)
+void toggle(QAction* a, void* soffset_, void* setdata)
 {
    bool *boolvalue;
-   unsigned int soffset = (unsigned int)soffset_;
+   unsigned int soffset = (uintptr_t)soffset_;
 
    if (soffset == -1)
       boolvalue = (bool*)setdata;
@@ -1054,15 +1054,15 @@ void toggle(QAction* a, pointertype soffset_, void *setdata)
 /* Invert the color scheme used for the background/foreground	  */
 /*----------------------------------------------------------------*/
 
-void inversecolor(QAction* a, pointertype soffset_, void* calldata)
+void inversecolor(QAction* a, void* soffset_, void* calldata)
 {
-   const unsigned int soffset = (unsigned int)soffset_;
+   const unsigned int soffset = (uintptr_t)soffset_;
    bool *boolvalue = (bool *)(((char*)areawin) + soffset);
 
    setcolorscheme(*boolvalue);
 
    if (a == NULL) a = menuAction("Options_AltColors");
-   toggle(a, (void*)soffset, (bool*)calldata);
+   toggle(a, soffset_, calldata);
 
    if (eventmode == NORMAL_MODE)
       XDefineCursor(areawin->viewport, DEFAULTCURSOR);
@@ -1259,37 +1259,37 @@ void setallstylemarks(u_short styleval)
 /* which has settings independent of the others.		*/
 /*--------------------------------------------------------------*/
 
-void setfill(QAction* w, pointertype value, void* calldata)
+void setfill(QAction* w, void* value, void*)
 {
-   setelementstyle(w, (unsigned int)value, OPAQUE | FILLED | FILLSOLID);
+   setelementstyle(w, (uintptr_t)value, OPAQUE | FILLED | FILLSOLID);
 }
 
 /*--------------------------------------------------------------*/
 
-void makebbox(QAction* w, pointertype value, void* calldata)
+void makebbox(QAction* w, void* value, void*)
 {
-   setelementstyle(w, (unsigned int)value, BBOX);
+   setelementstyle(w, (uintptr_t)value, BBOX);
 }
 
 /*--------------------------------------------------------------*/
 
-void setclosure(QAction* w, pointertype value, void* calldata)
+void setclosure(QAction* w, void* value, void*)
 {
-   setelementstyle(w, (unsigned int)value, UNCLOSED);
+   setelementstyle(w, (uintptr_t)value, UNCLOSED);
 }
 
 /*----------------------------------------------------------------*/
 
-void setopaque(QAction* w, pointertype value, void* calldata)
+void setopaque(QAction* w, void* value, void*)
 {
-   setelementstyle(w, (unsigned int)value, OPAQUE);
+   setelementstyle(w, (uintptr_t)value, OPAQUE);
 }
    
 /*----------------------------------------------------------------*/
 
-void setline(QAction* w, pointertype value, void* calldata)
+void setline(QAction* w, void* value, void*)
 {
-   setelementstyle(w, (unsigned int)value, BORDERS);
+   setelementstyle(w, (uintptr_t)value, BORDERS);
 }
    
 /*-----------------------------------------------*/
@@ -1429,11 +1429,11 @@ void promptparam(QAction* a, void*, void*)
 /* Set polygon editing style */
 /*---------------------------*/
 
-void boxedit(QAction* a, pointertype value_, void*)
+void boxedit(QAction* a, void* value_, void*)
 {
     /// \todo
 #if 0
-   unsigned int value = (unsigned int)value_;
+   unsigned int value = (uintptr_t)value_;
    if (w == NULL) {
       switch (value) {
          case MANHATTAN: w = PolygonEditManhattanBoxEditButton; break;
@@ -1464,10 +1464,10 @@ void addnewfont(QAction* a, void*, void*)
 /* Wrapper for labeltext when called from the menu */
 /*-------------------------------------------------*/
 
-void addtotext(QAction*, pointertype value, void*)
+void addtotext(QAction*, void* value, void*)
 {
    if (eventmode != TEXT_MODE && eventmode != ETEXT_MODE) return;
-   if (value == (pointertype)SPECIAL)
+   if (value == Number(SPECIAL))
       dospecial();
    else
       labeltext((int)value, (char *)1);

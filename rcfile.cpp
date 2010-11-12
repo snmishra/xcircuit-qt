@@ -84,22 +84,22 @@ short execcommand(short pflags, char *cmdptr)
       sscanf(argptr, "%149s", _STR);
       if (!strncmp(_STR, "grid", 4)) {
          areawin->gridon = a;
-         toggle(menuAction("Grid_Grid"), (pointertype)&areawin->gridon, NULL);
+         toggle(menuAction("Grid_Grid"), &areawin->gridon, NULL);
       }
       else if (!strncmp(_STR, "snap", 4) || !strncmp(_STR, "snap-to", 4)) {
          areawin->snapto = a;
-         toggle(menuAction("SnapTo_SnapTo"), (pointertype)&areawin->snapto, NULL);
+         toggle(menuAction("SnapTo_SnapTo"), &areawin->snapto, NULL);
       }
       else if (!strcmp(_STR, "axis") || !strcmp(_STR, "axes")) {
          areawin->axeson = a;
-         toggle(menuAction("Grid_Axes"), (pointertype)&areawin->axeson, NULL);
+         toggle(menuAction("Grid_Axes"), &areawin->axeson, NULL);
       }
       else if (!strcmp(_STR, "xschema") || !strcmp(_STR, "schema")) {
 	 /* Do nothing---retained for backward compatibility only */
       }
       else if (!strcmp(_STR, "antialias")) {
          areawin->antialias = a;
-         toggle(menuAction("Options_Antialias"), (void*)&areawin->antialias, NULL);
+         toggle(menuAction("Options_Antialias"), &areawin->antialias, NULL);
       }
       else if (!strcmp(_STR, "toolbar")) {
          areawin->toolbar_on = a;
@@ -311,7 +311,7 @@ short execcommand(short pflags, char *cmdptr)
 	 sscanf(argptr, "%*s %49s", value);
 	 if (!strcmp(value, "inverse") || !strcmp(value, "2"))
             areawin->invert = false;
-	 inversecolor(NULL, (pointertype)&areawin->invert, NULL);
+         inversecolor(NULL, &areawin->invert, NULL);
       }
       else if (!strncmp(argptr, "coordstyle", 10)) {
 	 sscanf(argptr, "%*s %49s", value);
