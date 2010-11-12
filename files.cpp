@@ -23,6 +23,7 @@
 #ifdef XC_WIN32
 #include <winsock2.h>
 #endif
+#include <stdint.h>
 
 #ifdef TCL_WRAPPER 
 #include <tk.h>

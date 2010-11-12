@@ -7,10 +7,12 @@
 /*      written by Tim Edwards, 8/13/93    				   */
 /*-------------------------------------------------------------------------*/
 
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
+#include <stdint.h>
 
 #ifdef TCL_WRAPPER 
 #include <tk.h>

@@ -18,6 +18,7 @@
 #include <cstring>
 #include <cmath>
 #include <cctype>
+#include <stdint.h>
 
 #ifdef TCL_WRAPPER
 #define  XK_MISCELLANY

@@ -10,6 +10,8 @@
 #ifndef XCIRCUIT_H
 #define XCIRCUIT_H
 
+#include <stdint.h>
+
 #include <QPoint>
 #include <QStringList>
 

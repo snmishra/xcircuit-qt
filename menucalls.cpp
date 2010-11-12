@@ -16,6 +16,7 @@
 #include <cerrno>
 #include <climits>
 #include <sys/types.h>
+#include <stdint.h>
 
 #ifdef TCL_WRAPPER
 #include <tk.h>

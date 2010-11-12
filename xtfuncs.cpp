@@ -16,6 +16,7 @@
 #include <cctype>
 #include <cerrno>
 #include <climits>
+#include <stdint.h>
 
 #include <sys/types.h>
 
