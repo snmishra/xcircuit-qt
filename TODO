@@ -1,0 +1,82 @@
+Xcircuit v3.x  Things To Do (file TODO)
+----------------------------------------------------------------------
+Bugs to fix:
+
+1) Positional parameters cause incorrect redisplay during polygon/path
+  edit (display reverts to original value).  Insertion of points must
+  renumber parameterized points.
+
+2) Position parameters have serious consequences for netlisting, in
+  that they can cause an object's netlist to change on a per-instance
+  basis.  This should be either dealt with or prevented.
+
+3) Substring selection in labels is backwards when the "flip
+  invariance" feature has rotated the text string 180 degrees.
+
+4) Colormap installation may be incomplete if xcircuit runs out
+  of colors in the middle of running the program (minor problem;
+  unlikely to happen).
+
+5) Color and Page menus run off the top and bottom of the screen
+  if the lists get to be too long.
+
+----------------------------------------------------------------------
+Features to add or change:
+
+1) Multiple item simultaneous edit:  If "edit" is invoked when multiple
+   elements are selected, and all elements are "similar" (e.g., exactly
+   the same except for spatial translation), then the edit is simultaneously
+   applied to all the elements.  This is particularly useful for adjusting
+   the endpoints of multiple lines, as in a table or graph.
+
+2) Instance numeric parameter edit:  If "edit" is invoked on an instance,
+   then the element inside that instance that is closest to the pointer
+   position and  has a numerically parameterized point or other
+   parameterized property (e.g., radius) will be put into edit mode.
+   Parameterized positions of instances and labels should invoke "move"
+   mode.  Both modes (edit and move) should be constrained to one axis
+   if only one dimension is parameterized.
+
+3) Graphic element, still to be addressed:
+
+    A) Incorporate raw PostScript by using ghostscript to generate
+       PPM data, and handling it like a PPM file, but treating it
+       in file input/output as an encapsulated PostScript block.
+       This should replace the current background rendering code.
+
+    B) Rewrite the image processing routines to clip the size of
+       the target image when outside screen bounds.  Cropped
+       images must be declared invalid on pan operations.
+
+    C) Page saves for backup should not write the graphic image,
+       or at least should not write it more than once (write it
+       to a separate file?)
+
+4) Create a Tcl command to return the value of countchanges(), and make
+   "quitcheck" a Tcl script, avoiding all the Tcl_Eval() calls there.
+
+5) Allow page label to be changed from the label on the bottom message bar.
+
+6) Some better handling of over/under arrangements of elements
+
+7) Vectored font output in PostScript.
+
+8) Proper cornering on dot/dashed boxes (maybe easier to
+   do in xcircuit and enforce WYSIWYG in PostScript?)
+
+9) Switch to all-floating-point internal units? ---probably not
+   necessary, but converting all XPoints to structures with ints
+   would be helpful.
+
+10) Comprehensive dependency list for allowing/disallowing
+   menu functions (key function dependencies have been dealt
+   with).
+
+11) Page indices need to be separated from the pagelist indices, so
+   that schematic library objects can be loaded and manipulated
+   without having to be displayed in the page list. 
+
+12) Need to translate the Python routines for handling the "generic"
+   netlist output to Tcl.
+
+----------------------------------------------------------------------
