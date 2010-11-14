@@ -29,7 +29,7 @@ void popupFile(QAction*, const char * request, const char * current, const char 
 
 QPoint actionCenter(QAction*);
 
-XtIntervalId xcAddTimeout(XtAppContext app_context, unsigned long interval, XtTimerCallbackProc proc, XtPointer client_data);
+XtIntervalId xcAddTimeout(unsigned long interval, XtTimerCallbackProc proc, XtPointer client_data);
 void xcRemoveTimeout(XtIntervalId timer);
 #define XtSetArg(arg,t,d) ((arg).name = (t), (arg).value = (XtArgVal)(d))
 void XtGetValues(Widget w, ArgList args, Cardinal num_args);
@@ -104,14 +104,14 @@ typedef struct _XtResource {
     XtPointer   default_addr;   /* Address of default resource              */
 } XtResource, *XtResourceList;
 
-inline Widget XtSetLanguageProc(XtAppContext, XtLanguageProc, XtPointer /*client_data*/) { return NULL; }
-inline void XwAppInitialize(XtAppContext) {}
+inline Widget XtSetLanguageProc(XtLanguageProc, XtPointer /*client_data*/) { return NULL; }
+inline void XwAppInitialize() {}
 void XtGetApplicationResources(Widget w, XtPointer base, XtResourceList resources, Cardinal
                                num_resources, ArgList args, Cardinal num_args);
 Widget XtAppCreateShell(String application_name, String application_class, WidgetClass widget_class,
                         ArgList args, Cardinal num_args);
 
-void XtAppAddConverter(XtAppContext app_context, String from_type, String to_type, XtConverter
+void XtAppAddConverter(String from_type, String to_type, XtConverter
               converter, XtConvertArgList convert_args, Cardinal num_args);
 
 

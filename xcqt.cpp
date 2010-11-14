@@ -433,7 +433,7 @@ void TimerObject::timerEvent(QTimerEvent * ev)
     }
 }
 
-XtIntervalId xcAddTimeout(XtAppContext, unsigned long interval, XtTimerCallbackProc proc, XtPointer client_data)
+XtIntervalId xcAddTimeout(unsigned long interval, XtTimerCallbackProc proc, XtPointer client_data)
 {
     Q_ASSERT(interval != 0);
     int id = (new TimerObject(interval, proc, client_data))->id();

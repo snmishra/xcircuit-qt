@@ -62,7 +62,6 @@ extern XCWindowData *areawin;
 extern fontinfo *fonts;
 extern short fontcount;
 extern Cursor appcursors[NUM_CURSORS];
-extern XtAppContext app;
 extern Window win;
 extern short beeper;
 
@@ -4228,7 +4227,7 @@ void incr_changes(objectptr thisobj)
 
    /* Generate a new timeout */
 
-   xobjs.timeout_id = xcAddTimeout(app, 60000 * xobjs.save_interval,
+   xobjs.timeout_id = xcAddTimeout(60000 * xobjs.save_interval,
  		savetemp, NULL);
 }
 

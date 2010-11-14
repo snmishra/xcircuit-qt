@@ -41,7 +41,6 @@
 /* Global Variable definitions						   */
 /*-------------------------------------------------------------------------*/
 
-extern XtAppContext app;
 extern Cursor	appcursors[NUM_CURSORS];
 extern XCWindowData *areawin;
 extern ApplicationData appdata;
@@ -2060,7 +2059,7 @@ void keyhandler(Widget w, caddr_t clientdata, XKeyEvent *event)
 	 if (func != -1) {
             areawin->save.x = event->x();
             areawin->save.y = event->y();
-            areawin->time_id = xcAddTimeout(app, PRESSTIME,
+            areawin->time_id = xcAddTimeout(PRESSTIME,
                         makepress, Number(keywstate));
             return;
 	 }

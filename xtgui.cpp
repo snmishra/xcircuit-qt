@@ -40,7 +40,6 @@
 
 extern short	 popups;      /* total number of popup widgets on the screen */
 
-XtAppContext app;
 Atom wprot, wmprop[2];
 
 extern Colormap cmap;
@@ -722,7 +721,7 @@ void xc_vprintf(Widget widget, const char *fmt, va_list args_in)
 
    /* 10 second timeout */
    if (widget == message3) {
-      printtime_id = xcAddTimeout(app, 10000, clrmessage, NULL);
+      printtime_id = xcAddTimeout(10000, clrmessage, NULL);
    }
 }
 

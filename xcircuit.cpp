@@ -86,8 +86,6 @@ extern float version;
 
 #ifdef TCL_WRAPPER
 extern Tcl_Interp *xcinterp;
-#else
-extern XtAppContext app;
 #endif
 
 //
@@ -945,7 +943,7 @@ void post_initialize()
    /*---------------------------------------------------*/
 
    xobjs.save_interval = appdata.timeout;
-   xobjs.timeout_id = xcAddTimeout(app, 60000 * xobjs.save_interval,
+   xobjs.timeout_id = xcAddTimeout(60000 * xobjs.save_interval,
 	savetemp, NULL);
 
    setsymschem();

@@ -72,7 +72,6 @@ typedef void (*ActionCallback)(QAction*, void*, void*);
 typedef void (*XtEventHandler)(Widget, XtPointer, QEvent*, bool*);
 typedef void (*XtTimerCallbackProc)(XtPointer, XtIntervalId*);
 typedef String (*XtLanguageProc)(String, XtPointer);
-typedef void* XtAppContext;
 
 typedef struct __CharStruct *XCharStruct;
 
