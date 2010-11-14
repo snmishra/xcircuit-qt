@@ -613,11 +613,6 @@ void rejustify(short mode)
       }
       if (preselected == false && eventmode != MOVE_MODE && eventmode != COPY_MODE)
 	 unselect_all();
-#if 0
-      else
-	 draw_all_selected();
-      /// \todo side effects of draw_all_selected?
-#endif
    }
    if (curlabel == NULL)
       Wprintf("No labels chosen to rejustify");

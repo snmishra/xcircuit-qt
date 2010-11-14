@@ -844,7 +844,11 @@ struct XCWindowData {
    char		*lastbackground;
    Cursor	*defaultcursor;
 
-   void update() const;
+   XCWindowData();
+   void update();
+   void markUpdated();
+private:
+   int updates;
 };
 typedef XCWindowData *XCWindowDataPtr;
 

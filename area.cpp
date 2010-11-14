@@ -50,6 +50,7 @@ void Area::paintEvent(QPaintEvent*)
     float x, y, spc, spc2, i, j, fpart;
     XPoint originpt;
     Context c(&p);
+    areawin->markUpdated();
 
     if (xobjs.pagelist[areawin->page].background.name != (char *)NULL)
       copybackground(&c);
@@ -345,7 +346,7 @@ void Area::zoom(const QPoint & center, float scale)
     newll -= ncenter;
     areawin->pcorner = newll;
     window_to_user(center.x(), center.y(), &ncenter);
-    qDebug("zoom dx=%d dy=%d", ncenter.x-ucenter.x, ncenter.y-ucenter.y);
+    if (false) qDebug("zoom dx=%d dy=%d", ncenter.x-ucenter.x, ncenter.y-ucenter.y);
 
     // check for out of bounds and for overflow
     Context ctx(NULL);
@@ -396,7 +397,7 @@ void Area::on_corner_clicked()
 void Area::wheelEvent(QWheelEvent * ev)
 {
     const double wheelScale = 1/400.0;
-    //qDebug("wheel event: %s by %d", ev->orientation() == Qt::Horizontal ? "hor" : "ver", ev->delta());
+    if (false) qDebug("wheel event: %s by %d", ev->orientation() == Qt::Horizontal ? "hor" : "ver", ev->delta());
     if (ev->orientation() == Qt::Horizontal) {
         const int delta = areawin->width * wheelScale * ev->delta();
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta);
@@ -409,7 +410,7 @@ void Area::wheelEvent(QWheelEvent * ev)
 void Area::pinchEvent(QPinchGesture * pinch)
 {
     const float eps = 1E-6;
-    qDebug("pinch %f -> %f", pinch->lastScaleFactor(), pinch->scaleFactor());
+    if (false) qDebug("pinch %f -> %f", pinch->lastScaleFactor(), pinch->scaleFactor());
     if ((pinch->lastScaleFactor() - 1.0) < eps) {
         // we begin a pinch
         initialScale = areawin->vscale;

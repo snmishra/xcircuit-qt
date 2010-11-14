@@ -12,7 +12,7 @@ static void free_all_eparams(genericptr thiselem)
 generic::~generic()
 {
     free_all_eparams(this);
-    qDebug("~generic %p", this);
+    if (false) qDebug("~generic %p", this);
 }
 
 generic::generic(const generic & src) :

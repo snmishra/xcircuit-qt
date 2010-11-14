@@ -2019,7 +2019,7 @@ void keyhandler(Widget w, caddr_t clientdata, XKeyEvent *event)
        event = new XKeyEvent(*dynamic_cast<QKeyEvent*>(event));
        newEvent = true;
    }
-   //qDebug("key event: tf=%d vf=%d key=%x type=%d", top->hasFocus(), areawin->viewport->hasFocus(), event->key(), event->type());
+   if (false) qDebug("key event: tf=%d vf=%d key=%x type=%d", top->hasFocus(), areawin->viewport->hasFocus(), event->key(), event->type());
 
    if (event->type() == QEvent::KeyRelease) {
 

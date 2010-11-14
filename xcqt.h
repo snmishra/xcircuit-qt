@@ -94,26 +94,6 @@ void DrawLine(QPainter* gc, int x1, int y1, int x2, int y2);
 void XCopyArea(Drawable src, Drawable dst, QPainter* gc, int x, int y, int w, int h, int offx, int offy);
 void XDrawString(Drawable, QPainter* gc, int x, int y, const char *str, int len);
 
-typedef struct _XtResource {
-    String      resource_name;  /* Resource name                            */
-    String      resource_class; /* Resource class                           */
-    String      resource_type;  /* Representation type desired              */
-    Cardinal    resource_size;  /* Size in bytes of representation          */
-    Cardinal    resource_offset;/* Offset from base to put resource value   */
-    String      default_type;   /* representation type of specified default */
-    XtPointer   default_addr;   /* Address of default resource              */
-} XtResource, *XtResourceList;
-
-inline Widget XtSetLanguageProc(XtLanguageProc, XtPointer /*client_data*/) { return NULL; }
-inline void XwAppInitialize() {}
-void XtGetApplicationResources(Widget w, XtPointer base, XtResourceList resources, Cardinal
-                               num_resources, ArgList args, Cardinal num_args);
-Widget XtAppCreateShell(String application_name, String application_class, WidgetClass widget_class,
-                        ArgList args, Cardinal num_args);
-
-void XtAppAddConverter(String from_type, String to_type, XtConverter
-              converter, XtConvertArgList convert_args, Cardinal num_args);
-
 
 #define KPMOD   Qt::KeypadModifier
 

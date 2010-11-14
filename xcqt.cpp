@@ -234,7 +234,7 @@ bool CallbackFilter::eventFilter(QObject * src, QEvent * event)
             }
         }
         if (match) {
-            //qDebug("  callback on object %x \"%s\" %s", (unsigned int)src, src->objectName().toLocal8Bit().data(), prop.data());
+            if (false) qDebug("  callback on object %x \"%s\" %s", (unsigned int)src, src->objectName().toLocal8Bit().data(), prop.data());
             QVariant callbacks = w->property(prop);
             Q_ASSERT(callbacks.isValid());
             foreach (Callback c, callbacks.toList()) {
@@ -284,7 +284,7 @@ static void addEventHandler(Widget w, EventMask event, EventMask &mask, const Ev
     w->setProperty(prop, eventList);
     if (event & PointerMotionMask) {
         w->setMouseTracking(true);
-        //qDebug("widget %x \"%s\" tracks mouse", (unsigned int)w, w->objectName().toLocal8Bit().data());
+        if (false) qDebug("widget %x \"%s\" tracks mouse", (unsigned int)w, w->objectName().toLocal8Bit().data());
     }
     mask = mask & ~event;
 }
@@ -311,7 +311,7 @@ static void removeEventHandler(Widget w, EventMask event, EventMask &mask, const
     w->setProperty(prop, eventList);
     if (event & PointerMotionMask) {
         w->setMouseTracking(false);
-        //qDebug("widget %x \"%s\" has stopped tracking mouse", (unsigned int)w, w->objectName().toLocal8Bit().data());
+        if (false) qDebug("widget %x \"%s\" has stopped tracking mouse", (unsigned int)w, w->objectName().toLocal8Bit().data());
     }
 }
 
@@ -327,7 +327,7 @@ static bool invokeEventHandler(Widget w, EventMask event, EventMask mask, QEvent
 
     QList<QVariant> eventList = events.toList();
     if (! eventList.isEmpty()) {
-        //qDebug("  event on object %x \"%s\" %x", (int)w, w->objectName().toLocal8Bit().data(), (int)event);
+        if (false) qDebug("  event on object %x \"%s\" %x", (int)w, w->objectName().toLocal8Bit().data(), (int)event);
     }
     for (int i = 0; i < eventList.count(); ++i) {
         EventHandler eh = eventList[i].value<EventHandler>();
@@ -377,7 +377,7 @@ bool EventFilter::eventFilter(QObject * src, QEvent * event)
     QMouseEvent * mev;
     switch (event->type()) {
     case QEvent::MouseMove:
-        //qDebug("mouse move on widget %x \"%s\"", (unsigned int)w, w->objectName().toLocal8Bit().data());
+        if (false) qDebug("mouse move on widget %x \"%s\"", (unsigned int)w, w->objectName().toLocal8Bit().data());
         mev = (QMouseEvent*)event;
         if (mev->buttons().testFlag(Qt::LeftButton)) events = events | ButtonMotionMask | Button1MotionMask;
         if (mev->buttons().testFlag(Qt::RightButton)) events = events | ButtonMotionMask | Button2MotionMask;
@@ -437,13 +437,13 @@ XtIntervalId xcAddTimeout(unsigned long interval, XtTimerCallbackProc proc, XtPo
 {
     Q_ASSERT(interval != 0);
     int id = (new TimerObject(interval, proc, client_data))->id();
-    //qDebug("adding %ldms timeout #%d", interval, id);
+    if (false) qDebug("adding %ldms timeout #%d", interval, id);
     return id;
 }
 
 void xcRemoveTimeout(XtIntervalId tid)
 {
-    //qDebug("removing timeout #%d", tid);
+    if (false) qDebug("removing timeout #%d", tid);
     Q_ASSERT(timerMap.contains(tid));
     if (timerMap.contains(tid)) {
         delete timerMap[tid];
@@ -534,7 +534,7 @@ void DrawLines(QPainter* gc, XPoint* point, int number)
 {
     Q_ASSERT(gc);
     for (int i = 0; i < number-1; ++ i) {
-        //qDebug("drawing line %d,%d -> %d,%d", point[i].x, point[i].y, point[i+1].x, point[i+1].y);
+        if (false) qDebug("drawing line %d,%d -> %d,%d", point[i].x, point[i].y, point[i+1].x, point[i+1].y);
         gc->drawLine(point[i].x, point[i].y, point[i+1].x, point[i+1].y);
     }
 }
@@ -779,7 +779,7 @@ QPoint actionCenter(QAction* a)
     QPoint p;
     foreach (QWidget * w, a->associatedWidgets()) {
         p = w->mapToGlobal(w->rect().center());
-        qDebug(" action center for \"%s\" at %d,%d", w->objectName().toLocal8Bit().data(), p.x(), p.y());
+        if (false) qDebug(" action center for \"%s\" at %d,%d", w->objectName().toLocal8Bit().data(), p.x(), p.y());
         if (qobject_cast<QAbstractButton*>(w)) break;
     }
     return p;

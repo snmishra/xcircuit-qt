@@ -518,51 +518,56 @@ XCWindowData *create_new_window()
 
    newwindow = new XCWindowData;
 
-   newwindow->toolbar_on = true;
-   newwindow->viewport = NULL;
-   newwindow->mapped = false;
-   newwindow->psfont = 0;
-   newwindow->justify = FLIPINV;
-   newwindow->page = 0;
-   newwindow->textscale = 1.0;
-   newwindow->linewidth = 1.0;
-   newwindow->zoomfactor = SCALEFAC;
-   newwindow->style = UNCLOSED;
-   newwindow->invert = false;
-   newwindow->antialias = false;
-   newwindow->axeson = true;
-   newwindow->snapto = true;
-   newwindow->gridon = true;
-   newwindow->center = true;
-   newwindow->bboxon = false;
-   newwindow->filter = ALL_TYPES;
-   newwindow->editinplace = true;
-   newwindow->selects = 0;
-   newwindow->selectlist = NULL;
-   newwindow->lastlibrary = 0;
-   newwindow->manhatn = false;
-   newwindow->boxedit = MANHATTAN;
-   newwindow->lastbackground = NULL;
-   newwindow->editstack = new object;
-   newwindow->stack = NULL;   /* at the top of the hierarchy */
-   newwindow->hierstack = NULL;
-   newwindow->pinpointon = false;
-   newwindow->pinattach = false;
-   newwindow->buschar = '(';	/* Vector notation for buses */
-   newwindow->defaultcursor = &CROSS;
-   newwindow->event_mode = NORMAL_MODE;
-   newwindow->attachto = -1;
-   newwindow->color = DEFAULTCOLOR;
-   newwindow->time_id = 0;
-   newwindow->vscale = 1;
-   newwindow->pcorner.x = newwindow->pcorner.y = 0;
-   newwindow->topinstance = (objinstptr)NULL;
-
    /* Prepend to linked window list in global data (xobjs) */
    newwindow->next = xobjs.windowlist;
    xobjs.windowlist = newwindow;
 
    return newwindow;
+}
+
+XCWindowData::XCWindowData()
+{
+    toolbar_on = true;
+    viewport = NULL;
+    mapped = false;
+    psfont = 0;
+    justify = FLIPINV;
+    page = 0;
+    textscale = 1.0;
+    linewidth = 1.0;
+    zoomfactor = SCALEFAC;
+    style = UNCLOSED;
+    invert = false;
+    antialias = false;
+    axeson = true;
+    snapto = true;
+    gridon = true;
+    center = true;
+    bboxon = false;
+    filter = ALL_TYPES;
+    editinplace = true;
+    selects = 0;
+    selectlist = NULL;
+    lastlibrary = 0;
+    manhatn = false;
+    boxedit = MANHATTAN;
+    lastbackground = NULL;
+    editstack = new object;
+    stack = NULL;   /* at the top of the hierarchy */
+    hierstack = NULL;
+    pinpointon = false;
+    pinattach = false;
+    buschar = '(';	/* Vector notation for buses */
+    defaultcursor = &CROSS;
+    event_mode = NORMAL_MODE;
+    attachto = -1;
+    color = DEFAULTCOLOR;
+    time_id = 0;
+    vscale = 1;
+    pcorner.x = pcorner.y = 0;
+    topinstance = NULL;
+    next = NULL;
+    updates = 0;
 }
 
 /*----------------------------------------------------------------------*/
@@ -961,7 +966,14 @@ QAction* menuAction(const char *m) {
     return a;
 }
 
-void XCWindowData::update() const
+void XCWindowData::update()
 {
-    viewport->update();
+    if (! updates) viewport->update();
+    updates ++;
+}
+
+void XCWindowData::markUpdated()
+{
+    if (false && updates > 1) qDebug("XCWindowData: update() was called %d times this cycle", updates);
+    updates = 0;
 }
