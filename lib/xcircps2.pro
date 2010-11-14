@@ -1,26 +1,26 @@
 %%BeginProlog
 %
 %  PostScript prolog for output from xcircuit
-%  Version: 3.3
+%  Version: 3.7
 %
 %  Electrical circuit (and otherwise general) drawing program
 %
-%  Written by Tim Edwards 8/5/93--7/13/05  (tim.edwards@multigig.com)
+%  Written by Tim Edwards 8/5/93--11/1/10  (tim.edwards@multigig.com)
 %  The Johns Hopkins University (1993-2004)
 %  MultiGiG, Inc. (2004-present)
 %
-%%BeginResource: procset XCIRCproc 3.3 0
+%%BeginResource: procset XCIRCproc 3.7 0
 %
 % supporting definitions --- these are the primary xcircuit types.
 
 /XCIRCsave save def
 /topmat matrix currentmatrix def
 
-/fontslant { /slant exch def [1 0 slant 1 0 0] 
+/fontslant { /slant exch def [1 0 slant 1 0 0]
     exch findfont exch makefont dup length dict /ndict exch def
     { 1 index /FID ne { ndict 3 1 roll put } { pop pop } ifelse } forall
     ndict definefont pop} def
-/ul { dup type /stringtype eq showflag 1 eq and { gsave 
+/ul { dup type /stringtype eq showflag 1 eq and { gsave
    currentpoint topmat setmatrix 0 0 moveto 2 index stringwidth pop (_)
    false charpath flattenpath pathbbox grestore exch pop 1 index
    sub setlinewidth exch pop currentpoint 3 -1 roll add moveto 0
@@ -33,67 +33,67 @@
    exch 4 1 roll exch sub add moveto pop 0 rlineto stroke
    moveto } if } def
 /stW { gsave currentpoint newpath moveto true charpath flattenpath
-	pathbbox pop exch pop sub grestore } def
+        pathbbox pop exch pop sub grestore } def
 /Ts {mark Tabs aload pop counttomark 1 add array astore /Tabs exch def Tabs
-	0 currentpoint pop put} def
+        0 currentpoint pop put} def
 /Tbn {mark Tabs aload pop counttomark dup 2 add 1 roll cleartomark 1 sub} def
 /Tb { 0 1 Tbn {Tabs exch get dup currentpoint pop lt
-	{currentpoint exch pop moveto exit} {pop} ifelse } for } def
+        {currentpoint exch pop moveto exit} {pop} ifelse } for } def
 /Tf { Tbn -1 0 {Tabs exch get dup currentpoint pop gt
-	{currentpoint exch pop moveto exit} {pop} ifelse } for } def
+        {currentpoint exch pop moveto exit} {pop} ifelse } for } def
 /qS { (aa) stW (a a) stW sub 4 div 0 Kn } def
 /hS { qS qS } def
 /pspc 0 def
 /cf0 { scalefont setfont } bind def
 /Kn { dup kY add /kY exch def rmoveto } bind def
 /ss { /fscale fscale 0.67 mul def currentfont 0.67 cf0 0 fscale0 fscale mul
-	0.33 mul neg Kn} def
+        0.33 mul neg Kn} def
 /Ss { /fscale fscale 0.67 mul def currentfont 0.67 cf0 0 fscale0 fscale mul
-	0.67 mul Kn } def
+        0.67 mul Kn } def
 /ns { 0 kY neg Kn /kY 0 def /fscale 1.0 def xfont0 1.0 cf0 } def
 /CR { ns 0 /Bline Bline fscale0 neg add def Bline moveto } def
 /cf { dup type /realtype ne {1.0} if exch findfont exch kY 0 eq
-	{ 40 mul dup /fscale0 exch def cf0 /xfont0 currentfont def}
-	{fscale0 mul fscale mul cf0} ifelse } def
+        { 40 mul dup /fscale0 exch def cf0 /xfont0 currentfont def}
+        {fscale0 mul fscale mul cf0} ifelse } def
 /ctmk { counttomark dup 2 add -1 roll pop } bind def
 /label { gsave translate 0 0 moveto dup scale neg /rotval exch def
-	/just exch def just 384 and 0 gt {/mshow {pop} def} {/mshow {show}
-	def} ifelse just 16 and 0 gt {gsave rotval rotate 0 1 dtransform
-	gsave pagemat setmatrix idtransform exch grestore 1 0 dtransform
-	gsave pagemat setmatrix idtransform exch grestore dup abs 1e-9 lt
-	{pop mul 0 gt} {3 1 roll pop pop 0 lt} ifelse grestore {-1 /rotval
-	rotval neg def /just just dup 3 and 1 ne {3 xor} if def} {1} ifelse
-	exch -1e-9 lt {-1 /rotval rotval neg def /just just dup 12 and
-	4 ne {12 xor} if def} {1} ifelse scale } if /showflag 0 def
-	/fspc pspc def /Bline 0 def /Tabs 0 array def /fscale 1.0 def
-	/kY 0 def gsave dup 1 add copy 0 exch 1 0 dtransform exch atan rotate
-	{exch dup type /stringtype eq {true charpath flattenpath} {dup type
-	/arraytype eq {exec} {12 string cvs true charpath flattenpath} ifelse}
-	ifelse} repeat pop pathbbox grestore 3 -1 roll pop 3 1 roll just
-	1 and 0 gt {just 2 and 0 gt {exch pop neg fspc sub} {exch sub 0.5
-	mul neg} ifelse} {pop neg fspc add} ifelse exch Bline exch just 4
-	and 0 gt {just 8 and 0 gt {exch pop neg fspc sub} {add 0.5 mul neg}
-	ifelse} {pop neg fspc add} ifelse rotval rotate Kn currentpoint
-	translate /showflag 1 def /Bline 0 def /Tabs 0 array def /fscale
-	1.0 def /kY 0 def {dup type /stringtype eq {mshow} {dup type
-	/arraytype eq {exec} {12 string cvs mshow} ifelse} ifelse} repeat
-	grestore } def
+        /just exch def just 384 and 0 gt {/mshow {pop} def} {/mshow {show}
+        def} ifelse just 16 and 0 gt {gsave rotval rotate 0 1 dtransform
+        gsave pagemat setmatrix idtransform exch grestore 1 0 dtransform
+        gsave pagemat setmatrix idtransform exch grestore dup abs 1e-9 lt
+        {pop mul 0 gt} {3 1 roll pop pop 0 lt} ifelse grestore {-1 /rotval
+        rotval neg def /just just dup 3 and 1 ne {3 xor} if def} {1} ifelse
+        exch -1e-9 lt {-1 /rotval rotval neg def /just just dup 12 and
+        4 ne {12 xor} if def} {1} ifelse scale } if /showflag 0 def
+        /fspc pspc def /Bline 0 def /Tabs 0 array def /fscale 1.0 def
+        /kY 0 def gsave dup 1 add copy 0 exch 1 0 dtransform exch atan rotate
+        {exch dup type /stringtype eq {true charpath flattenpath} {dup type
+        /arraytype eq {exec} {12 string cvs true charpath flattenpath} ifelse}
+        ifelse} repeat pop pathbbox grestore 3 -1 roll pop 3 1 roll just
+        1 and 0 gt {just 2 and 0 gt {exch pop neg fspc sub} {exch sub 0.5
+        mul neg} ifelse} {pop neg fspc add} ifelse exch Bline exch just 4
+        and 0 gt {just 8 and 0 gt {exch pop neg fspc sub} {add 0.5 mul neg}
+        ifelse} {pop neg fspc add} ifelse rotval rotate Kn currentpoint
+        translate /showflag 1 def /Bline 0 def /Tabs 0 array def /fscale
+        1.0 def /kY 0 def {dup type /stringtype eq {mshow} {dup type
+        /arraytype eq {exec} {12 string cvs mshow} ifelse} ifelse} repeat
+        grestore } def
 /pinlabel { 4 index 32 and 0 ne hlevel 0 eq or { /pspc 10 def label
-	/pspc 0 def } { pop pop pop pop pop {pop} repeat } ifelse } def
+        /pspc 0 def } { pop pop pop pop pop {pop} repeat } ifelse } def
 /pinglobal { pinlabel } def
 /infolabel { pinlabel } def
 /graphic { gsave 4 index cvx exec /DataSource get resetfile translate
-	0 0 moveto neg rotate dup scale cvx exec image grestore } def
+        0 0 moveto neg rotate dup scale cvx exec image grestore } def
 
 /scb { setrgbcolor } bind def  /sce { defColor aload pop scb } bind def
 /cRedef {/defColor currentcolor 3 array astore def} def
 /begingate {dup type /dicttype ne {1 dict} if begin	% default params
-	dup type /dicttype ne {1 dict} if begin		% instanced params
-	/hlevel hlevel 1 add def /defColor currentcolor sce 3 array
-	astore def gsave sce translate 0 0 moveto neg rotate dup abs scale
-	} bind def
+        dup type /dicttype ne {1 dict} if begin		% instanced params
+        /hlevel hlevel 1 add def /defColor currentcolor sce 3 array
+        astore def gsave sce translate 0 0 moveto neg rotate dup abs scale
+        } bind def
 /endgate { /hlevel hlevel 1 sub def grestore defColor aload pop cRedef
-	scb end end} bind def
+        scb end end} bind def
 
 /hlevel 0 def
 /tmpa [1 0 0 1 0 0] def
@@ -119,13 +119,23 @@
   7 exch sub 8 div dup 1 exch sub currentrgbcolor 3 array astore
   {3 copy mul add 4 1 roll pop} forall pop pop setrgbcolor eofill}
   {dup 7 lt {gar exch get ppaint} {pop eofill} ifelse} ifelse}
-  {style 256 and 0 gt {1 setgray eofill} if} ifelse grestore style 8 and 0 gt 
-  style 512 eq or {newpath} {stroke} ifelse grestore} def     
+  {style 256 and 0 gt {1 setgray eofill} if} ifelse grestore style 8 and 0 gt
+  style 512 eq or {newpath} {stroke} ifelse grestore} def
 
+/addtoy {exch dup dup 2 mul 3 add 1 roll -1 1 { 4 1 roll dup 4 1 roll add
+        4 -1 roll 2 mul 1 add index 2 mul 2 add 2 roll} for pop} def
+/addtoy1 {1 exch addtoy pop} def
+/addtoy3 {3 exch addtoy pop} def
+/addtoy4 {4 exch addtoy pop} def
+/addtox {exch dup dup 2 mul 3 add 1 roll -1 1 { 4 1 roll dup 4 1 roll 3 -1 roll
+        add exch 4 -1 roll 2 mul 1 add index 2 mul 2 add 2 roll} for pop} def
+/addtox1 {1 exch addtox pop} def
+/addtox3 {3 exch addtox pop} def
+/addtox4 {4 exch addtox pop} def
 /polygon { gsave /num exch def moveto num 1 sub {lineto} repeat setstyles } def
 /xcarc   { gsave newpath arc setstyles } def
 /elb { matrix currentmatrix 7 -1 roll 7 -1 roll translate 5 1 roll 4 -1 roll
-	3 index div 1 scale } def
+        3 index div 1 scale } def
 /ele { 0 4 1 roll 0 4 1 roll } bind def
 /ellipse { gsave elb newpath ele arc setmatrix setstyles } def
 /pellip  { elb ele arc setmatrix } def
@@ -136,7 +146,7 @@
 /endpath { setstyles } bind def
 /bop	 { 1 setlinecap 0 setlinejoin 6 setmiterlimit 0 0 0 scb cRedef } def
 /psinsertion {/PSobj save def /showpage {} def /setpagedevice {pop} def bop
-	rotate translate dup scale} def
+        rotate translate dup scale} def
 /end_insert {PSobj restore} def
 /setpagemat {/pagemat matrix currentmatrix def} def
 /inchscale  {setpagemat 0.375 mul dup scale} def

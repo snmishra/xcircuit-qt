@@ -13,7 +13,7 @@ macx:ICON = xcircuit.icns
 win:RC_FILE = resources.rc
 
 VERSION=3.7
-REVISION=8
+REVISION=12
 
 isEmpty(PREFIX): PREFIX=/usr/lib/xcircuit-$$VERSION
 
@@ -106,3 +106,6 @@ HEADERS = \
     elements.h \
     context.h \
     matrix.h
+
+OTHER_FILES += \
+    lib/xcircps2.pro

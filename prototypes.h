@@ -202,7 +202,9 @@ short printparams(FILE *, objinstptr, short);
 void printobjectparams(FILE *, objectptr);
 void varcheck(FILE *, short, objectptr, short *, genericptr, u_char);
 void varfcheck(FILE *, float, objectptr, short *, genericptr, u_char);
-void varpcheck(FILE *, short, objectptr, int, short *, genericptr, u_char);
+bool varpcheck(FILE *, short, objectptr, int, short *, genericptr, u_char);
+bool varpathcheck(FILE *, short, objectptr, int, short *,
+                genericptr *, pathptr, u_char);
 void getfile(QAction*, void*, void*);
 int filecmp(const QString &, const QString &);
 void loadglib(bool, short, short, const QString &);

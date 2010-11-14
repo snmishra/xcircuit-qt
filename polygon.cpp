@@ -55,6 +55,7 @@ void polygon::draw(Context* ctx) const
 void polygon::indicate(Context* ctx, eparamptr epp, oparamptr ops) const
 {
     int k = epp->pdata.pointno;
+    if (k < 0) k = 0;
     UDrawCircle(ctx, points + k, ops->which);
 }
 

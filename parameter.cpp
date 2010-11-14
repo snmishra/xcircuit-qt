@@ -452,7 +452,7 @@ int epsubstitute(genericptr thiselem, objectptr thisobj, objinstptr pinst,
    eparamptr epp;
    oparamptr dps, ops;
    int retval = -1;
-   int k, ival;
+   int i, k, ival, diff;
    char *key;
    float fval;
    XPoint *setpt;
@@ -544,22 +544,69 @@ int epsubstitute(genericptr thiselem, objectptr thisobj, objinstptr pinst,
             retval = qMax(retval, 1);
 	    switch(thiselem->type) {
 	       case PATH:
-                  pgen = TOPATH(&thiselem)->begin() + epp->pdata.pathpt[0];
-		  if (ELEMENTTYPE(*pgen) == POLYGON) {
-		     setpt = TOPOLY(pgen)->points + k;
-		     setpt->x = ival;
-		  }
-		  else { /* spline */
-		     TOSPLINE(pgen)->ctrl[k].x = ival;
-		     if (needrecalc) *needrecalc = true;
-		  }
+                  if (k < 0) {
+                     pgen = TOPATH(&thiselem)->begin();
+                     if (ELEMENTTYPE(*pgen) == POLYGON) {
+                        setpt = TOPOLY(pgen)->points.begin();
+                        diff = ival - setpt->x;
+                     }
+                     else { /* spline */
+                        diff = ival - TOSPLINE(pgen)->ctrl[0].x;
+                     }
+                     for (pgen = TOPATH(&thiselem)->begin(); pgen <
+                                TOPATH(&thiselem)->end(); ++pgen) {
+                        if (ELEMENTTYPE(*pgen) == POLYGON) {
+                           for (i = 0; i < TOPOLY(pgen)->points.count(); ++i) {
+                              setpt = TOPOLY(pgen)->points + i;
+                              setpt->x += diff;
+                           }
+                        }
+                        else { /* spline */
+                           for (i = 0; i < 4; i++) {
+                              TOSPLINE(pgen)->ctrl[i].x += diff;
+                           }
+                           if (needrecalc) *needrecalc = true;
+                        }
+                     }
+                  }
+                  else {
+                     pgen = TOPATH(&thiselem)->begin() + epp->pdata.pathpt[0];
+                     if (ELEMENTTYPE(*pgen) == POLYGON) {
+                        setpt = TOPOLY(pgen)->points + k;
+                        setpt->x = ival;
+                     }
+                     else { /* spline */
+                        TOSPLINE(pgen)->ctrl[k].x = ival;
+                        if (needrecalc) *needrecalc = true;
+                     }
+                  }
 		  break;
 	       case POLYGON:
-	          setpt = TOPOLY(&thiselem)->points + k;
-		  setpt->x = ival;
+                  if (k < 0) {
+                     setpt = TOPOLY(&thiselem)->points.begin();
+                     diff = ival - setpt->x;
+                     for (i = 0; i < TOPOLY(&thiselem)->points.count(); i++) {
+                        setpt = TOPOLY(&thiselem)->points.begin() + i;
+                        setpt->x += diff;
+                     }
+                  }
+                  else {
+                     setpt = TOPOLY(&thiselem)->points + k;
+                     setpt->x = ival;
+                  }
 		  break;
 	       case SPLINE:
-		  TOSPLINE(&thiselem)->ctrl[k].x = ival;
+                  if (k < 0) {
+                     setpt = &(TOSPLINE(&thiselem)->ctrl[0]);
+                     diff = ival - setpt->x;
+                     for (i = 0; i < 4; i++) {
+                        setpt = &(TOSPLINE(&thiselem)->ctrl[i]);
+                        setpt->x += diff;
+                     }
+                  }
+                  else {
+                     TOSPLINE(&thiselem)->ctrl[k].x = ival;
+                  }
 		  if (needrecalc) *needrecalc = true;
 		  break;
 	       case LABEL:
@@ -577,22 +624,69 @@ int epsubstitute(genericptr thiselem, objectptr thisobj, objinstptr pinst,
             retval = qMax(retval, 1);
 	    switch(thiselem->type) {
 	       case PATH:
-                  pgen = TOPATH(&thiselem)->begin() + epp->pdata.pathpt[0];
-		  if (ELEMENTTYPE(*pgen) == POLYGON) {
-		     setpt = TOPOLY(pgen)->points + k;
-		     setpt->y = ival;
-		  }
-		  else { /* spline */
-		     TOSPLINE(pgen)->ctrl[k].y = ival;
-		     if (needrecalc) *needrecalc = true;
-		  }
+                if (k < 0) {
+                   pgen = TOPATH(&thiselem)->begin();
+                   if (ELEMENTTYPE(*pgen) == POLYGON) {
+                      setpt = TOPOLY(pgen)->points.begin();
+                      diff = ival - setpt->y;
+                   }
+                   else { /* spline */
+                      diff = ival - TOSPLINE(pgen)->ctrl[0].y;
+                   }
+                   for (pgen = TOPATH(&thiselem)->begin(); pgen <
+                              TOPATH(&thiselem)->end(); pgen++) {
+                      if (ELEMENTTYPE(*pgen) == POLYGON) {
+                         for (i = 0; i < TOPOLY(pgen)->points.count(); i++) {
+                            setpt = TOPOLY(pgen)->points.begin() + i;
+                            setpt->y += diff;
+                         }
+                      }
+                      else { /* spline */
+                         for (i = 0; i < 4; i++) {
+                            TOSPLINE(pgen)->ctrl[i].y += diff;
+                         }
+                         if (needrecalc) *needrecalc = true;
+                      }
+                   }
+                }
+                else {
+                   pgen = TOPATH(&thiselem)->begin() + epp->pdata.pathpt[0];
+                   if (ELEMENTTYPE(*pgen) == POLYGON) {
+                      setpt = TOPOLY(pgen)->points.begin() + k;
+                      setpt->y = ival;
+                   }
+                   else { /* spline */
+                      TOSPLINE(pgen)->ctrl[k].y = ival;
+                      if (needrecalc) *needrecalc = true;
+                   }
+                }
 		  break;
 	       case POLYGON:
-	          setpt = TOPOLY(&thiselem)->points + k;
-		  setpt->y = ival;
+                  if (k < 0) {
+                     setpt = TOPOLY(&thiselem)->points.begin();
+                     diff = ival - setpt->y;
+                     for (i = 0; i < TOPOLY(&thiselem)->points.count(); i++) {
+                        setpt = TOPOLY(&thiselem)->points.begin() + i;
+                        setpt->y += diff;
+                     }
+                  }
+                  else {
+                     setpt = TOPOLY(&thiselem)->points.begin() + k;
+                     setpt->y = ival;
+                  }
 		  break;
 	       case SPLINE:
-		  TOSPLINE(&thiselem)->ctrl[k].y = ival;
+                  if (k < 0) {
+                     setpt = &(TOSPLINE(&thiselem)->ctrl[0]);
+                     diff = ival - setpt->y;
+                     for (i = 0; i < 4; i++) {
+                        setpt = &(TOSPLINE(&thiselem)->ctrl[i]);
+                        setpt->y += diff;
+                     }
+                  }
+                  else {
+                     TOSPLINE(&thiselem)->ctrl[k].y = ival;
+                  }
 		  if (needrecalc) *needrecalc = true;
 		  break;
 	       case LABEL:
@@ -857,6 +951,7 @@ void pwriteback(objinstptr thisinst)
 		  k = epp->pdata.pathpt[1];
 	       else
 	          k = epp->pdata.pointno;
+               if (k < 0 ) k = 0;
                switch(ops->which) {
 	          case P_POSITION_X:
 	             switch(thiselem->type) {
@@ -877,7 +972,10 @@ void pwriteback(objinstptr thisinst)
 		           wtemp.ival = TOSPLINE(eptr)->ctrl[k].x;
 		           break;
 			case PATH:
-                           pgen = TOPATH(eptr)->begin() + epp->pdata.pathpt[0];
+                           if (epp->pdata.pathpt[0] < 0)
+                              pgen = TOPATH(eptr)->begin();
+                           else
+                              pgen = TOPATH(eptr)->begin() + epp->pdata.pathpt[0];
 			   if (ELEMENTTYPE(*pgen) == POLYGON) {
 	                      setpt = TOPOLY(pgen)->points + k;
 		              wtemp.ival = setpt->x;
@@ -906,7 +1004,10 @@ void pwriteback(objinstptr thisinst)
 		           wtemp.ival = TOSPLINE(eptr)->ctrl[k].y;
 		           break;
 			case PATH:
-                           pgen = TOPATH(eptr)->begin() + epp->pdata.pathpt[0];
+                           if (epp->pdata.pathpt[0] < 0)
+                              pgen = TOPATH(eptr)->begin();
+                           else
+                              pgen = TOPATH(eptr)->begin() + epp->pdata.pathpt[0];
 			   if (ELEMENTTYPE(*pgen) == POLYGON) {
 	                      setpt = TOPOLY(pgen)->points + k;
 		              wtemp.ival = setpt->y;
@@ -1420,12 +1521,12 @@ const char *getnumericalpkey(u_int mode)
 
 void makenumericalp(genericptr *gelem, u_int mode, char *key, short cycle)
 {
-   genericptr pgen;
+   genericptr pgen, *pathpgen;
    oparamptr ops, newops;
    eparamptr epp;
    XPoint *pptr;
    char new_key[7], *keyptr;
-   int pidx;
+   int pidx, i;
    short loccycle = cycle;
 
    /* Parameterized strings are handled by makeparam() */
@@ -1440,8 +1541,19 @@ void makenumericalp(genericptr *gelem, u_int mode, char *key, short cycle)
    for (epp = (*gelem)->passed; epp != NULL; epp = epp->next) {
       ops = match_param(topobject, epp->key);
       if (ops->which == (u_char)mode) {
-	 Fprintf(stderr, "Cannot duplicate a parameter!\n");
-	 return;
+          if ((mode == P_POSITION_X || mode == P_POSITION_Y) &&
+                 ((*gelem)->type == POLYGON || (*gelem)->type == SPLINE) &&
+                 (TOPOLY(gelem)->cycle != NULL))
+          {
+             if ((cycle < 0) || (TOPOLY(gelem)->cycle->number != cycle)) {
+                Fprintf(stderr, "Cannot duplicate a point parameter!\n");
+                return;
+             }
+          }
+          else {
+             Fprintf(stderr, "Cannot duplicate a parameter!\n");
+             return;
+          }
       }
    }
 
@@ -1585,13 +1697,31 @@ void makenumericalp(genericptr *gelem, u_int mode, char *key, short cycle)
                                            TOPOLY(gelem)->cycle->number : -1;
 	    switch(mode) {
 	       case P_POSITION_X:
-	          pptr = TOPOLY(gelem)->points + loccycle;
-	          newops->parameter.ivalue = (int)pptr->x;
+                if (loccycle == -1) {
+                   pptr = TOPOLY(gelem)->points.begin();
+                   newops->parameter.ivalue = (int)pptr->x;
+                   for (i = 0; i < TOPOLY(gelem)->points.count(); i++) {
+                      pptr = TOPOLY(gelem)->points.begin() + i;
+                      pptr->x -= newops->parameter.ivalue;
+                   }
+                } else {
+                   pptr = TOPOLY(gelem)->points.begin() + loccycle;
+                   newops->parameter.ivalue = (int)pptr->x;
+                }
 	          epp->pdata.pointno = loccycle;
 	          break;
 	       case P_POSITION_Y:
-	          pptr = TOPOLY(gelem)->points + loccycle;
-	          newops->parameter.ivalue = (int)pptr->y;
+                  if (loccycle == -1) {
+                     pptr = TOPOLY(gelem)->points.begin();
+                     newops->parameter.ivalue = (int)pptr->y;
+                     for (i = 0; i < TOPOLY(gelem)->points.count(); i++) {
+                        pptr = TOPOLY(gelem)->points.begin() + i;
+                        pptr->y -= newops->parameter.ivalue;
+                     }
+                  } else {
+                     pptr = TOPOLY(gelem)->points.begin() + loccycle;
+                     newops->parameter.ivalue = (int)pptr->y;
+                  }
 	          epp->pdata.pointno = loccycle;
 	          break;
 	       case P_STYLE:
@@ -1609,13 +1739,31 @@ void makenumericalp(genericptr *gelem, u_int mode, char *key, short cycle)
                            TOSPLINE(gelem)->cycle->number : -1;
 	    switch(mode) {
 	       case P_POSITION_X:
-	          pptr = TOSPLINE(gelem)->ctrl + loccycle;
-	          newops->parameter.ivalue = (int)pptr->x;
+                if (loccycle == -1) {
+                   pptr = &(TOSPLINE(gelem)->ctrl[0]);
+                   newops->parameter.ivalue = (int)pptr->x;
+                   for (i = 0; i < 4; i++) {
+                      pptr = &(TOSPLINE(gelem)->ctrl[i]);
+                      pptr->x -= newops->parameter.ivalue;
+                   }
+                } else {
+                   pptr = TOSPLINE(gelem)->ctrl + loccycle;
+                   newops->parameter.ivalue = (int)pptr->x;
+                }
 	          epp->pdata.pointno = loccycle;
 	          break;
 	       case P_POSITION_Y:
-	          pptr = TOSPLINE(gelem)->ctrl + loccycle;
-	          newops->parameter.ivalue = (int)pptr->y;
+                  if (loccycle == -1) {
+                     pptr = &(TOSPLINE(gelem)->ctrl[0]);
+                     newops->parameter.ivalue = (int)pptr->y;
+                     for (i = 0; i < 4; i++) {
+                        pptr = &(TOSPLINE(gelem)->ctrl[i]);
+                        pptr->y -= newops->parameter.ivalue;
+                     }
+                  } else {
+                     pptr = TOSPLINE(gelem)->ctrl + loccycle;
+                     newops->parameter.ivalue = (int)pptr->y;
+                  }
 	          epp->pdata.pointno = loccycle;
 	          break;
 	       case P_STYLE:
@@ -1652,21 +1800,77 @@ void makenumericalp(genericptr *gelem, u_int mode, char *key, short cycle)
 	          break;
 	       case P_POSITION_X:
 		  newops->type = XC_INT;
-		  if (ELEMENTTYPE(pgen) == POLYGON)
-		     newops->parameter.ivalue = ((polyptr)pgen)->points[loccycle].x;
-		  else
-		     newops->parameter.ivalue = ((splineptr)pgen)->ctrl[loccycle].x;
-	          epp->pdata.pathpt[1] = loccycle;
-	          epp->pdata.pathpt[0] = pidx;
+                  if (loccycle == -1) {
+                     pathpgen = TOPATH(gelem)->begin();
+                     if (ELEMENTTYPE(*pathpgen) == POLYGON) {
+                        pptr = TOPOLY(pathpgen)->points.begin();
+                        newops->parameter.ivalue = (int)pptr->x;
+                     }
+                     else {
+                        pptr = &(TOSPLINE(pathpgen)->ctrl[0]);
+                        newops->parameter.ivalue = (int)pptr->x;
+                     }
+                     for (pathpgen = TOPATH(gelem)->begin(); pathpgen <
+                                TOPATH(gelem)->end(); pathpgen++) {
+                        if (ELEMENTTYPE(*pathpgen) == POLYGON) {
+                           for (i = 0; i < TOPOLY(pathpgen)->points.count(); i++) {
+                              pptr = TOPOLY(pathpgen)->points.begin() + i;
+                              pptr->x -= newops->parameter.ivalue;
+                           }
+                        }
+                        else {
+                           for (i = 0; i < 4; i++) {
+                              pptr = &(TOSPLINE(pathpgen)->ctrl[i]);
+                              pptr->x -= newops->parameter.ivalue;
+                           }
+                        }
+                     }
+                  }
+                  else {
+                     if (ELEMENTTYPE(pgen) == POLYGON)
+                        newops->parameter.ivalue = ((polyptr)pgen)->points[loccycle].x;
+                     else
+                        newops->parameter.ivalue = ((splineptr)pgen)->ctrl[loccycle].x;
+                     epp->pdata.pathpt[1] = loccycle;
+                     epp->pdata.pathpt[0] = pidx;
+                  }
 		  break;
 	       case P_POSITION_Y:
 		  newops->type = XC_INT;
-		  if (ELEMENTTYPE(pgen) == POLYGON)
-		     newops->parameter.ivalue = ((polyptr)pgen)->points[loccycle].y;
-		  else
-		     newops->parameter.ivalue = ((splineptr)pgen)->ctrl[loccycle].y;
-	          epp->pdata.pathpt[1] = loccycle;
-	          epp->pdata.pathpt[0] = pidx;
+                  if (loccycle == -1) {
+                     pathpgen = TOPATH(gelem)->begin();
+                     if (ELEMENTTYPE(*pathpgen) == POLYGON) {
+                        pptr = TOPOLY(pathpgen)->points.begin();
+                        newops->parameter.ivalue = (int)pptr->y;
+                     }
+                     else {
+                        pptr = &(TOSPLINE(pathpgen)->ctrl[0]);
+                        newops->parameter.ivalue = (int)pptr->y;
+                     }
+                     for (pathpgen = TOPATH(gelem)->begin(); pathpgen <
+                                TOPATH(gelem)->end(); pathpgen++) {
+                        if (ELEMENTTYPE(*pathpgen) == POLYGON) {
+                           for (i = 0; i < TOPOLY(pathpgen)->points.count(); i++) {
+                              pptr = TOPOLY(pathpgen)->points.begin() + i;
+                              pptr->y -= newops->parameter.ivalue;
+                           }
+                        }
+                        else {
+                           for (i = 0; i < 4; i++) {
+                              pptr = &(TOSPLINE(pathpgen)->ctrl[i]);
+                              pptr->y -= newops->parameter.ivalue;
+                           }
+                        }
+                     }
+                  }
+                  else {
+                     if (ELEMENTTYPE(pgen) == POLYGON)
+                        newops->parameter.ivalue = ((polyptr)pgen)->points[loccycle].y;
+                     else
+                        newops->parameter.ivalue = ((splineptr)pgen)->ctrl[loccycle].y;
+                     epp->pdata.pathpt[1] = loccycle;
+                     epp->pdata.pathpt[0] = pidx;
+                  }
 		  break;
 	    }
 	    break;
@@ -2154,7 +2358,9 @@ void parameterize(int mode, char *key, short cycle)
 {
    short *fselect, ptype;
    labelptr settext;
+   bool preselected;
 
+   preselected = areawin->selects > 0;
    if (mode >= 0) {
       ptype = (short)param_select[mode];
       if (!checkselect(ptype)) select_element(ptype);
@@ -2177,7 +2383,7 @@ void parameterize(int mode, char *key, short cycle)
       else
          makenumericalp(topobject->begin() + (*fselect), mode, key, cycle);
    }
-   unselect_all();
+   if (!preselected) unselect_all();
    setparammarks(NULL);
 }
 

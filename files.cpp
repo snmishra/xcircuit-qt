@@ -319,10 +319,10 @@ void dostcount(FILE *ps, short *count, short addlength)
 
 /*----------------------------------------------------------------------*/
 /* Write a numerical value as a string to _STR, making a parameter	*/
-/* substitution if appropriate.						*/
+/* substitution if appropriate.	 Returns true if substitution was done */
 /*----------------------------------------------------------------------*/
 
-void varpcheck(FILE *ps, short value, objectptr localdata, int pointno,
+bool varpcheck(FILE *ps, short value, objectptr localdata, int pointno,
 	short *stptr, genericptr thiselem, u_char which)
 {
    oparamptr ops;
@@ -330,7 +330,7 @@ void varpcheck(FILE *ps, short value, objectptr localdata, int pointno,
    bool done = false;
 
    for (epp = thiselem->passed; epp != NULL; epp = epp->next) {
-      if (epp->pdata.pointno != pointno) continue;
+      if (epp->pdata.pointno != -1 && epp->pdata.pointno != pointno) continue;
       ops = match_param(localdata, epp->key);
       if (ops != NULL && (ops->which == which)) {
 	 sprintf(_STR, "%s ", epp->key);
@@ -339,11 +339,16 @@ void varpcheck(FILE *ps, short value, objectptr localdata, int pointno,
       }
    }
       
-   if (!done)
+   if (!done) {
+      if (pointno == -1) return done;
       sprintf(_STR, "%d ", (int)value);
-
+   }
+   else if (epp->pdata.pointno == -1 && pointno >= 0) {
+      sprintf(_STR, "%d ", (int)value - ops->parameter.ivalue);
+   }
    dostcount (ps, stptr, strlen(_STR));
    fputs(_STR, ps);
+   return done;
 }
 
 /*----------------------------------------------------------------------*/
@@ -387,7 +392,7 @@ void varfcheck(FILE *ps, float value, objectptr localdata, short *stptr,
 /* Like varpcheck(), for path types only.				*/
 /*----------------------------------------------------------------------*/
 
-void varpathcheck(FILE *ps, short value, objectptr localdata, int pointno,
+bool varpathcheck(FILE *ps, short value, objectptr localdata, int pointno,
 	short *stptr, genericptr *thiselem, pathptr thispath, u_char which)
 {
    oparamptr ops;
@@ -395,8 +400,8 @@ void varpathcheck(FILE *ps, short value, objectptr localdata, int pointno,
    bool done = false;
 
    for (epp = thispath->passed; epp != NULL; epp = epp->next) {
-      if (epp->pdata.pathpt[1] != pointno) continue;
-      if (epp->pdata.pathpt[0] != (short)(thiselem - thispath->begin())) continue;
+      if (epp->pdata.pathpt[0] != -1 && epp->pdata.pathpt[1] != pointno) continue;
+      if (epp->pdata.pathpt[0] != -1 && epp->pdata.pathpt[0] != (short)(thiselem - thispath->begin())) continue;
       ops = match_param(localdata, epp->key);
       if (ops != NULL && (ops->which == which)) {
 	 sprintf(_STR, "%s ", epp->key);
@@ -405,11 +410,17 @@ void varpathcheck(FILE *ps, short value, objectptr localdata, int pointno,
       }
    }
       
-   if (!done)
+   if (!done) {
+      if (pointno == -1) return done;
       sprintf(_STR, "%d ", (int)value);
+   }
+   else if (epp->pdata.pathpt[0] == -1 && pointno >= 0) {
+      sprintf(_STR, "%d ", (int)value - ops->parameter.ivalue);
+  }
 
    dostcount (ps, stptr, strlen(_STR));
    fputs(_STR, ps);
+   return done;
 }
 
 /* Structure used to hold data specific to each load mode.  See	*/
@@ -3041,6 +3052,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
    int curcolor = ccolor;
    char *colorkey = NULL;
    int i, j, k;
+   short px, py;
    objinstptr *newinst;
    eparamptr epptrx, epptry;	/* used for paths only */
 
@@ -3054,7 +3066,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
    temp = buffer;
 
    for(;;) {
-      char *lineptr, *keyptr;
+      char *lineptr, *keyptr, *saveptr;
 
       if (fgets(temp, 255, ps) == NULL) {
 	 if (strcmp(keyword, "restore")) {
@@ -3154,15 +3166,38 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	 /* begin a path constructor */
 
 	 else if (!strcmp(keyword, "beginpath")) {
+            px = py = 0;
 	    
             newpath = localdata->append(new path);
             (*newpath)->color = curcolor;
 
+            for (--keyptr; *keyptr == ' '; --keyptr) ;
+            for (; *keyptr != ' '; --keyptr) ;
+
+            /* check for "addtox" and "addtoy" parameter specification */
+            while (!strncmp(keyptr + 1, "addto", 5)) {
+                saveptr = keyptr + 1;
+
+                for (--keyptr; *keyptr == ' '; --keyptr) ;
+                for (; *keyptr != ' '; --keyptr) ;
+
+                /* Get parameter and its value */
+                if (*(saveptr + 5) == 'x')
+                   varpscan(localdata, keyptr + 1, &px, (genericptr)*newpath,
+                                 -1, offx, P_POSITION_X);
+                else
+                   varpscan(localdata, keyptr + 1, &py, (genericptr)*newpath,
+                                 -1, offy, P_POSITION_Y);
+
+                for (--keyptr; *keyptr == ' '; --keyptr) ;
+                for (; *keyptr != ' '; --keyptr) ;
+            }
+
 	    lineptr = varpathscan(localdata, buffer, &startpoint.x,
-			(genericptr *)NULL, *newpath, 0, offx, P_POSITION_X,
+                        (genericptr *)NULL, *newpath, 0, offx + px, P_POSITION_X,
 			&epptrx);
 	    lineptr = varpathscan(localdata, lineptr, &startpoint.y,
-			(genericptr *)NULL, *newpath, 0, offy, P_POSITION_Y,
+                        (genericptr *)NULL, *newpath, 0, offy + py, P_POSITION_Y,
 			&epptry);
 
             std_eparam(*newpath, colorkey);
@@ -3192,10 +3227,32 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
             XPoint* newpoints;
 	    short tmpnum;
 
+            px = py = 0;
+
             newpoly = (*newpath)->append(new polygon);
 
-	    for (--keyptr; *keyptr == ' '; keyptr--);
-	    for (; *keyptr != ' '; keyptr--);
+            for (--keyptr; *keyptr == ' '; keyptr--) ;
+            for (; *keyptr != ' '; keyptr--) ;
+
+            /* check for "addtox" and "addtoy" parameter specification */
+            while (!strncmp(keyptr + 1, "addto", 5)) {
+               saveptr = keyptr + 1;
+
+               for (--keyptr; *keyptr == ' '; keyptr--) ;
+               for (; *keyptr != ' '; keyptr--) ;
+
+               /* Get parameter and its value */
+               if (*(saveptr + 5) == 'x')
+                  varpscan(localdata, keyptr + 1, &px, (genericptr)*newpoly,
+                                -1, offx, P_POSITION_X);
+               else
+                  varpscan(localdata, keyptr + 1, &py, (genericptr)*newpoly,
+                                -1, offy, P_POSITION_Y);
+
+               for (--keyptr; *keyptr == ' '; keyptr--) ;
+               for (; *keyptr != ' '; keyptr--) ;
+            }
+
 	    sscanf(keyptr, "%hd", &tmpnum);
             (*newpoly)->points.resize(tmpnum + 1);
 	    (*newpoly)->width = 1.0;
@@ -3226,10 +3283,10 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
             newpoints = (*newpoly)->points.end() - 1;
 	    lineptr = varpathscan(localdata, lineptr, &newpoints->x,
                         (genericptr *)newpoly, *newpath, newpoints - (*newpoly)->points.begin(),
-			 offx, P_POSITION_X, &epptrx);
+                         offx + px, P_POSITION_X, &epptrx);
 	    lineptr = varpathscan(localdata, lineptr, &newpoints->y,
                         (genericptr *)newpoly, *newpath, newpoints - (*newpoly)->points.begin(),
-			offy, P_POSITION_Y, &epptry);
+                        offy + py, P_POSITION_Y, &epptry);
 
             for (--newpoints; newpoints > (*newpoly)->points.begin(); newpoints--) {
 
@@ -3312,6 +3369,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	 else if (!strcmp(keyword, "curveto")) {
 	    splineptr *newspline;
             newspline = (*newpath)->append(new spline);
+            px = py = 0;
 
             (*newspline)->cycle = NULL;
 	    (*newspline)->width = 1.0;
@@ -3336,24 +3394,45 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	       newepp->pdata.pathpt[0] = (*newpath)->parts - 1;
 	    }
 
+            for (--keyptr; *keyptr == ' '; keyptr--) ;
+            for (; *keyptr != ' '; keyptr--) ;
+
+            /* check for "addtox" and "addtoy" parameter specification */
+            while (!strncmp(keyptr + 1, "addto", 5)) {
+               saveptr = keyptr + 1;
+
+               for (--keyptr; *keyptr == ' '; keyptr--) ;
+               for (; *keyptr != ' '; keyptr--) ;
+
+               /* Get parameter and its value */
+               if (*(saveptr + 5) == 'x')
+                  varpscan(localdata, keyptr + 1, &px, (genericptr)*newspline,
+                                -1, offx, P_POSITION_X);
+               else
+                  varpscan(localdata, keyptr + 1, &py, (genericptr)*newspline,
+                                -1, offy, P_POSITION_Y);
+
+               for (--keyptr; *keyptr == ' '; keyptr--) ;
+               for (; *keyptr != ' '; keyptr--) ;
+            }
 
 	    lineptr = varpathscan(localdata, buffer, &(*newspline)->ctrl[1].x,
-			(genericptr *)newspline, *newpath, 1, offx, P_POSITION_X,
+                        (genericptr *)newspline, *newpath, 1, offx + px, P_POSITION_X,
 			NULL);
 	    lineptr = varpathscan(localdata, lineptr, &(*newspline)->ctrl[1].y,
-			(genericptr *)newspline, *newpath, 1, offy, P_POSITION_Y,
+                        (genericptr *)newspline, *newpath, 1, offy + py, P_POSITION_Y,
 			NULL);
 	    lineptr = varpathscan(localdata, lineptr, &(*newspline)->ctrl[2].x,
-			(genericptr *)newspline, *newpath, 2, offx, P_POSITION_X,
+                        (genericptr *)newspline, *newpath, 2, offx + px, P_POSITION_X,
 			NULL);
 	    lineptr = varpathscan(localdata, lineptr, &(*newspline)->ctrl[2].y,
-			(genericptr *)newspline, *newpath, 2, offy, P_POSITION_Y,
+                        (genericptr *)newspline, *newpath, 2, offy + py, P_POSITION_Y,
 			NULL);
 	    lineptr = varpathscan(localdata, lineptr, &(*newspline)->ctrl[3].x,
-			(genericptr *)newspline, *newpath, 3, offx, P_POSITION_X,
+                        (genericptr *)newspline, *newpath, 3, offx + px, P_POSITION_X,
 			&epptrx);
 	    lineptr = varpathscan(localdata, lineptr, &(*newspline)->ctrl[3].y,
-			(genericptr *)newspline, *newpath, 3, offy, P_POSITION_Y,
+                        (genericptr *)newspline, *newpath, 3, offy + py, P_POSITION_Y,
 			&epptry);
 
             (*newspline)->ctrl[0] = startpoint;
@@ -3435,6 +3514,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
          else if (!strcmp(keyword, "polygon") || !strcmp(keyword, "wire")) {
 	    polyptr *newpoly;
             XPoint* newpoints;
+            px = py = 0;
 
             newpoly = localdata->append(new polygon);
 	    lineptr = buffer;
@@ -3456,8 +3536,26 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	          for (; *keyptr != ' '; keyptr--);
 	          sscanf(keyptr, "%f", &(*newpoly)->width);
 	       }
-	       for (--keyptr; *keyptr == ' '; keyptr--);
-	       for (; *keyptr != ' '; keyptr--);
+               for (--keyptr; *keyptr == ' '; keyptr--) ;
+               for (; *keyptr != ' '; keyptr--) ;
+               /* check for "addtox" and "addtoy" parameter specification */
+               while (!strncmp(keyptr + 1, "addto", 5)) {
+                  saveptr = keyptr + 1;
+
+                  for (--keyptr; *keyptr == ' '; keyptr--) ;
+                  for (; *keyptr != ' '; keyptr--) ;
+
+                  /* Get parameter and its value */
+                  if (*(saveptr + 5) == 'x')
+                     varpscan(localdata, keyptr + 1, &px, (genericptr)*newpoly,
+                                -1, offx, P_POSITION_X);
+                  else
+                     varpscan(localdata, keyptr + 1, &py, (genericptr)*newpoly,
+                                -1, offy, P_POSITION_Y);
+
+                  for (--keyptr; *keyptr == ' '; keyptr--) ;
+                  for (; *keyptr != ' '; keyptr--) ;
+               }
                short int number;
                sscanf(keyptr, "%hd", &number);
                (*newpoly)->points.resize(number);
@@ -3479,10 +3577,10 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
                 newpoints++) {
 	       lineptr = varpscan(localdata, lineptr, &newpoints->x,
                         *newpoly, newpoints - (*newpoly)->points.begin(),
-			offx, P_POSITION_X);
+                        offx + px, P_POSITION_X);
 	       lineptr = varpscan(localdata, lineptr, &newpoints->y,
                         *newpoly, newpoints - (*newpoly)->points.begin(),
-			offy, P_POSITION_Y);
+                        offy + py, P_POSITION_Y);
             }
             std_eparam((*newpoly), colorkey);
          }
@@ -3491,6 +3589,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 
          else if (!strcmp(keyword, "spline")) {
             splineptr *newspline;
+            px = py = 0;
 
             newspline = localdata->append(new spline);
             (*newspline)->color = curcolor;
@@ -3512,27 +3611,47 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	       (*newspline)->ctrl[0].y -= offy;
 	    }
 	    else {
+                for (--keyptr; *keyptr == ' '; keyptr--) ;
+                for (; *keyptr != ' '; keyptr--) ;
+                /* check for "addtox" and "addtoy" parameter specification */
+                while (!strncmp(keyptr + 1, "addto", 5)) {
+                   saveptr = keyptr + 1;
+
+                   for (--keyptr; *keyptr == ' '; keyptr--) ;
+                   for (; *keyptr != ' '; keyptr--) ;
+
+                   /* Get parameter and its value */
+                   if (*(saveptr + 5) == 'x')
+                      varpscan(localdata, keyptr + 1, &px, (genericptr)*newspline,
+                                 -1, offx, P_POSITION_X);
+                   else
+                      varpscan(localdata, keyptr + 1, &py, (genericptr)*newspline,
+                                 -1, offy, P_POSITION_Y);
+
+                   for (--keyptr; *keyptr == ' '; keyptr--) ;
+                   for (; *keyptr != ' '; keyptr--) ;
+                }
 
                lineptr = varscan(localdata, buffer, (short int*)&(*newspline)->style,
                                 *newspline, P_STYLE);
 	       lineptr = varfscan(localdata, lineptr, &(*newspline)->width,
                                 *newspline, P_LINEWIDTH);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[1].x,
-                                *newspline, 1, offx, P_POSITION_X);
+                                *newspline, 1, offx + px, P_POSITION_X);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[1].y,
-                                *newspline, 1, offy, P_POSITION_Y);
+                                *newspline, 1, offy + py, P_POSITION_Y);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[2].x,
-                                *newspline, 2, offx, P_POSITION_X);
+                                *newspline, 2, offx + px, P_POSITION_X);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[2].y,
-                                *newspline, 2, offy, P_POSITION_Y);
+                                *newspline, 2, offy + py, P_POSITION_Y);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[3].x,
-                                *newspline, 3, offx, P_POSITION_X);
+                                *newspline, 3, offx + px, P_POSITION_X);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[3].y,
-                                *newspline, 3, offy, P_POSITION_Y);
+                                *newspline, 3, offy + py, P_POSITION_Y);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[0].x,
-                                *newspline, 0, offx, P_POSITION_X);
+                                *newspline, 0, offx + px, P_POSITION_X);
 	       lineptr = varpscan(localdata, lineptr, &(*newspline)->ctrl[0].y,
-                                *newspline, 0, offy, P_POSITION_Y);
+                                *newspline, 0, offy + py, P_POSITION_Y);
 	    }
 
             (*newspline)->calc();
@@ -5403,8 +5522,22 @@ void printOneObject(FILE *ps, objectptr localdata, int ccolor)
                         savept - TOPOLY(savegen)->points.begin(), &stcount, *savegen,
 			P_POSITION_Y);
 	    }
-            sprintf(_STR, "%d polygon\n", TOPOLY(savegen)->points.count());
+            sprintf(_STR, "%d ", TOPOLY(savegen)->points.count());
 	    dostcount (ps, &stcount, strlen(_STR));
+            if (varpcheck(ps, 0, localdata, -1, &stcount, *savegen,
+                        P_POSITION_X)) {
+               sprintf(_STR, "addtox ");
+               dostcount (ps, &stcount, strlen(_STR));
+               fputs(_STR, ps);
+            }
+            if (varpcheck(ps, 0, localdata, -1, &stcount, *savegen,
+                        P_POSITION_Y)) {
+               sprintf(_STR, "addtoy ");
+               dostcount (ps, &stcount, strlen(_STR));
+               fputs(_STR, ps);
+            }
+            sprintf(_STR, "polygon\n", TOPOLY(savegen)->points.count());
+            dostcount (ps, &stcount, strlen(_STR));
 	    fputs(_STR, ps);
 	    break;
 
@@ -5419,6 +5552,18 @@ void printOneObject(FILE *ps, objectptr localdata, int ccolor)
 		  break;
 	    }
 	    dostcount(ps, &stcount, 9);
+            if (varpathcheck(ps, 0, localdata, -1, &stcount, pgen,
+                        TOPATH(savegen), P_POSITION_X)) {
+               sprintf(_STR, "addtox1 ");
+               dostcount (ps, &stcount, strlen(_STR));
+               fputs(_STR, ps);
+            }
+            if (varpathcheck(ps, 0, localdata, -1, &stcount, pgen,
+                        TOPATH(savegen), P_POSITION_Y)) {
+               sprintf(_STR, "addtoy1 ");
+               dostcount (ps, &stcount, strlen(_STR));
+               fputs(_STR, ps);
+            }
 	    fprintf(ps, "beginpath\n");
             for (pgen = TOPATH(savegen)->begin(); pgen != TOPATH(savegen)->end(); pgen++) {
 	       switch(ELEMENTTYPE(*pgen)) {
@@ -5428,7 +5573,22 @@ void printOneObject(FILE *ps, objectptr localdata, int ccolor)
                         xypathcheck(*savept, savept - TOPOLY(pgen)->points.begin(), pgen,
 				savegen);
 	       	     }
-                     sprintf(_STR, "%d polyc\n", TOPOLY(pgen)->points.count() - 1);
+                     sprintf(_STR, "%d ", TOPOLY(pgen)->points.count() - 1);
+                     dostcount (ps, &stcount, strlen(_STR));
+                     fputs(_STR, ps);
+                     if (varpathcheck(ps, 0, localdata, -1, &stcount, pgen,
+                                TOPATH(savegen), P_POSITION_X)) {
+                        sprintf(_STR, "addtox ");
+                        dostcount (ps, &stcount, strlen(_STR));
+                        fputs(_STR, ps);
+                     }
+                     if (varpathcheck(ps, 0, localdata, -1, &stcount, pgen,
+                                TOPATH(savegen), P_POSITION_Y)) {
+                        sprintf(_STR, "addtoy ");
+                        dostcount (ps, &stcount, strlen(_STR));
+                        fputs(_STR, ps);
+                     }
+                     sprintf(_STR, "polyc\n");
 	       	     dostcount (ps, &stcount, strlen(_STR));
 	       	     fputs(_STR, ps);
 	       	     break;
@@ -5436,6 +5596,18 @@ void printOneObject(FILE *ps, objectptr localdata, int ccolor)
 		     xypathcheck(TOSPLINE(pgen)->ctrl[1], 1, pgen, savegen);
 		     xypathcheck(TOSPLINE(pgen)->ctrl[2], 2, pgen, savegen);
 		     xypathcheck(TOSPLINE(pgen)->ctrl[3], 3, pgen, savegen);
+                     if (varpathcheck(ps, 0, localdata, -1, &stcount, pgen,
+                                TOPATH(savegen), P_POSITION_X)) {
+                        sprintf(_STR, "addtox3 ");
+                        dostcount (ps, &stcount, strlen(_STR));
+                        fputs(_STR, ps);
+                     }
+                     if (varpathcheck(ps, 0, localdata, -1, &stcount, pgen,
+                                TOPATH(savegen), P_POSITION_Y)) {
+                        sprintf(_STR, "addtoy3 ");
+                        dostcount (ps, &stcount, strlen(_STR));
+                        fputs(_STR, ps);
+                     }
 		     fprintf(ps, "curveto\n");
 		     break;
 	       }
@@ -5456,6 +5628,18 @@ void printOneObject(FILE *ps, objectptr localdata, int ccolor)
 	    xyvarcheck(TOSPLINE(savegen)->ctrl[2], 2, savegen);
 	    xyvarcheck(TOSPLINE(savegen)->ctrl[3], 3, savegen);
 	    xyvarcheck(TOSPLINE(savegen)->ctrl[0], 0, savegen);
+            if (varpcheck(ps, 0, localdata, -1, &stcount, *savegen,
+                        P_POSITION_X)) {
+               sprintf(_STR, "addtox4 ");
+               dostcount (ps, &stcount, strlen(_STR));
+               fputs(_STR, ps);
+            }
+            if (varpcheck(ps, 0, localdata, -1, &stcount, *savegen,
+                        P_POSITION_Y)) {
+               sprintf(_STR, "addtoy4 ");
+               dostcount (ps, &stcount, strlen(_STR));
+               fputs(_STR, ps);
+            }
 	    fprintf(ps, "spline\n");
 	    break;
 
@@ -5640,6 +5824,7 @@ void printobjects(FILE *ps, objectptr localdata, objectptr **wrotelist,
 
    /* Write all the elements in order */
 
+   opsubstitute(localdata, NULL);
    printOneObject(ps, localdata, curcolor);
 
    /* Write object (gate) trailer */

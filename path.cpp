@@ -80,7 +80,12 @@ void path::calc()
 void path::indicate(Context* ctx, eparamptr epp, oparamptr ops) const
 {
     int k = epp->pdata.pathpt[1];
-    genericptr pgen = at(epp->pdata.pathpt[0]);
+    if (k < 0) k = 0;
+    genericptr pgen;
+    if (epp->pdata.pathpt[0] < 0)
+        pgen = at(0);
+    else
+        pgen = at(epp->pdata.pathpt[0]);
     if (ELEMENTTYPE(pgen) == POLYGON)
         UDrawCircle(ctx, TOPOLY(&pgen)->points + k, ops->which);
     else	/* spline */
