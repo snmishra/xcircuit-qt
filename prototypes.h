@@ -818,7 +818,7 @@ int find_ordinal(int, labelptr, objinstptr);
 
 short UDrawChar(Context*, u_char, short, short, int, int);
 void UDrawString(Context*, labelptr, int, objinstptr, bool drawX = true);
-TextExtents ULength(Context*, const label *, objinstptr, float, short, XPoint *);
+TextExtents ULength(const label *, objinstptr, short, XPoint *);
 void composefontlib(short);
 void fontcat_op(int, int, int);
 

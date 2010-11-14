@@ -582,7 +582,7 @@ static void SVGDrawString(Context* ctx, labelptr drawlabel, int passcolor, objin
    fprintf(svgf, ">\n");
 
    /* "natural" (unscaled) length */
-   tmpext = ULength(ctx, drawlabel, localinst, 0.0, 0, NULL);
+   tmpext = ULength(drawlabel, localinst, 0, NULL);
 
    newpoint.x = (tmpjust & NOTLEFT ?
        (tmpjust & RIGHT ? -tmpext.width : -tmpext.width >> 1) : 0);

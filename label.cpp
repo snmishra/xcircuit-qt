@@ -74,7 +74,7 @@ void label::doGetBbox(XPoint * npoints, float scale, int, objinstptr callinst) c
     TextExtents tmpext;
     short j;
 
-    tmpext = ULength(NULL, this, callinst, 0.0, 0, NULL);
+    tmpext = ULength(this, callinst, 0, NULL);
     points[0].x = points[1].x = (justify & NOTLEFT ?
                 (justify & RIGHT ? -tmpext.width :
                  -tmpext.width / 2) : 0);

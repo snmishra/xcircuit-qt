@@ -1402,7 +1402,7 @@ void UDrawString(Context* ctx, labelptr drawlabel, int passcolor, objinstptr loc
    tmpjust = ctx->flipadjust(drawlabel->justify);
 
    /* "natural" (unscaled) length */
-   tmpext = ULength(ctx, drawlabel, localinst, 0.0, 0, NULL);
+   tmpext = ULength(drawlabel, localinst, 0, NULL);
 
    newpoint.x = (tmpjust & NOTLEFT ?
        (tmpjust & RIGHT ? -tmpext.width : -tmpext.width >> 1) : 0);
@@ -1634,10 +1634,9 @@ void UDrawString(Context* ctx, labelptr drawlabel, int passcolor, objinstptr loc
 /* Compute the actual length of a string or portion thereof.		*/
 /*----------------------------------------------------------------------*/
 
-TextExtents ULength(Context* ctx, const label * drawlabel, objinstptr localinst,
-	float newscale, short dostop, XPoint *tbreak)
+TextExtents ULength(const label * drawlabel, objinstptr localinst,
+        short dostop, XPoint *tbreak)
 {
-   Q_ASSERT(ctx || newscale == 0.0);
    float oldscale, strscale, natscale, locscale = 1.0, xtotal = 0.5;
    float lasttotal = xtotal;
    stringpart *strptr;
@@ -1656,8 +1655,7 @@ TextExtents ULength(Context* ctx, const label * drawlabel, objinstptr localinst,
    /* Don't draw temporary labels from schematic capture system */
    else if (drawlabel->string->type != FONT_NAME) return retext;
 
-   if (newscale > 0.0) natscale = ctx->UTopScale() * newscale;
-   else natscale = 1.0;
+   natscale = 1.0;
      
    oldscale = strscale = natscale;
 
@@ -1726,8 +1724,6 @@ TextExtents ULength(Context* ctx, const label * drawlabel, objinstptr localinst,
 	    strscale = natscale * strptr->data.scale;
 	    if (ykern == 0.0)
 	       natscale = strscale;
-   	    if (newscale > 0.0)
-               strscale *= ctx->UTopScale();
 	    break;
 	 case KERN:
 	    xtotal += strptr->data.kern[0];

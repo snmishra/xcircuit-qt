@@ -965,7 +965,7 @@ bool selectarea(objectptr selobj, short level)
 			&(newboxpts[j].y), -1);
 	   }
 
-           tmpext = ULength(NULL, slab, areawin->topinstance, 0.0, 0, NULL);
+           tmpext = ULength(slab, areawin->topinstance, 0, NULL);
 	   adj.x = (slab->justify & NOTLEFT ? (slab->justify & RIGHT ? 
 			tmpext.width : tmpext.width >> 1) : 0);
 	   adj.y = (slab->justify & NOTBOTTOM ? (slab->justify & TOP ? 
@@ -981,7 +981,7 @@ bool selectarea(objectptr selobj, short level)
 	      if (locpos < 0) continue;	  /* only look at printable characters */
 	      if (strptr->type == RETURN) tmpl2 = 0;
 	      tmpl1 = tmpl2;
-              tmpext = ULength(NULL, slab, areawin->topinstance, 0.0, j + 1, NULL);
+              tmpext = ULength(slab, areawin->topinstance, j + 1, NULL);
 	      tmpl2 = tmpext.width;
 	      isect = test_insideness(((tmpl1 + tmpl2) >> 1) - adj.x,
 			(tmpext.base + (BASELINE >> 1)) - adj.y, newboxpts);

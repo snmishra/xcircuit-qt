@@ -1167,10 +1167,10 @@ void UDrawTextLine(Context* ctx, labelptr curlabel, short tpos)
    SetFunction(ctx->gc(), GXxor);
    SetForeground(ctx->gc(), AUXCOLOR ^ BACKGROUND);
 
-   tmpext = ULength(ctx, curlabel, areawin->topinstance, 0.0, tpos, NULL);
+   tmpext = ULength(curlabel, areawin->topinstance, tpos, NULL);
    xdist = tmpext.width;
    xbase = tmpext.base;
-   tmpext = ULength(ctx, curlabel, areawin->topinstance, 0.0, 0, NULL);
+   tmpext = ULength(curlabel, areawin->topinstance, 0, NULL);
 
    points[0].x = (tmpjust & NOTLEFT ?
         (tmpjust & RIGHT ? -tmpext.width : -tmpext.width >> 1) : 0)

@@ -2941,7 +2941,7 @@ void edit(int x, int y)
 	    window_to_user(x, y, &areawin->save);
 	    InvTransformPoints(&areawin->save, &tmppt, 1, (*lastlabel)->position,
 		(*lastlabel)->scale, (*lastlabel)->rotation);
-            tmpext = ULength(NULL, *lastlabel, areawin->topinstance, 0.0, 0, NULL);
+            tmpext = ULength(*lastlabel, areawin->topinstance, 0, NULL);
 	    tmppt.x += ((*lastlabel)->justify & NOTLEFT ?
 		((*lastlabel)->justify & RIGHT ? tmpext.width : tmpext.width >> 1) : 0);
 	    tmppt.y += ((*lastlabel)->justify & NOTBOTTOM ?
@@ -2949,7 +2949,7 @@ void edit(int x, int y)
 		(tmpext.ascent + tmpext.base) >> 1) : tmpext.base);
 	    if ((*lastlabel)->pin)
 	       pinadjust((*lastlabel)->justify, &tmppt.x, NULL, -1);
-            tmpext = ULength(NULL, *lastlabel, areawin->topinstance, 0.0, 0, &tmppt);
+            tmpext = ULength(*lastlabel, areawin->topinstance, 0, &tmppt);
 	    areawin->textpos = tmpext.width;
 	 }
 
@@ -2962,20 +2962,6 @@ void edit(int x, int y)
 
 	 setfontmarks(curfont, (*lastlabel)->justify);
 
-         Context ctx(NULL);
-         tmpext = ULength(&ctx, *lastlabel, areawin->topinstance,
-			(*lastlabel)->scale, 0, NULL);
-
-         areawin->origin.x = (*lastlabel)->position.x + ((*lastlabel)->
-	    justify & NOTLEFT ? ((*lastlabel)->justify & RIGHT ? 0 : tmpext.width
-	    / 2) : tmpext.width);
-         areawin->origin.y = (*lastlabel)->position.y + ((*lastlabel)->
-	    justify & NOTBOTTOM ? ((*lastlabel)->justify & TOP ? -tmpext.ascent :
-	    -(tmpext.ascent + tmpext.base) / 2) : -tmpext.base);
-	 if ((*lastlabel)->pin)
-	    pinadjust((*lastlabel)->justify, &(areawin->origin.x),
-		&(areawin->origin.y), 1);
-	
 	 if (eventmode == CATALOG_MODE) {
             /* CATTEXT_MODE may show an otherwise hidden library namespace */
             eventmode = CATTEXT_MODE;
