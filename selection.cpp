@@ -877,6 +877,7 @@ bool selectarea(objectptr selobj, short level)
    bool	selected;
    stringpart	*strptr;
    int		locpos;
+   int         hwidth, hheight;
    objinstptr	curinst;
    XPoint	saveorig, savesave, tmppt;
 
@@ -902,32 +903,29 @@ bool selectarea(objectptr selobj, short level)
 
       switch(ELEMENTTYPE(*curgen)) {
 	case(OBJINST):
-	    curinst = TOOBJINST(curgen);
+          curinst = TOOBJINST(curgen);
 
-	    /* An object instance is selected if any part of it is	*/
-	    /* selected on a recursive area search.			*/
-            savesave = areawin->save;
-            InvTransformPoints(&areawin->save, &tmppt, 1, curinst->position,
-			curinst->scale, curinst->rotation);
-            areawin->save = tmppt;
+          /* An object instance is selected if any part of it is      */
+          /* selected on a recursive area search.                     */
+          savesave = areawin->save;
+          saveorig = areawin->origin;
 
-            saveorig = areawin->origin;
-            InvTransformPoints(&areawin->origin, &tmppt, 1, curinst->position,
-			curinst->scale, curinst->rotation);
-            areawin->origin = tmppt;
+          areawin->save.x = (areawin->origin.x + areawin->save.x) / 2;
+          areawin->save.y = (areawin->origin.y + areawin->save.y) / 2;
 
-            {
-                Matrix ctm;
-                /// \todo this may be wrong
-                //UPushCTM();
-                ctm.preMult(curinst->position, curinst->scale,
-                            curinst->rotation);
-                selected = selectarea(curinst->thisobject, level + 1);
-                //UPopCTM();
-            }
-            areawin->save = savesave;
-            areawin->origin = saveorig;
-	    break;
+          InvTransformPoints(&areawin->save, &tmppt, 1, curinst->position,
+                      curinst->scale, curinst->rotation);
+          hwidth = (savesave.x - saveorig.x) / (2 * curinst->scale);
+          hheight = (savesave.y - saveorig.y) / (2 * curinst->scale);
+          areawin->save.x = tmppt.x + hwidth;
+          areawin->save.y = tmppt.y + hheight;
+          areawin->origin.x = tmppt.x - hwidth;
+          areawin->origin.y = tmppt.y - hheight;
+
+          selected = selectarea(curinst->thisobject, level + 1);
+          areawin->save = savesave;
+          areawin->origin = saveorig;
+          break;
 
 	case(GRAPHIC):
            /* check for graphic image center point inside area box */
@@ -1217,12 +1215,7 @@ selection *recurselect(short class_, u_char mode, pushlistptr *seltop)
 			"in new object is (%d, %d)\n",
 			savesave.x, savesave.y,
 			areawin->save.x, areawin->save.y); */
-         Matrix ctm;
-         /// \todo this may be wrong
-         //UPushCTM();
-         ctm.preMult(selinst->position, selinst->scale, selinst->rotation);
          rcheck = recurselect(ALL_TYPES, recmode, &selnew);
-         //UPopCTM();
          areawin->save = savesave;
 
 	 /* If rgen is NULL, remove selected object from the list, and	*/
