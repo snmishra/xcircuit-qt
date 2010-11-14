@@ -133,12 +133,12 @@ bool graphic::transform(Context* ctx) const
 
     ctx->UTopOffset(&xc, &yc);
     xc += (int)((float)gp->position.x * tscale);
-    yc = areawin->height - yc;
+    yc = areawin->height() - yc;
     yc += (int)((float)gp->position.y * tscale);
 
-    if (xc - (twidth >> 1) > areawin->width) return false;
+    if (xc - (twidth >> 1) > areawin->width()) return false;
     if (xc + (twidth >> 1) < 0) return false;
-    if (yc - (theight >> 1) > areawin->height) return false;
+    if (yc - (theight >> 1) > areawin->height()) return false;
     if (yc + (theight >> 1) < 0) return false;
 
     /* Generate the new target image */

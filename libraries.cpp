@@ -517,8 +517,8 @@ void computespacing(short mode, int *gxsize, int *gysize, int *xdel, int *ydel)
 
    /* 0.5 is the default vscale;  g#size is the number of pages per line */
 
-   *xdel = areawin->width / (0.5 * (*gxsize));
-   *ydel = areawin->height / (0.5 * (*gysize));
+   *xdel = areawin->width() / (0.5 * (*gxsize));
+   *ydel = areawin->height() / (0.5 * (*gysize));
 }
 
 /*-------------------------------------------------------------------*/
@@ -705,7 +705,7 @@ void composelib(short mode)
    labelptr *drawname;
    objectptr libobj, libpage = xobjs.libtop[mode]->thisobject;
    liblistptr spec;
-   int xpos = 0, ypos = areawin->height << 1;
+   int xpos = 0, ypos = areawin->height() << 1;
    int nypos = 220, nxpos;
    short fval;
    short llx, lly, width, height;

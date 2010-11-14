@@ -79,18 +79,18 @@ void Area::paintEvent(QPaintEvent*)
                 (fpart - (float)((int)fpart)) * areawin->vscale;
 
          SetForeground(c.gc(), GRIDCOLOR);
-         for (i = x; i < (float)areawin->width; i += spc)
-            p.drawLine((int)(i + 0.5), 0, (int)(i + 0.5), areawin->height);
-         for (j = (float)areawin->height - y; j > 0; j -= spc)
-            p.drawLine(0, (int)(j - 0.5), areawin->width, (int)(j - 0.5));
+         for (i = x; i < (float)areawin->width(); i += spc)
+            p.drawLine((int)(i + 0.5), 0, (int)(i + 0.5), areawin->height());
+         for (j = (float)areawin->height() - y; j > 0; j -= spc)
+            p.drawLine(0, (int)(j - 0.5), areawin->width(), (int)(j - 0.5));
       };
       if (areawin->axeson) {
          XPoint zeropt;
          zeropt.x = zeropt.y = 0;
          SetForeground(c.gc(), AXESCOLOR);
          user_to_window(zeropt, &originpt);
-         p.drawLine(originpt.x, 0, originpt.x, areawin->height);
-         p.drawLine(0, originpt.y, areawin->width, originpt.y);
+         p.drawLine(originpt.x, 0, originpt.x, areawin->height());
+         p.drawLine(0, originpt.y, areawin->width(), originpt.y);
       }
 
       /* bounding box goes beneath everything except grid/axis lines */
@@ -112,8 +112,8 @@ void Area::paintEvent(QPaintEvent*)
                 (fpart - (float)((int)fpart)) * areawin->vscale;
 
          SetForeground(c.gc(), SNAPCOLOR);
-         for (i = x2; i < areawin->width; i += spc2)
-            for (j = areawin->height - y2; j > 0; j -= spc2)
+         for (i = x2; i < areawin->width(); i += spc2)
+            for (j = areawin->height() - y2; j > 0; j -= spc2)
                p.drawPoint((int)(i + 0.5), (int)(j - 0.5));
       };
 
@@ -128,8 +128,8 @@ void Area::paintEvent(QPaintEvent*)
          y = major_snapspace * (fpart - (float)((int)fpart)) * areawin->vscale;
 
          SetForeground(c.gc(), GRIDCOLOR);
-         for (i = x; i < (float)areawin->width; i += spc3) {
-            for (j = (float)areawin->height - y; j > 0; j -= spc3) {
+         for (i = x; i < (float)areawin->width(); i += spc3) {
+            for (j = (float)areawin->height() - y; j > 0; j -= spc3) {
                 p.drawEllipse((int)(i + 0.5) - 1, (int)(j - 0.5) - 1, 2, 2);
             }
          }
@@ -254,11 +254,8 @@ void Area::paintEvent(QPaintEvent*)
     }
 }
 
-void Area::resizeEvent(QResizeEvent* ev)
+void Area::resizeEvent(QResizeEvent*)
 {
-    areawin->width = ev->size().width();
-    areawin->height = ev->size().height();
-
     /* Re-compose the directories to match the new dimensions */
     composelib(LIBLIB);
     composelib(PAGELIB);
@@ -294,13 +291,13 @@ static const int scrollMargin = 10;
 void Area::refresh()
 {
     const int fullWidth = topobject->bbox.width * areawin->vscale;
-    const int pageStepH = areawin->width;
+    const int pageStepH = areawin->width();
     const int maxH = fullWidth - pageStepH + scrollMargin;
     const int minH = -scrollMargin;
     const int valH = (areawin->pcorner.x - topobject->bbox.lowerleft.x) * areawin->vscale;
 
     const int fullHeight = topobject->bbox.height * areawin->vscale;
-    const int pageStepV = areawin->height;
+    const int pageStepV = areawin->height();
     const int maxV = fullHeight - pageStepH + scrollMargin;
     const int minV = -scrollMargin;
     const int valV = (areawin->pcorner.y - topobject->bbox.lowerleft.y) * areawin->vscale;
@@ -371,8 +368,8 @@ void Area::zoom(float scale)
 {
     QPoint p = viewport()->mapFromGlobal(QCursor::pos());
     if (false && ! viewport()->rect().contains(p)) {
-        p.setX(areawin->width / 2);
-        p.setY(areawin->height / 2);
+        p.setX(areawin->width() / 2);
+        p.setY(areawin->height() / 2);
     }
     zoom(p, scale);
 }
@@ -399,10 +396,10 @@ void Area::wheelEvent(QWheelEvent * ev)
     const double wheelScale = 1/400.0;
     if (false) qDebug("wheel event: %s by %d", ev->orientation() == Qt::Horizontal ? "hor" : "ver", ev->delta());
     if (ev->orientation() == Qt::Horizontal) {
-        const int delta = areawin->width * wheelScale * ev->delta();
+        const int delta = areawin->width() * wheelScale * ev->delta();
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta);
     } else {
-        const int delta = areawin->height * wheelScale * ev->delta();
+        const int delta = areawin->height() * wheelScale * ev->delta();
         verticalScrollBar()->setValue(verticalScrollBar()->value() + delta);
     }
 }

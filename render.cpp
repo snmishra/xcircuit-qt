@@ -74,8 +74,8 @@ void ghostinit_local()
 {
    sprintf(_STR, "%ld %d %d %d %d %d %g %g %d %d %d %d",
 		0L, 0, 0, 0,
-		areawin->width * 75 / 72,
-		areawin->height * 75 / 72,
+                areawin->width() * 75 / 72,
+                areawin->height() * 75 / 72,
 		75.0, 75.0, 0, 0, 0, 0);
    XChangeProperty(areawin->viewport, gv, XA_STRING, 8, PropModeReplace,
         (const unsigned char*)_STR, strlen(_STR));
@@ -219,7 +219,7 @@ void start_gs()
 #endif
 
    if (bbuf != (Pixmap)NULL) delete bbuf;
-   bbuf = new QPixmap(areawin->width, areawin->height);
+   bbuf = new QPixmap(areawin->width(), areawin->height());
 
    ret = pipe(fgs);
    ret = pipe(std_out);
@@ -539,7 +539,7 @@ int renderbackground()
 
    psxpos = (float)(-areawin->pcorner.x) * areawin->vscale * devres;
    psypos = (float)(-areawin->pcorner.y) * areawin->vscale * devres
-		+ ((float)areawin->height / 12.0);
+                + ((float)areawin->height() / 12.0);
 
    /* Conditions for re-rendering:  Must have a background specified */
    /* and must be on the page, not a library or other object.	     */
@@ -607,7 +607,7 @@ int copybackground(Context* ctx)
       return -1;
 
    XCopyArea(bbuf, areawin->viewport, ctx->gc(), 0, 0,
-             areawin->width, areawin->height, 0, 0);
+             areawin->width(), areawin->height(), 0, 0);
 
    return 0;
 }

@@ -798,7 +798,8 @@ struct XCWindowData {
    XtIntervalId time_id;
 
    /* global page parameters */
-   short	width, height;
+   short	width() const;
+   short       height() const;
    short	page;
    float	vscale;		/* proper scale */
    XPoint	pcorner;	/* page position */

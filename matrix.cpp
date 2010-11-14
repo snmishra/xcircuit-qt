@@ -262,6 +262,6 @@ void UMakeWCTM(Matrix *ctm)
 
    ctm->d *= -areawin->vscale;
    ctm->e *= -areawin->vscale;
-   ctm->f = (float)areawin->height + ((float)areawin->pcorner.y - ctm->f) *
+   ctm->f = (float)areawin->height() + ((float)areawin->pcorner.y - ctm->f) *
             areawin->vscale;
 }

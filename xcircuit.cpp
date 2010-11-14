@@ -977,3 +977,13 @@ void XCWindowData::markUpdated()
     if (false && updates > 1) qDebug("XCWindowData: update() was called %d times this cycle", updates);
     updates = 0;
 }
+
+short  XCWindowData::width() const
+{
+    return viewport->width();
+}
+
+short XCWindowData::height() const
+{
+    return viewport->height();
+}

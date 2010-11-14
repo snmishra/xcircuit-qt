@@ -255,10 +255,10 @@ short checkbounds(Context* ctx)
 
    /* check window-to-user space */
 
-   lval = 2 * (long)((float) (areawin->width) / areawin->vscale) +
+   lval = 2 * (long)((float) (areawin->width()) / areawin->vscale) +
 	(long)areawin->pcorner.x;
    if (lval != (long)((short)lval)) return -1;
-   lval = 2 * (long)((float) (areawin->height) / areawin->vscale) +
+   lval = 2 * (long)((float) (areawin->height()) / areawin->vscale) +
 	(long)areawin->pcorner.y;
    if (lval != (long)((short)lval)) return -1;
 
@@ -267,7 +267,7 @@ short checkbounds(Context* ctx)
    lval = (long)((float)(topobject->bbox.lowerleft.x - areawin->pcorner.x) *
 	areawin->vscale);
    if (lval != (long)((short)lval)) return -1;
-   lval = (long)areawin->height - (long)((float)(topobject->bbox.lowerleft.y -
+   lval = (long)areawin->height() - (long)((float)(topobject->bbox.lowerleft.y -
 	areawin->pcorner.y) * areawin->vscale); 
    if (lval != (long)((short)lval)) return -1;
    ctx->CTM().transform(&(topobject->bbox.lowerleft), &testpt, 1);
@@ -275,7 +275,7 @@ short checkbounds(Context* ctx)
    lval = (long)((float)(topobject->bbox.lowerleft.x + topobject->bbox.width -
 	areawin->pcorner.x) * areawin->vscale);
    if (lval != (long)((short)lval)) return -1;
-   lval = (long)areawin->height - (long)((float)(topobject->bbox.lowerleft.y +
+   lval = (long)areawin->height() - (long)((float)(topobject->bbox.lowerleft.y +
 	topobject->bbox.height - areawin->pcorner.y) * areawin->vscale); 
    if (lval != (long)((short)lval)) return -1;
 
@@ -291,7 +291,7 @@ void window_to_user(short xw, short yw, XPoint *upt)
   float tmpx, tmpy;
 
   tmpx = (float)xw / areawin->vscale + (float)areawin->pcorner.x;
-  tmpy = (float)(areawin->height - yw) / areawin->vscale + 
+  tmpy = (float)(areawin->height() - yw) / areawin->vscale +
 	(float)areawin->pcorner.y;
 
   tmpx += (tmpx > 0) ? 0.5 : -0.5;
@@ -310,7 +310,7 @@ void user_to_window(XPoint upt, XPoint *wpt)
   float tmpx, tmpy;
 
   tmpx = (float)(upt.x - areawin->pcorner.x) * areawin->vscale;
-  tmpy = (float)areawin->height - (float)(upt.y - areawin->pcorner.y)
+  tmpy = (float)areawin->height() - (float)(upt.y - areawin->pcorner.y)
 	* areawin->vscale; 
 
   tmpx += (tmpx > 0) ? 0.5 : -0.5;
@@ -907,15 +907,15 @@ void centerview(objinstptr tinst)
    width = corner.x - origin.x;
    height = corner.y - origin.y;
 
-   fitwidth = (float)areawin->width / ((float)width + 2 * DEFAULTGRIDSPACE);
-   fitheight = (float)areawin->height / ((float)height + 2 * DEFAULTGRIDSPACE);
+   fitwidth = (float)areawin->width() / ((float)width + 2 * DEFAULTGRIDSPACE);
+   fitheight = (float)areawin->height() / ((float)height + 2 * DEFAULTGRIDSPACE);
 
    tobj->viewscale = (fitwidth < fitheight) ?
                  qMin(MINAUTOSCALE, fitwidth) : qMin(MINAUTOSCALE, fitheight);
 
-   tobj->pcorner.x = origin.x - (areawin->width
+   tobj->pcorner.x = origin.x - (areawin->width()
 	       / tobj->viewscale - width) / 2;
-   tobj->pcorner.y = origin.y - (areawin->height
+   tobj->pcorner.y = origin.y - (areawin->height()
 	       / tobj->viewscale - height) / 2;
 
    /* Copy new position values to the current window */

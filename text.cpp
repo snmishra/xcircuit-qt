@@ -1430,7 +1430,7 @@ void UDrawString(Context* ctx, labelptr drawlabel, int passcolor, objinstptr loc
    xm = (bboxout[0].x < bboxout[1].x) ? 0 : 1;
    ym = (bboxout[0].y < bboxout[1].y) ? 0 : 1;
 
-   if (bboxout[xm].x < areawin->width && bboxout[ym].y < areawin->height &&
+   if (bboxout[xm].x < areawin->width() && bboxout[ym].y < areawin->height() &&
        bboxout[1 - xm].x > 0 && bboxout[1 - ym].y > 0) {
 
        pos = 0;
@@ -1827,7 +1827,7 @@ void composefontlib(short cfont)
    /* generate the list of object instances */
 
    /* 0.5 is the default vscale;  16 is no. characters per line */
-   del = qMin(areawin->width, areawin->height) / (0.5 * 16);
+   del = qMin(areawin->width(), areawin->height()) / (0.5 * 16);
    qdel = del >> 2;
 
    for (i = 0; i < 256; i++) {

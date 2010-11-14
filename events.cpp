@@ -130,6 +130,9 @@ void setpage(bool killselects)
    areawin->vscale = topobject->viewscale;
    areawin->pcorner = topobject->pcorner;
 
+   // handle displaying catalogs for the first time
+   if (areawin->vscale == 0.0) zoomview(NULL, NULL, NULL);
+
    if (killselects) clearselects();
 
 #ifdef TCL_WRAPPER
@@ -518,17 +521,17 @@ void zoominbox(int x, int y)
    }
 
    /* determine whether x or y is limiting factor in zoom */
-   delxscale = (areawin->width / areawin->vscale) /
+   delxscale = (areawin->width() / areawin->vscale) /
 	   abs(areawin->save.x - areawin->origin.x);
-   delyscale = (areawin->height / areawin->vscale) /
+   delyscale = (areawin->height() / areawin->vscale) /
 	   abs(areawin->save.y - areawin->origin.y);
    areawin->vscale *= qMin(delxscale, delyscale);
 
    areawin->pcorner.x = qMin(areawin->origin.x, areawin->save.x) -
-	 (areawin->width / areawin->vscale - 
+         (areawin->width() / areawin->vscale -
 	 abs(areawin->save.x - areawin->origin.x)) / 2;
    areawin->pcorner.y = qMin(areawin->origin.y, areawin->save.y) -
-	 (areawin->height / areawin->vscale - 
+         (areawin->height() / areawin->vscale -
 	 abs(areawin->save.y - areawin->origin.y)) / 2;
    eventmode = NORMAL_MODE;
 
@@ -594,9 +597,9 @@ void zoomoutbox(int x, int y)
 
    /* determine whether x or y is limiting factor in zoom */
    delxscale = abs(areawin->save.x - areawin->origin.x) /
-	   (areawin->width / areawin->vscale);
+           (areawin->width() / areawin->vscale);
    delyscale = abs(areawin->save.y - areawin->origin.y) /
-	   (areawin->height / areawin->vscale);
+           (areawin->height() / areawin->vscale);
    scalefac = qMin(delxscale, delyscale);
    areawin->vscale *= scalefac;
 
@@ -605,13 +608,13 @@ void zoomoutbox(int x, int y)
       newll.y = qMin(areawin->save.y, areawin->origin.y);
       newll.x = (areawin->save.x + areawin->origin.x
 		- (abs(areawin->save.y - areawin->origin.y) *
-		areawin->width / areawin->height)) / 2;
+                areawin->width() / areawin->height())) / 2;
    }
    else {
       newll.x = qMin(areawin->save.x, areawin->origin.x);
       newll.y = (areawin->save.y + areawin->origin.y
 		- (abs(areawin->save.x - areawin->origin.x) *
-		areawin->height / areawin->width)) / 2;
+                areawin->height() / areawin->width())) / 2;
    }
 
    /* extrapolate to find new lower-left corner of screen */
@@ -667,7 +670,7 @@ void panbutton(u_int ptype, int x, int y, float value)
 {
    int  xpos, ypos, newllx, newlly;
    XPoint savell;
-   Dimension hwidth = areawin->width >> 1, hheight = areawin->height >> 1;
+   Dimension hwidth = areawin->width() >> 1, hheight = areawin->height() >> 1;
 
    savell = areawin->pcorner;
 
@@ -755,11 +758,11 @@ void checkwarp(XPoint *userpt)
 
   user_to_window(*userpt, &wpoint);
 
-  if (wpoint.x < 0 || wpoint.y < 0 || wpoint.x > areawin->width ||
-        wpoint.y > areawin->height) {
+  if (wpoint.x < 0 || wpoint.y < 0 || wpoint.x > areawin->width() ||
+        wpoint.y > areawin->height()) {
      panrefresh(5, wpoint.x, wpoint.y, 0); 
-     wpoint.x = areawin->width >> 1;
-     wpoint.y = areawin->height >> 1;
+     wpoint.x = areawin->width() >> 1;
+     wpoint.y = areawin->height() >> 1;
      /* snap(wpoint.x, wpoint.y, userpt); */
   }
   warppointer(wpoint.x, wpoint.y);
@@ -4809,8 +4812,8 @@ void finish_op(int op, int x, int y)
          xcRemoveEventHandler(areawin->viewport, PointerMotionMask, false,
                (XtEventHandler)xlib_drag, NULL);
 	 if (op != XCF_Cancel)
-	    panbutton((u_int) 5, (areawin->width >> 1) - (x - areawin->origin.x),
-			(areawin->height >> 1) - (y - areawin->origin.y), 0);
+            panbutton((u_int) 5, (areawin->width() >> 1) - (x - areawin->origin.x),
+                        (areawin->height() >> 1) - (y - areawin->origin.y), 0);
 	 break;
    }
 

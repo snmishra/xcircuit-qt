@@ -169,7 +169,7 @@ void UDrawObject(Context* ctx, objinstptr theinstance, short level, int passcolo
    xm = (bboxout[0].x < bboxout[1].x) ? 0 : 1;
    ym = (bboxout[0].y < bboxout[1].y) ? 0 : 1;
 
-   if (bboxout[xm].x < areawin->width && bboxout[ym].y < areawin->height &&
+   if (bboxout[xm].x < areawin->width() && bboxout[ym].y < areawin->height() &&
        bboxout[1 - xm].x > 0 && bboxout[1 - ym].y > 0) {
 
      /* make parameter substitutions */

@@ -16,8 +16,8 @@ void object::set_defaults()
 
     /* Object should not reference the window:  this needs to be rethunk! */
     if (areawin != NULL) {
-      pcorner.x = -areawin->width;
-      pcorner.y = -areawin->height;
+      pcorner.x = -areawin->width();
+      pcorner.y = -areawin->height();
     }
     bbox.width = 0;
     bbox.height = 0;
