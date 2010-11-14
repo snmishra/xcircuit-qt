@@ -147,30 +147,21 @@ void Matrix::preScale()
 
 void Matrix::transform(const XPoint *ipoints, XPoint *points, short number) const
 {
-   const XPoint *current;
-   XPoint *ptptr = points;
-   float fx, fy;
+    const XPoint *in = ipoints;
+    XPoint *out = points;
 
-   for (current = ipoints; current < ipoints + number; current++, ptptr++) {
-      fx = a() * (float)current->x + b() * (float)current->y + c();
-      fy = d() * (float)current->x + e() * (float)current->y + f();
-
-      ptptr->x = (fx >= 0) ? (short)(fx + 0.5) : (short)(fx - 0.5);
-      ptptr->y = (fy >= 0) ? (short)(fy + 0.5) : (short)(fy - 0.5);
-   }
+    for (; in < ipoints + number; ++in, ++out) {
+        *out = map(*in);
+    }
 }
 
 void Matrix::transform(const XfPoint *fpoints, XPoint *points, short number) const
 {
-   const XfPoint * current;
-   XPoint *newlist = points;
-   float fx, fy;
+   const XfPoint * in = fpoints;
+   XPoint *out = points;
 
-   for (current = fpoints; current < fpoints + number; current++, newlist++) {
-      fx = a() * current->x + b() * current->y + c();
-      fy = d() * current->x + e() * current->y + f();
-      newlist->x = (fx >= 0) ? (short)(fx + 0.5) : (short)(fx - 0.5);
-      newlist->y = (fy >= 0) ? (short)(fy + 0.5) : (short)(fy - 0.5);
+   for (; in < fpoints + number; ++in, ++out) {
+       *out = map(*in).toPoint();
    }
 }
 

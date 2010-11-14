@@ -5,6 +5,8 @@
 #include <QRgb>
 #include <QList>
 #include <QVector>
+#include <QPoint>
+#include <QPointF>
 
 #include <cmath>
 
@@ -89,6 +91,7 @@ public:
    float x, y;
    inline XfPoint() {}
    inline XfPoint(float _x, float _y) : x(_x), y(_y) {}
+   inline operator QPointF() const { return QPointF(x, y); }
    inline XfPoint & operator+=(const XfPoint& other) { x += other.x; y += other.y; return *this; }
    inline XfPoint & operator-=(const XfPoint& other) { x -= other.x; y -= other.y; return *this; }
 };
@@ -106,6 +109,8 @@ public:
     inline operator QPoint() const { return QPoint(x, y); }
     inline operator XfPoint() const { return XfPoint(x, y); }
     XPoint & operator=(const XlPoint & other);
+    XPoint & operator=(const QPoint & other);
+
     inline XPoint & operator=(const XfPoint& other) { x = other.x; y = other.y; return *this; }
     inline XPoint & operator+=(const XPoint& other) { x += other.x; y += other.y; return *this; }
     inline XPoint & operator-=(const XPoint& other) { x -= other.x; y -= other.y; return *this; }
@@ -142,6 +147,7 @@ struct XlPoint {
 NO_FREE(XlPoint*);
 
 inline XPoint & XPoint::operator=(const XlPoint & other) { x = other.x; y = other.y; return *this; }
+inline XPoint & XPoint::operator=(const QPoint & other) { x = other.x(); y = other.y(); return *this; }
 
 
 // BBox
