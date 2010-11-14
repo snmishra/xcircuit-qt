@@ -2,6 +2,7 @@
 #define MATRIX_H
 
 #include <qglobal.h>
+#include <QTransform>
 
 #include "xctypes.h"
 
@@ -13,11 +14,10 @@
 /*			   | c  f  1 |					*/
 /*----------------------------------------------------------------------*/
 
-class Matrix {
+class Matrix : public QTransform {
 public:
     Matrix();
     Matrix(const Matrix&);
-    void reset();
     static void pop(Matrix*&);
     static void push(Matrix*&);
 
@@ -35,18 +35,23 @@ public:
 
     void transform(const XPoint *ipoints, XPoint *points, short number) const;
     void transform(const XfPoint *fpoints, XPoint *points, short number) const;
+    void set(float a, float b, float c, float d, float e, float f);
 
-public:
-    float a, b, c, d, e, f;
+    void makeWCTM();
+
+    inline float a() const { return m11(); }
+    inline float b() const { return m21(); }
+    inline float c() const { return m31(); }
+    inline float d() const { return m12(); }
+    inline float e() const { return m22(); }
+    inline float f() const { return m32(); }
+
 private:
     Matrix* next;
-    Matrix& operator=(const Matrix&);
 };
-typedef Matrix* Matrixptr;
 
 static const float EPS = 1e-9;
 
-void UMakeWCTM(Matrix*);
 void UTransformPoints(XPoint *, XPoint *, short, XPoint, float, short);
 void InvTransformPoints(XPoint *, XPoint *, short, XPoint, float, short);
 

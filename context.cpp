@@ -10,7 +10,7 @@ Context::Context(QPainter * gc) :
         gc_(gc),
         matStack(new Matrix)
 {
-    UMakeWCTM(DCTM());
+    DCTM()->makeWCTM();
 }
 
 void Context::setPainter(QPainter * gc)
@@ -45,7 +45,7 @@ float Context::UTopDrawingScale() const
 {
    Matrix lctm(*DCTM()), wctm;
 
-   UMakeWCTM(&wctm);
+   wctm.makeWCTM();
    wctm.invert();
    wctm.preMult(lctm);
    return wctm.getScale();
@@ -88,7 +88,7 @@ void Context::UTopOffset(int *offx, int *offy) const
 void Context::UTopDrawingOffset(int *offx, int *offy) const
 {
    Matrix lctm(*DCTM()), wctm;
-   UMakeWCTM(&wctm);
+   wctm.makeWCTM();
    wctm.invert();
    wctm.preMult(lctm);
    wctm.getOffset(offx, offy);
@@ -104,12 +104,12 @@ short Context::flipadjust(short justify)
    short tmpjust = justify & (~FLIPINV);
 
    if (justify & FLIPINV) {
-      if ((CTM->a < -EPS) || ((CTM->a < EPS) && (CTM->a > -EPS) &&
-                ((CTM->d * CTM->b) < 0))) {
+      if ((CTM->a() < -EPS) || ((CTM->a() < EPS) && (CTM->a() > -EPS) &&
+                ((CTM->d() * CTM->b()) < 0))) {
          if ((tmpjust & (RIGHT | NOTLEFT)) != NOTLEFT)
             tmpjust ^= (RIGHT | NOTLEFT);
       }
-      if (CTM->e > EPS) {
+      if (CTM->e() > EPS) {
          if ((tmpjust & (TOP | NOTBOTTOM)) != NOTBOTTOM)
             tmpjust ^= (TOP | NOTBOTTOM);
       }

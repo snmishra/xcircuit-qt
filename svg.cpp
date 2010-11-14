@@ -327,7 +327,7 @@ static void SVGDrawArc(Context* ctx, arcptr thearc, int passcolor)
 		endpoints[0].x, endpoints[0].y,
 		radius[0], radius[1],
 		((tarc > 180) ? 1 : 0),
-                (((ctx->DCTM()->a * ctx->DCTM()->e) >= 0) ? 1 : 0),
+                (((ctx->DCTM()->a() * ctx->DCTM()->e()) >= 0) ? 1 : 0),
 		endpoints[1].x, endpoints[1].y);
       svg_strokepath(ctx, passcolor, thearc->style, thearc->width);
    }
@@ -576,7 +576,7 @@ static void SVGDrawString(Context* ctx, labelptr drawlabel, int passcolor, objin
    /* need to adjust to the Y baseline.						*/
 
    fprintf(svgf, "<g transform=\"matrix(%4g %4g %4g %4g %3g %3g)\" ",
-        DCTM->a, DCTM->d, -(DCTM->b), -(DCTM->e), DCTM->c, DCTM->f);
+        DCTM->a(), DCTM->d(), -(DCTM->b()), -(DCTM->e()), DCTM->c(), DCTM->f());
 
    svg_printcolor(passcolor, "fill=");
    fprintf(svgf, ">\n");
@@ -968,12 +968,7 @@ static void OutputSVG(Context* ctx, char *filename, bool fullscale)
    /* The origin is at the top left, and all data points fit in a box	*/
    /* at (0, 0) to the object (width, height)				*/
 
-   DCTM->a = 1.0;
-   DCTM->b = 0.0;
-   DCTM->c = -pinst->bbox.lowerleft.x;
-   DCTM->d = 0.0;
-   DCTM->e = -1.0;
-   DCTM->f = pinst->bbox.lowerleft.y + pinst->bbox.height;
+   DCTM->set(1.0, 0.0,-pinst->bbox.lowerleft.x, 0.0, -1.0, pinst->bbox.lowerleft.y + pinst->bbox.height);
 
    fprintf(svgf, "<svg xmlns=\"http://www.w3.org/2000/svg\"\n");
    fprintf(svgf, "   xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n");

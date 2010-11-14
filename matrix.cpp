@@ -6,31 +6,15 @@
 #include "prototypes.h"
 
 Matrix::Matrix() :
-        a(1.0),
-        b(0.0),
-        c(0.0),
-        d(0.0),
-        e(1.0),
-        f(0.0),
+        QTransform(),
         next(NULL)
 {
 }
 
 Matrix::Matrix(const Matrix & src) :
-        a(src.a),
-        b(src.b),
-        c(src.c),
-        d(src.d),
-        e(src.e),
-        f(src.f),
+        QTransform(src),
         next(NULL)
 {
-}
-
-void Matrix::reset()
-{
-   a = e = 1.0;
-   b = c = d = f = 0.0;
 }
 
 void Matrix::pop(Matrix*& stack)
@@ -46,7 +30,7 @@ void Matrix::pop(Matrix*& stack)
 
 void Matrix::push(Matrix *& stack)
 {
-    Matrixptr nmatrix;
+    Matrix* nmatrix;
     if (stack) nmatrix = new Matrix(*stack);
     else nmatrix = new Matrix;
     nmatrix->next = stack;
@@ -55,41 +39,29 @@ void Matrix::push(Matrix *& stack)
 
 float Matrix::getScale() const
 {
-    return (float)sqrt(a * a + d * d);
+    return (float)sqrt(a() * a() + d() * d());
 }
 
 int Matrix::getRotation() const
 {
-    double rads = atan2(d, a);
+    double rads = atan2(d(), a());
     return (int)(rads / RADFAC);
 }
 
 XPoint Matrix::getOffset() const
 {
-    return XPoint(c, f);
+    return XPoint(c(), f());
 }
 
 void Matrix::getOffset(int *x, int *y) const
 {
-    if (x) *x = c;
-    if (y) *y = f;
+    if (x) *x = c();
+    if (y) *y = f();
 }
 
 void Matrix::invert()
 {
-   float det = a * e - b * d;
-   float tx = b * f - c * e;
-   float ty = d * c - a * f;
-
-   float tmpa = a;
-
-   b = -b / det;
-   d = -d / det;
-
-   a = e / det;
-   e = tmpa / det;
-   c = tx / det;
-   f = ty / det;
+    *static_cast<QTransform*>(this) = inverted();
 }
 
 /*----------------------------------------------------------------------*/
@@ -98,29 +70,18 @@ void Matrix::invert()
 
 void Matrix::slant(float beta)
 {
-   b += a * beta;
-   e += d * beta;
+    shear(beta, 0.0);
 }
 
 void Matrix::preMult(const Matrix & pre)
 {
-   float mata, matd;
-
-   mata = pre.a * a + pre.d * b;
-   c += pre.c * a + pre.f * b;
-   b = pre.b * a + pre.e * b;
-   a = mata;
-
-   matd = pre.a * d + pre.d * e;
-   f += pre.c * d + pre.f * e;
-   e = pre.b * d + pre.e * e;
-   d = matd;
+    *static_cast<QTransform*>(this) =
+            static_cast<const QTransform &>(pre) * static_cast<QTransform>(*this);
 }
 
 void Matrix::preMult(XPoint position, float scale, short rotate)
 {
    float tmpa, tmpb, tmpd, tmpe, yscale;
-   float mata, matd;
    double drot = (double)rotate * RADFAC;
 
    yscale = fabs(scale);		/* negative scale value implies flip in x only */
@@ -130,23 +91,18 @@ void Matrix::preMult(XPoint position, float scale, short rotate)
    tmpd = -scale * sin(drot);
    tmpe = yscale * cos(drot);
 
-   c += a * position.x + b * position.y;
-   f += d * position.x + e * position.y;
-
-   mata = a * tmpa + b * tmpd;
-   b = a * tmpb + b * tmpe;
-
-   matd = d * tmpa + e * tmpd;
-   e = d * tmpb + e * tmpe;
-
-   a = mata;
-   d = matd;
+   set(
+           a() * tmpa + b() * tmpd,
+           a() * tmpb + b() * tmpe,
+           c() + a() * position.x + b() * position.y,
+           d() * tmpa + e() * tmpd,
+           d() * tmpb + e() * tmpe,
+           f() + d() * position.x + e() * position.y);
 }
 
 void Matrix::mult(XPoint position, float scale, short rotate)
 {
    float tmpa, tmpb, tmpd, tmpe, yscale;
-   float mata, matb, matc;
    double drot = (double)rotate * RADFAC;
 
    yscale = fabs(scale);  /* -scale implies flip in x direction only */
@@ -156,17 +112,13 @@ void Matrix::mult(XPoint position, float scale, short rotate)
    tmpd = -scale * sin(drot);
    tmpe = yscale * cos(drot);
 
-   mata = a * tmpa + d * tmpb;
-   matb = b * tmpa + e * tmpb;
-   matc = c * tmpa + f * tmpb + position.x;
-
-   d = d * tmpe + a * tmpd;
-   e = e * tmpe + b * tmpd;
-   f = f * tmpe + c * tmpd + position.y;
-
-   a = mata;
-   b = matb;
-   c = matc;
+   set(
+           a() * tmpa + d() * tmpb,
+           b() * tmpa + e() * tmpb,
+           c() * tmpa + f() * tmpb + position.x,
+           d() * tmpe + a() * tmpd,
+           e() * tmpe + b() * tmpd,
+           f() * tmpe + c() * tmpd + position.y);
 }
 
 /*----------------------------------------------------------------------*/
@@ -178,16 +130,14 @@ void Matrix::mult(XPoint position, float scale, short rotate)
 void Matrix::preScale()
 {
    /* negative X scale (-1, +1) */
-   if ((a < -EPS) || ((a < EPS) && (a > -EPS) &&
-                ((d * b) < 0))) {
-      a = -a;
-      d = -d;
+   if ((a() < -EPS) || (a() < EPS && a() > -EPS &&
+                ((d() * b()) < 0))) {
+       scale(-1.0, 1.0);
    }
 
    /* negative Y scale (+1, -1) */
-   if (e > EPS) {
-      e = -e;
-      b = -b;
+   if (e() > EPS) {
+       scale(1.0, -1.0);
    }
 
    /* At 90, 270 degrees need special attention to avoid discrepencies	*/
@@ -202,8 +152,8 @@ void Matrix::transform(const XPoint *ipoints, XPoint *points, short number) cons
    float fx, fy;
 
    for (current = ipoints; current < ipoints + number; current++, ptptr++) {
-      fx = a * (float)current->x + b * (float)current->y + c;
-      fy = d * (float)current->x + e * (float)current->y + f;
+      fx = a() * (float)current->x + b() * (float)current->y + c();
+      fy = d() * (float)current->x + e() * (float)current->y + f();
 
       ptptr->x = (fx >= 0) ? (short)(fx + 0.5) : (short)(fx - 0.5);
       ptptr->y = (fy >= 0) ? (short)(fy + 0.5) : (short)(fy - 0.5);
@@ -217,11 +167,35 @@ void Matrix::transform(const XfPoint *fpoints, XPoint *points, short number) con
    float fx, fy;
 
    for (current = fpoints; current < fpoints + number; current++, newlist++) {
-      fx = a * current->x + b * current->y + c;
-      fy = d * current->x + e * current->y + f;
+      fx = a() * current->x + b() * current->y + c();
+      fy = d() * current->x + e() * current->y + f();
       newlist->x = (fx >= 0) ? (short)(fx + 0.5) : (short)(fx - 0.5);
       newlist->y = (fy >= 0) ? (short)(fy + 0.5) : (short)(fy - 0.5);
    }
+}
+
+void Matrix::set(float a, float b, float c, float d, float e, float f)
+{
+    setMatrix(a, d, 0.0, b, e, 0.0, c, f, 1.0);
+}
+
+/*-------------------------------------------------------------------------*/
+/* Multiply CTM by current screen position and scale to get transformation */
+/* matrix from a user point to the X11 window				   */
+/*-------------------------------------------------------------------------*/
+
+void Matrix::makeWCTM()
+{
+    float A,B,C,D,E,F;
+    A = a() * areawin->vscale;
+    B = b() * areawin->vscale;
+    C = (c() - (float)areawin->pcorner.x) * areawin->vscale;
+
+    D = d() * -areawin->vscale;
+    E = e() * -areawin->vscale;
+    F = (float)areawin->height() + ((float)areawin->pcorner.y - f()) *
+            areawin->vscale;
+    set(A, B, C, D, E, F);
 }
 
 /*------------------------------------------------------------------------*/
@@ -230,7 +204,6 @@ void UTransformPoints(XPoint *points, XPoint *newpoints, short number,
         XPoint atpt, float scale, short rotate)
 {
    Matrix LCTM;
-
    LCTM.mult(atpt, scale, rotate);
    LCTM.transform(points, newpoints, number);
 }
@@ -243,25 +216,7 @@ void InvTransformPoints(XPoint *points, XPoint *newpoints, short number,
         XPoint atpt, float scale, short rotate)
 {
    Matrix LCTM;
-
    LCTM.preMult(atpt, scale, rotate);
    LCTM.invert();
    LCTM.transform(points, newpoints, number);
-}
-
-/*-------------------------------------------------------------------------*/
-/* Multiply CTM by current screen position and scale to get transformation */
-/* matrix from a user point to the X11 window				   */
-/*-------------------------------------------------------------------------*/
-
-void UMakeWCTM(Matrix *ctm)
-{
-   ctm->a *= areawin->vscale;
-   ctm->b *= areawin->vscale;
-   ctm->c = (ctm->c - (float)areawin->pcorner.x) * areawin->vscale;
-
-   ctm->d *= -areawin->vscale;
-   ctm->e *= -areawin->vscale;
-   ctm->f = (float)areawin->height() + ((float)areawin->pcorner.y - ctm->f) *
-            areawin->vscale;
 }
