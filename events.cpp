@@ -1955,6 +1955,8 @@ int functiondispatch(int function, short value, int x, int y)
    else if (xobjs.suspend != 2)
       xobjs.suspend = -1;
 
+   areawin->update();
+
    return result;
 }
 
