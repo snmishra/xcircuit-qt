@@ -1005,9 +1005,9 @@ static void OutputSVG(Context* ctx, char *filename, bool fullscale)
    /* Set default color to black */
    fprintf(svgf, "<g stroke=\"black\">\n");
 
-   free_stack(&areawin->hierstack);
-   SVGDrawObject(ctx, areawin->topinstance, TOPLEVEL, FOREGROUND, &areawin->hierstack);
-   free_stack(&areawin->hierstack);
+   pushlistptr hierstack = NULL;
+   SVGDrawObject(ctx, areawin->topinstance, TOPLEVEL, FOREGROUND, &hierstack);
+   free_stack(&hierstack);
 
    /* restore the selection list (if any) */
    areawin->selects = savesel;

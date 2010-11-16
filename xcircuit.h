@@ -840,7 +840,6 @@ struct XCWindowData {
    objinstptr	topinstance;
    objectptr	editstack;
    pushlistptr	stack;
-   pushlistptr	hierstack;
    EventMode	event_mode;
    char		*lastbackground;
    Cursor	*defaultcursor;
@@ -997,15 +996,11 @@ extern Globaldata xobjs;
 /* conversions from a selection to a specific type */
 
 static inline genericptr * SELTOGENERICPTR(short* a) {
-    return  (areawin->hierstack == NULL) ?
-            (topobject->begin() + *a) :
-            (hierobject->begin() + *a);
+    return  topobject->begin() + *a;
 }
 
 static inline genericptr * SELTOGENERICPTR(short a) {
-    return  (areawin->hierstack == NULL) ?
-            (topobject->begin() + a) :
-            (hierobject->begin() + a);
+    return  topobject->begin() + a;
 }
 
 static inline polyptr SELTOPOLY(short* a) { return TOPOLY(SELTOGENERICPTR(a)); }

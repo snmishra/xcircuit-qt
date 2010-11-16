@@ -484,9 +484,8 @@ void delete_window(XCWindowData *window)
 	 /* Free any select list */
 	 if (searchwin->selects > 0) free(searchwin->selectlist);
 
-	 /* Free the matrix and pushlist stacks */
+         /* Free the pushlist stack */
 
-	 free_stack(&searchwin->hierstack);
 	 free_stack(&searchwin->stack);
 
 	 if (lastwin != NULL)
@@ -554,7 +553,6 @@ XCWindowData::XCWindowData()
     lastbackground = NULL;
     editstack = new object;
     stack = NULL;   /* at the top of the hierarchy */
-    hierstack = NULL;
     pinpointon = false;
     pinattach = false;
     buschar = '(';	/* Vector notation for buses */

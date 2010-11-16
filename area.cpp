@@ -193,9 +193,9 @@ void Area::paintEvent(QPaintEvent*)
     SetForeground(c.gc(), FOREGROUND);
 
     /* Initialize hierstack */
-    free_stack(&areawin->hierstack);
-    UDrawObject(&c, areawin->topinstance, TOPLEVEL, FOREGROUND, &areawin->hierstack);
-    free_stack(&areawin->hierstack);
+    pushlistptr hierstack = NULL;
+    UDrawObject(&c, areawin->topinstance, TOPLEVEL, FOREGROUND, &hierstack);
+    free_stack(&hierstack);
 
     /* draw the highlighted netlist, if any */
     if (checkvalid(topobject) != -1)

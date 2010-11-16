@@ -1087,8 +1087,6 @@ void draw_all_selected(Context* ctx)
 {
    int j;
 
-   if (areawin->hierstack != NULL) return;
-
    for (j = 0; j < areawin->selects; j++)
       gendrawselected(ctx, areawin->selectlist + j, topobject, areawin->topinstance);
 }
@@ -1107,7 +1105,6 @@ void freeselects()
    if (areawin->selects > 0)
       free(areawin->selectlist);
    areawin->selects = 0;
-   free_stack(&areawin->hierstack);
 }
 
 /*--------------------------------------------------------------*/
