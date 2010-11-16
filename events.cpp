@@ -3564,8 +3564,7 @@ void delete_one_element(objinstptr thisinstance, genericptr thiselement)
 
    if (genobj == thisobject->end()) return;
 
-   for (genobj; thisobject->values(genobj); )
-      *(genobj - 1) = *genobj;
+   while (thisobject->values(genobj)) *(genobj - 1) = *genobj;
    thisobject->take_last();
 
    if (pinchange) setobjecttype(thisobject);
@@ -3605,8 +3604,7 @@ objectptr delete_element(objinstptr thisinstance, short *slist, int selects)
        /* exist on the page, so we should remove them from the netlist.	*/
 
       if (RemoveFromNetlist(thisobject, *genobj)) pinchange = true;
-      for (genobj; thisobject->values(genobj); )
-	 *(genobj - 1) = *genobj;
+      while (thisobject->values(genobj)) *(genobj - 1) = *genobj;
       thisobject->take_last();
       reviseselect(slist, selects, selectobj);
    }
