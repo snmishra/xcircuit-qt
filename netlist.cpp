@@ -1551,7 +1551,7 @@ static bool highlightnet(DrawContext* ctx, const object * cschem, const objinst 
 	    else {
 	       /* Otherwise (symbols, fundamental, trivial, etc., objects), we	*/
 	       /* highlight the pin position of the port.			*/
-               if ((clabel = PortToLabel(ccinst, ports->portid)));
+               clabel = PortToLabel(ccinst, ports->portid);
 	    }
             ctx->UPopCTM();
 	 }
@@ -3325,7 +3325,7 @@ u_int devindex(objectptr cfrom, CalllistPtr clist)
    while (isspace(*devname)) devname++;
 
    /* Count total number of devices */
-   for (cptr = listfrom, total = 0; cptr != NULL; cptr = cptr->next, total++);
+   for (cptr = listfrom, total = 0; cptr != NULL; cptr = cptr->next, total++) ;
    occupied = (u_int *)malloc(total * sizeof(u_int));
    objindex = 1;
 
@@ -5491,7 +5491,7 @@ bool writepcb(struct Ptab **ptableptr, objectptr cschem, CalllistPtr cfrom,
 	    rhs++;
 	    if (isspace(*lhs)) lhs++;
 	    while ((*rhs) && isspace(*rhs)) rhs++;
-	    for (rend = rhs; (*rend) && (!isspace(*rend)); rend++);
+            for (rend = rhs; (*rend) && (!isspace(*rend)); rend++) ;
 	    rsave = *rend;
 	    *rend = '\0';
 
@@ -6362,7 +6362,7 @@ void append_included(char *filename)
          *(included_files + 1) = (ino_t)NULL;
       }
       else {
-	 for (numi = 0; *(included_files + numi) != (ino_t)NULL; numi++);
+         for (numi = 0; *(included_files + numi) != (ino_t)NULL; numi++) ;
 	 
 	 included_files = (ino_t *)realloc(included_files,
 		(++numi) * sizeof(ino_t));

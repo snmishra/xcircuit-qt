@@ -157,7 +157,7 @@ int loadfontfile(const char *fontname)
    while (fgets(temp, 249, fd) != NULL) {
       if (*temp == '\n') continue;
       sscanf(temp, "%29s", commandstr);
-      for(cmdptr = commandstr; isspace(*cmdptr); cmdptr++);
+      for(cmdptr = commandstr; isspace(*cmdptr); cmdptr++) ;
 
       /* very liberal about comment line characters */
 

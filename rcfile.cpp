@@ -70,7 +70,7 @@ short execcommand(short pflags, char *cmdptr)
       if (*argptr == '\0') return flags;
    cmdptr = argptr;
 
-   for(argptr = cmdptr; (!isspace(*argptr)) && (*argptr != '\0'); argptr++);
+   for(argptr = cmdptr; (!isspace(*argptr)) && (*argptr != '\0'); argptr++) ;
    *argptr++ = '\0';
    while(isspace(*argptr)) argptr++;
 

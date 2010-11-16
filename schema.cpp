@@ -243,7 +243,7 @@ void connectivity(QAction*, void*, void*)
       /* Should look at the top scorer, when scoring has been implemented */
       if (rselect && (rselect->selects > 0)) {
 	 for (nextselect = rselect; (nextselect->next != NULL) &&
-		(nextselect->selects > 0); nextselect = nextselect->next);
+                (nextselect->selects > 0); nextselect = nextselect->next) ;
          ggen = *(nextselect->thisinst->thisobject->begin() + *(nextselect->selectlist));
          delete rselect;
          rselect = NULL;
@@ -1068,7 +1068,7 @@ bool schemassoc(objectptr schemobj, objectptr symbolobj)
       strcpy(schemobj->name, GetCanonicalName(symbolobj->name));
 
       /* Ensure that schematic (page) name is unique */
-      while (checkpagename(schemobj) < 0);
+      while (checkpagename(schemobj) < 0) ;
       setsymschem();	/* Set buttons and menu items appropriately */
    }
    return true;

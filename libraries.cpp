@@ -354,7 +354,7 @@ int libmoveobject(objectptr thisobject, int libtarget)
 	 if (srch == NULL)
 	    xobjs.userlibs[libtarget].instlist = spec;
 	 else {
-	    for (; srch->next != NULL; srch = srch->next);
+            for (; srch->next != NULL; srch = srch->next) ;
 	    spec->next = srch->next;
 	    srch->next = spec;
 	 }
@@ -1231,7 +1231,7 @@ void catmove(int x, int y)
 
    /* Find object number s2 (because s2 value may change during insertion) */
    if (s2 > -1) {
-      for (k = 0, spec = xobjs.userlibs[i].instlist; k < s2; spec = spec->next, k++);
+      for (k = 0, spec = xobjs.userlibs[i].instlist; k < s2; spec = spec->next, k++) ;
       lobj = spec->thisinst;
    }
    else lobj = NULL;

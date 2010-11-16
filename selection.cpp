@@ -421,7 +421,7 @@ void copycycles(pointselect **newl, pointselect * const*old)
       return;
    }
 
-   for (pptr = *old; !(pptr->flags & LASTENTRY); pptr++, cycles++);
+   for (pptr = *old; !(pptr->flags & LASTENTRY); pptr++, cycles++) ;
    cycles += 2;
    *newl = (pointselect *)malloc(cycles * sizeof(pointselect));
    memcpy(*newl, *old, cycles * sizeof(pointselect));
@@ -600,7 +600,7 @@ void advancecycle(genericptr *pgen, short newvalue)
    /* "Remove" them by shuffling them to the end of the list,	*/
    /* and marking the one in front as the last entry.		*/
 
-   for (endptr = *cycptr; !(endptr->flags & LASTENTRY); endptr++);
+   for (endptr = *cycptr; !(endptr->flags & LASTENTRY); endptr++) ;
    pptr = *cycptr;
    while (pptr < endptr) {
       if ((pptr->flags & (EDITX | EDITY)) != (EDITX | EDITY)) {
@@ -1228,7 +1228,7 @@ selection *recurselect(short class_, u_char mode, pushlistptr *seltop)
 	 }
 	 else {
 	    for (lastselect = rselect; lastselect->next != NULL; lastselect =
-			lastselect->next);
+                        lastselect->next) ;
 	    lastselect->next = rcheck;
 	 }
       }

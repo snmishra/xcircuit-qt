@@ -2128,7 +2128,7 @@ void readlabel(objectptr localdata, char *lineptr, stringpart **strhead)
 	       Wprintf("Error:  Bad change-font command");
 	       newpart->type = NOLINE;	/* placeholder */
 	    }
-	    for (nextptr = newptr; !isspace(*nextptr); nextptr++);
+            for (nextptr = newptr; !isspace(*nextptr); nextptr++) ;
 	    *(nextptr++) = '\0';
 	    while (isspace(*nextptr)) nextptr++;
 
@@ -2317,7 +2317,7 @@ void readparams(objectptr localdata, objinstptr newinst, objectptr libobj,
 	 if (newinst->params == NULL)
 	    newinst->params = newops;
 	 else {
-	    for (fops = newinst->params; fops->next != NULL; fops = fops->next);
+            for (fops = newinst->params; fops->next != NULL; fops = fops->next) ;
 	    fops->next = newops;
 	 }
       }
@@ -2325,7 +2325,7 @@ void readparams(objectptr localdata, objinstptr newinst, objectptr libobj,
 	 if (libobj->params == NULL)
 	    libobj->params = newops;
 	 else {
-	    for (fops = libobj->params; fops->next != NULL; fops = fops->next);
+            for (fops = libobj->params; fops->next != NULL; fops = fops->next) ;
 	    fops->next = newops;
 	 }
       }
@@ -2880,7 +2880,7 @@ char *continueline(char **buffer)
    char *lineptr;
    int bufsize;
 
-   for (lineptr = *buffer; (*lineptr != '\n') && (*lineptr != '\0'); lineptr++);
+   for (lineptr = *buffer; (*lineptr != '\n') && (*lineptr != '\0'); lineptr++) ;
    if (*lineptr == '\n') *lineptr++ = ' ';
 
    bufsize = (int)(lineptr - (*buffer)) + 256;
@@ -3031,7 +3031,7 @@ void readimagedata(FILE *ps, int width, int height)
 
    fgets(temp, 149, ps);	/* definition line */
    fgets(temp, 149, ps);	/* pick up name of image from here */
-   for (pptr = temp; !isspace(*pptr); pptr++);
+   for (pptr = temp; !isspace(*pptr); pptr++) ;
    *pptr = '\0';
    iptr->filename = strdup(temp + 1);
    for (x = 0; x < 5; x++) fgets(temp, 149, ps);  /* skip image dictionary */
@@ -3077,10 +3077,10 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
       temp = buffer;
 
       /* because PostScript is a stack language, we will scan from the end */
-      for (lineptr = buffer; (*lineptr != '\n') && (*lineptr != '\0'); lineptr++);
+      for (lineptr = buffer; (*lineptr != '\n') && (*lineptr != '\0'); lineptr++) ;
       if (lineptr != buffer) {  /* ignore any blank lines */
-         for (keyptr = lineptr - 1; isspace(*keyptr) && keyptr != buffer; keyptr--);
-         for (; !isspace(*keyptr) && keyptr != buffer; keyptr--);
+         for (keyptr = lineptr - 1; isspace(*keyptr) && keyptr != buffer; keyptr--) ;
+         for (; !isspace(*keyptr) && keyptr != buffer; keyptr--) ;
          sscanf(keyptr, "%79s", keyword);
 
          if (!strcmp(keyword, "showpage")) {
@@ -3528,11 +3528,11 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	    else {
 	       /* backward compatibility */
 	       if (version < 1.5) {
-	          for (--keyptr; *keyptr == ' '; keyptr--);
-	          for (; *keyptr != ' '; keyptr--);
+                  for (--keyptr; *keyptr == ' '; keyptr--) ;
+                  for (; *keyptr != ' '; keyptr--) ;
 	          sscanf(keyptr, "%hd", &(*newpoly)->style);
-	          for (--keyptr; *keyptr == ' '; keyptr--);
-	          for (; *keyptr != ' '; keyptr--);
+                  for (--keyptr; *keyptr == ' '; keyptr--) ;
+                  for (; *keyptr != ' '; keyptr--) ;
 	          sscanf(keyptr, "%f", &(*newpoly)->width);
 	       }
                for (--keyptr; *keyptr == ' '; keyptr--) ;
@@ -3715,16 +3715,16 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	    /* scan backwards to get the number of substrings */
 	    lineptr = keyptr - 1;
 	    for (i = 0; i < ((version < 2.25) ? 5 : 6); i++) {
-	       for (; *lineptr == ' '; lineptr--);
-	       for (; *lineptr != ' '; lineptr--);
+               for (; *lineptr == ' '; lineptr--) ;
+               for (; *lineptr != ' '; lineptr--) ;
 	    }
 	    if ((strchr(lineptr, '.') != NULL) && (version < 2.25)) {
 	       Fprintf(stderr, "Error:  File version claims to be %2.1f,"
 			" but has version %2.1f labels\n", version, PROG_VERSION);
 	       Fprintf(stderr, "Attempting to resolve problem by updating version.\n");
 	       version = PROG_VERSION;
-	       for (; *lineptr == ' '; lineptr--);
-	       for (; *lineptr != ' '; lineptr--);
+               for (; *lineptr == ' '; lineptr--) ;
+               for (; *lineptr != ' '; lineptr--) ;
 	    }
 	    /* no. segments is ignored---may be a derived quantity, anyway */
 	    if (version < 2.25) {
@@ -3811,7 +3811,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 
 	 else if (!strcmp(keyword, "is_schematic")) {
 	    char tempstr[50];
-	    for (lineptr = buffer; *lineptr == ' '; lineptr++);
+            for (lineptr = buffer; *lineptr == ' '; lineptr++) ;
             parse_ps_string(++lineptr, tempstr, 49, false, false);
 	    checksym(localdata, tempstr);
 	 }
@@ -3819,7 +3819,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
          /* read bounding box (font files only)	*/
 
          else if (!strcmp(keyword, "bbox")) {
-	    for (lineptr = buffer; *lineptr == ' '; lineptr++);
+            for (lineptr = buffer; *lineptr == ' '; lineptr++) ;
             if (*lineptr != '%') {
 	       Wprintf("Illegal bbox.");
 	       free(buffer);
@@ -3843,7 +3843,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 
 	    /* Read backwards from keyword to find name of object instanced. */
 	    for (lineptr = keyptr; *lineptr != '/' && lineptr > buffer;
-			lineptr--);
+                        lineptr--) ;
             parse_ps_string(++lineptr, keyword, 79, false, false);
 	    new_library_instance(mode - LIBRARY, keyword, buffer, defaulttech);
 	 }
@@ -3854,7 +3854,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	    objlistptr redef;
 	    objectptr *newobject;
 
-	    for (lineptr = buffer; *lineptr == ' '; lineptr++);
+            for (lineptr = buffer; *lineptr == ' '; lineptr++) ;
 	    if (*lineptr++ != '/') {
 	       /* This may be part of a label. . . treat as a continuation line */
 	       temp = continueline(&buffer);
@@ -3886,7 +3886,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	 else if (!strcmp(keyword, "loadfontencoding")) {
 	    /* Deprecated, but retained for backward compatibility. */
 	    /* Load from script, .xcircuitrc, or command line instead. */
-	    for (lineptr = buffer; *lineptr != '%'; lineptr++);
+            for (lineptr = buffer; *lineptr != '%'; lineptr++) ;
 	    sscanf (lineptr + 1, "%149s", _STR);
 	    if (*(lineptr + 1) != '%') loadfontfile(_STR);
 	 }
@@ -3895,12 +3895,12 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	    /* Load from script, .xcircuitrc, or command line instead. */
 	    int ilib, tlib;
 
-	    for (lineptr = buffer; *lineptr != '%'; lineptr++);
+            for (lineptr = buffer; *lineptr != '%'; lineptr++) ;
             char str[150];
             sscanf (++lineptr, "%149s", str);
 	    while (isspace(*lineptr)) lineptr++;
-	    while (!isspace(*++lineptr));
-	    while (isspace(*++lineptr));
+            while (!isspace(*++lineptr)) ;
+            while (isspace(*++lineptr)) ;
 	    if (sscanf (lineptr, "%d", &ilib) > 0) {
 	       while ((ilib - 2 + LIBRARY) > xobjs.numlibs) {
 		  tlib = createlibrary(false);
@@ -3915,8 +3915,8 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	 }
 	 else if (!strcmp(keyword, "beginparm")) { /* parameterized object */
 	    short tmpnum, i;
-	    for (--keyptr; *keyptr == ' '; keyptr--);
-	    for (; isdigit(*keyptr) && (keyptr >= buffer); keyptr--);
+            for (--keyptr; *keyptr == ' '; keyptr--) ;
+            for (; isdigit(*keyptr) && (keyptr >= buffer); keyptr--) ;
 	    sscanf(keyptr, "%hd", &tmpnum);
 	    lineptr = buffer;
 	    while (isspace(*lineptr)) lineptr++;
@@ -3997,7 +3997,7 @@ bool objectread(FILE *ps, objectptr localdata, short offx, short offy,
 	    /* Return if we have a page boundary	   	   */
 	    /* Read an image if this is an imagedata line.	   */
 
-	    for (tmpptr = buffer; isspace(*tmpptr); tmpptr++);
+            for (tmpptr = buffer; isspace(*tmpptr); tmpptr++) ;
 	    if (*tmpptr == '%') {
 	       if (strstr(buffer, "%%Page:") == tmpptr) {
                   strncpy(retstr, buffer, 150);
@@ -4351,7 +4351,7 @@ void savetechnology(char *technology, char *outname)
    if (strchr(outptr, '.') == NULL) outfile += ".lps";
 
    xc_tilde_expand(outfile);
-   while (xc_variable_expand(outfile));
+   while (xc_variable_expand(outfile)) ;
 
    ps = fopen(outfile.toLocal8Bit(), "w");
    if (ps == NULL) {
@@ -4564,7 +4564,7 @@ void savefile(short mode)
    else outname = fname;
 
    xc_tilde_expand(outname);
-   while(xc_variable_expand(outname));
+   while(xc_variable_expand(outname)) ;
 
    ps = fopen(outname.toLocal8Bit(), "w");
    if (ps == NULL) {

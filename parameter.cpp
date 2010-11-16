@@ -842,7 +842,7 @@ int opsubstitute(objectptr thisobj, objinstptr pinst)
 
    for (labeliter eptr; thisobj->values(eptr); ) {
          for (strptr = eptr->string; strptr != NULL; strptr =
-			nextstringpartrecompute(strptr, pinst));
+                        nextstringpartrecompute(strptr, pinst)) ;
    }
 
    if (thisobj->params == NULL)
@@ -2260,7 +2260,7 @@ void unmakeparam(labelptr thislabel, stringpart *thispart)
    /* the existing string.						*/
 
    for (endpart = newstr; endpart->nextpart->type != PARAM_END;
-	endpart = endpart->nextpart);
+        endpart = endpart->nextpart) ;
    delete endpart->nextpart;
    endpart->nextpart = thispart->nextpart;
 
@@ -2325,7 +2325,7 @@ void unparameterize(int mode)
 		tmpptr = nextstringpart(tmpptr, areawin->topinstance))
 	 if (tmpptr->type == PARAM_START) lastptr = tmpptr;
       /* Finish search, unlinking any parameter we might be inside */
-      for (; tmpptr != NULL; tmpptr = nextstringpart(tmpptr, areawin->topinstance));
+      for (; tmpptr != NULL; tmpptr = nextstringpart(tmpptr, areawin->topinstance)) ;
 
       if (lastptr != NULL) unmakeparam(settext, lastptr);
    }

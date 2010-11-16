@@ -84,7 +84,7 @@ void joinlabels()
       if (SELECTTYPE(jl) == LABEL) {
          dest = SELTOLABEL(jl);
 	 for (endpart = dest->string; endpart->nextpart != NULL; endpart =
-			endpart->nextpart);
+                        endpart->nextpart) ;
 	 break;
       }
    }
@@ -93,7 +93,7 @@ void joinlabels()
       if (SELECTTYPE(jl) == LABEL) {
          source = SELTOLABEL(jl);
 	 endpart->nextpart = source->string;
-	 for (; endpart->nextpart != NULL; endpart = endpart->nextpart);
+         for (; endpart->nextpart != NULL; endpart = endpart->nextpart) ;
          delete source;
 	 removep(jl, 0);
          reviseselect(areawin->selectlist, areawin->selects, jl);
