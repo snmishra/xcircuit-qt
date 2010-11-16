@@ -1447,7 +1447,7 @@ Genericlist *is_resolved(genericptr *rgen, pushlistptr seltop, objectptr *topobj
 /* mode = 1 highlight, mode = 0 erase				*/
 /*--------------------------------------------------------------*/
 
-static bool highlightnet(Context* ctx, const object * cschem, const objinst * cinst, int netid)
+static bool highlightnet(DrawContext* ctx, const object * cschem, const objinst * cinst, int netid)
 {
    CalllistPtr calls;
    PortlistPtr ports;
@@ -1565,7 +1565,7 @@ static bool highlightnet(Context* ctx, const object * cschem, const objinst * ci
 /* if any.								*/
 /*----------------------------------------------------------------------*/
 
-void highlightnetlist(Context* ctx, objectptr nettop, objinstptr cinst)
+void highlightnetlist(DrawContext* ctx, objectptr nettop, objinstptr cinst)
 {
    int lbus, netid;
    buslist *sbus;

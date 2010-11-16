@@ -2,14 +2,17 @@
 #define CONTEXT_H
 
 #include <qglobal.h>
+#include <QVector>
 
 class QPainter;
 class Matrix;
+class UIContext;
 
-class Context
+class DrawContext
 {
 public:
-    Context(QPainter *);
+    DrawContext(QPainter *, const UIContext * ui = NULL);
+    ~DrawContext();
     void setPainter(QPainter *);
     inline QPainter* gc() const { return gc_; }
     inline Matrix* DCTM() const { return matStack; }
@@ -29,8 +32,16 @@ public:
     int gccolor, gctype;
 private:
     QPainter* gc_;
+    const UIContext* ui;
+    bool ownUi;
     Matrix* matStack;
-    Q_DISABLE_COPY(Context)
+    Q_DISABLE_COPY(DrawContext)
+};
+
+class UIContext
+{
+public:
+    QVector<short> selects;
 };
 
 #endif // CONTEXT_H

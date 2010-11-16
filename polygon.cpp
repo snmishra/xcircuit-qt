@@ -44,7 +44,7 @@ generic* polygon::copy() const
     return new polygon(*this);
 }
 
-void polygon::draw(Context* ctx) const
+void polygon::draw(DrawContext* ctx) const
 {
    pointlist tmppoints(points.count());
 
@@ -52,7 +52,7 @@ void polygon::draw(Context* ctx) const
    strokepath(ctx, tmppoints.begin(), tmppoints.count(), style, width);
 }
 
-void polygon::indicate(Context* ctx, eparamptr epp, oparamptr ops) const
+void polygon::indicate(DrawContext* ctx, eparamptr epp, oparamptr ops) const
 {
     int k = epp->pdata.pointno;
     if (k < 0) k = 0;

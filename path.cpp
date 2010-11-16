@@ -36,7 +36,7 @@ generic* path::copy() const
     return new path(*this);
 }
 
-void path::draw(Context* ctx) const
+void path::draw(DrawContext* ctx) const
 {
     pointlist   tmppoints;
     const genericptr	*genpath;
@@ -77,7 +77,7 @@ void path::calc()
     for (genericptr* elem = 0; values(elem); ) (*elem)->calc();
 }
 
-void path::indicate(Context* ctx, eparamptr epp, oparamptr ops) const
+void path::indicate(DrawContext* ctx, eparamptr epp, oparamptr ops) const
 {
     int k = epp->pdata.pathpt[1];
     if (k < 0) k = 0;

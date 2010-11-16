@@ -7,6 +7,8 @@
 /*----------------------------------------------------------------------*/
 
 #include <QString>
+
+class DrawContext;
 class QAction;
 class uselection;
 
@@ -292,11 +294,11 @@ float findsplinemin(splineptr, XPoint *);
 short closepoint(polyptr, XPoint *);
 short closedistance(polyptr, XPoint *);
 void updateinstparam(objectptr);
-short checkbounds(Context*);
+short checkbounds(DrawContext*);
 void window_to_user(short, short, XPoint *);
 void user_to_window(XPoint, XPoint *);
 
-void UDrawBBox(Context*);
+void UDrawBBox(DrawContext*);
 
 XPoint UGetCursor(void);
 XPoint UGetCursorPos(void);
@@ -319,23 +321,23 @@ void calcbboxvalues(objinstptr, genericptr *);
 void centerview(objinstptr);
 void refresh(QAction*, void*, void*);
 void zoomview(QAction*, void*, void*);
-void UDrawSimpleLine(Context*, const XPoint *, const XPoint *);
-void UDrawLine(Context*, const XPoint *, const XPoint *);
-void UDrawCircle(Context*, const XPoint *, u_char);
-void UDrawX(Context*, labelptr);
-void UDrawXDown(Context*, labelptr);
+void UDrawSimpleLine(DrawContext*, const XPoint *, const XPoint *);
+void UDrawLine(DrawContext*, const XPoint *, const XPoint *);
+void UDrawCircle(DrawContext*, const XPoint *, u_char);
+void UDrawX(DrawContext*, labelptr);
+void UDrawXDown(DrawContext*, labelptr);
 int  toplevelwidth(objinstptr, short *);
 int  toplevelheight(objinstptr, short *);
 void extendschembbox(objinstptr, XPoint *, XPoint *);
 void pinadjust(short, short *, short *, short);
-void UDrawTextLine(Context*, labelptr, short);
-void UDrawTLine(Context*, labelptr);
-void UDrawXLine(Context*, XPoint, XPoint);
-void UDrawBox(Context*, XPoint, XPoint);
-float UDrawRescaleBox(Context*, const XPoint &);
-void strokepath(Context*, XPoint *, short, short, float);
-void makesplinepath(Context*, const spline *, XPoint *);
-void UDrawObject(Context*, objinstptr, short, int, pushlistptr *);
+void UDrawTextLine(DrawContext*, labelptr, short);
+void UDrawTLine(DrawContext*, labelptr);
+void UDrawXLine(DrawContext*, XPoint, XPoint);
+void UDrawBox(DrawContext*, XPoint, XPoint);
+float UDrawRescaleBox(DrawContext*, const XPoint &);
+void strokepath(DrawContext*, XPoint *, short, short, float);
+void makesplinepath(DrawContext*, const spline *, XPoint *);
+void UDrawObject(DrawContext*, objinstptr, short, int, pushlistptr *);
 void TopDoLatex(void);
 
 /* from help.c: */
@@ -546,7 +548,7 @@ bool HierNameToObject(objinstptr, char *, pushlistptr *);
 void resolve_devindex(objectptr, bool);
 void copy_bus(Genericlist *, Genericlist *);
 Genericlist *is_resolved(genericptr *, pushlistptr, objectptr *);
-void highlightnetlist(Context*, objectptr, objinstptr);
+void highlightnetlist(DrawContext*, objectptr, objinstptr);
 void remove_highlights(objinstptr);
 int pushnetwork(pushlistptr, objectptr);
 bool match_buses(Genericlist *, Genericlist *, int);
@@ -708,7 +710,7 @@ void register_bg(const QString &);
 void loadbackground(QAction*, const QString&, void*);
 void send_to_gs(const char *);
 int renderbackground(void);
-int copybackground(Context*);
+int copybackground(DrawContext*);
 int exit_gs(void);
 int reset_gs(void);
 
@@ -748,8 +750,8 @@ void enable_selects(objectptr, short *, int);
 void disable_selects(objectptr, short *, int);
 void selectfilter(QAction *, void*, void*);
 bool checkselect(short, bool draw_selected = false);
-void geneasydraw(Context*, short, int, objectptr, objinstptr);
-void gendrawselected(Context*, short *, objectptr, objinstptr);
+void geneasydraw(DrawContext*, short, int, objectptr, objinstptr);
+void gendrawselected(DrawContext*, short *, objectptr, objinstptr);
 selection *genselectelement(short, u_char, objectptr, objinstptr);
 short *allocselect(void);
 void setoptionmenu(void);
@@ -760,7 +762,7 @@ bool selectarea(objectptr, short);
 void startdesel(QAction*, void*, void*);
 void deselect(Widget, caddr_t, caddr_t);
 void freeselects(void);
-void draw_all_selected(Context*);
+void draw_all_selected(DrawContext*);
 void clearselects_noundo(void);
 void clearselects(void);
 void unselect_all(void);
@@ -816,8 +818,8 @@ bool pin_is_bus(labelptr, objinstptr);
 int find_cardinal(int, labelptr, objinstptr);
 int find_ordinal(int, labelptr, objinstptr);
 
-short UDrawChar(Context*, u_char, short, short, int, int);
-void UDrawString(Context*, labelptr, int, objinstptr, bool drawX = true);
+short UDrawChar(DrawContext*, u_char, short, short, int, int);
+void UDrawString(DrawContext*, labelptr, int, objinstptr, bool drawX = true);
 TextExtents ULength(const label *, objinstptr, short, XPoint *);
 void composefontlib(short);
 void fontcat_op(int, int, int);

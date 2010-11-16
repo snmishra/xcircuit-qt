@@ -95,7 +95,7 @@ void label::doGetBbox(XPoint * npoints, float scale, int, objinstptr callinst) c
                  scale, rotation);
 }
 
-void label::indicate(Context* ctx, eparamptr, oparamptr ops) const
+void label::indicate(DrawContext* ctx, eparamptr, oparamptr ops) const
 {
     UDrawCircle(ctx, &position, ops->which);
 }

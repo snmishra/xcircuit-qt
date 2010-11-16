@@ -25,7 +25,7 @@
 #include "colors.h"
 #include "context.h"
 
-static void SVGDrawString(Context*, labelptr, int, objinstptr);
+static void SVGDrawString(DrawContext*, labelptr, int, objinstptr);
 
 /*----------------------------------------------------------------------*/
 /* External Variable definitions					*/
@@ -92,7 +92,7 @@ static void svg_blendcolor(int passcolor, const char *prefix, int amount)
 /* Fill and/or draw a border around an element				*/
 /*----------------------------------------------------------------------*/
 
-static void svg_stroke(Context* ctx, int passcolor, short style, float width)
+static void svg_stroke(DrawContext* ctx, int passcolor, short style, float width)
 {
    float        tmpwidth;
    short	minwidth, solidpart, shade;
@@ -157,7 +157,7 @@ static void svg_stroke(Context* ctx, int passcolor, short style, float width)
 /* Finish a path and fill and/or stroke					*/
 /*----------------------------------------------------------------------*/
 
-static void svg_strokepath(Context* ctx, int passcolor, short style, float width)
+static void svg_strokepath(DrawContext* ctx, int passcolor, short style, float width)
 {
    /* Finish the path, closing if necessary */
    if (!(style & UNCLOSED))
@@ -224,7 +224,7 @@ void SVGCreateImages(int page)
 
 /*-------------------------------------------------------------------------*/
 
-static void SVGDrawGraphic(Context* ctx, graphicptr gp)
+static void SVGDrawGraphic(DrawContext* ctx, graphicptr gp)
 {
     XPoint ppt, corner;
     Imagedata *img;
@@ -267,7 +267,7 @@ static void SVGDrawGraphic(Context* ctx, graphicptr gp)
 
 /*-------------------------------------------------------------------------*/
 
-static void SVGDrawSpline(Context* ctx, splineptr thespline, int passcolor)
+static void SVGDrawSpline(DrawContext* ctx, splineptr thespline, int passcolor)
 {
    XPoint       tmppoints[4];
 
@@ -283,7 +283,7 @@ static void SVGDrawSpline(Context* ctx, splineptr thespline, int passcolor)
 
 /*-------------------------------------------------------------------------*/
 
-static void SVGDrawPolygon(Context* ctx, polyptr thepoly, int passcolor)
+static void SVGDrawPolygon(DrawContext* ctx, polyptr thepoly, int passcolor)
 {
    int i;
    pointlist tmppoints(thepoly->points.count());
@@ -302,7 +302,7 @@ static void SVGDrawPolygon(Context* ctx, polyptr thepoly, int passcolor)
 
 /*-------------------------------------------------------------------------*/
 
-static void SVGDrawArc(Context* ctx, arcptr thearc, int passcolor)
+static void SVGDrawArc(DrawContext* ctx, arcptr thearc, int passcolor)
 {
    XPoint  endpoints[2];
    int	   radius[2];
@@ -335,7 +335,7 @@ static void SVGDrawArc(Context* ctx, arcptr thearc, int passcolor)
 
 /*-------------------------------------------------------------------------*/
 
-static void SVGDrawPath(Context* ctx, pathptr thepath, int passcolor)
+static void SVGDrawPath(DrawContext* ctx, pathptr thepath, int passcolor)
 {
    pointlist	tmppoints;
    genericptr	*genpath;
@@ -386,7 +386,7 @@ static void SVGDrawPath(Context* ctx, pathptr thepath, int passcolor)
 /*    passcolor is the inherited color value passed to object		*/
 /*----------------------------------------------------------------------*/
 
-static void SVGDrawObject(Context* ctx, objinstptr theinstance, short level, int passcolor, pushlistptr *stack)
+static void SVGDrawObject(DrawContext* ctx, objinstptr theinstance, short level, int passcolor, pushlistptr *stack)
 {
    genericptr	*areagen;
    float	tmpwidth;
@@ -493,7 +493,7 @@ static void addlinepoint(QVector<XPoint>& points, int x, int y)
 /* Draw an entire string, including parameter substitutions		*/
 /*----------------------------------------------------------------------*/
 
-static void SVGDrawString(Context* ctx, labelptr drawlabel, int passcolor, objinstptr localinst)
+static void SVGDrawString(DrawContext* ctx, labelptr drawlabel, int passcolor, objinstptr localinst)
 {
    stringpart *strptr;
    char *textptr;
@@ -938,7 +938,7 @@ static void SVGDrawString(Context* ctx, labelptr drawlabel, int passcolor, objin
 
 #define PMARGIN	6		/* Pixel margin around drawing */
 
-static void OutputSVG(Context* ctx, char *filename, bool fullscale)
+static void OutputSVG(DrawContext* ctx, char *filename, bool fullscale)
 {
    short	savesel;
    objinstptr	pinst;

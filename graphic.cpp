@@ -88,7 +88,7 @@ short *collect_graphics(short *pagelist)
 /* Otherwise, return true.						*/
 /*----------------------------------------------------------------------*/
 
-bool graphic::transform(Context* ctx) const
+bool graphic::transform(DrawContext* ctx) const
 {
     const graphic * const gp = this;
     int width, height, twidth, theight, rotation;
@@ -188,7 +188,7 @@ void graphic::doGetBbox(XPoint * npoints, float scale, int, objinst *) const
 /* Image is centered on the center point of the graphic image.		*/
 /*----------------------------------------------------------------------*/
 
-void graphic::draw(Context* ctx) const
+void graphic::draw(DrawContext* ctx) const
 {
     XPoint ppt;
 
@@ -206,7 +206,7 @@ void graphic::draw(Context* ctx) const
     ctx->gc()->drawImage(ppt.x, ppt.y, *target);
 }
 
-void graphic::indicate(Context* ctx, eparamptr, oparamptr ops) const
+void graphic::indicate(DrawContext* ctx, eparamptr, oparamptr ops) const
 {
     UDrawCircle(ctx, &position, ops->which);
 }

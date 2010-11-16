@@ -1306,7 +1306,7 @@ stringpart *stringcopyback(stringpart *string, objinstptr thisinst)
 /* draw a single character at 0, 0 using current transformation matrix */
 /*---------------------------------------------------------------------*/
 
-short UDrawChar(Context* ctx, u_char code, short styles, short ffont, int groupheight, int passcolor)
+short UDrawChar(DrawContext* ctx, u_char code, short styles, short ffont, int groupheight, int passcolor)
 {
    objectptr drawchar;
    XPoint alphapts[2];
@@ -1356,7 +1356,7 @@ short UDrawChar(Context* ctx, u_char code, short styles, short ffont, int grouph
 /* (Normally called as UDrawString(); see below)			*/
 /*----------------------------------------------------------------------*/
 
-void UDrawString(Context* ctx, labelptr drawlabel, int passcolor, objinstptr localinst, bool drawX)
+void UDrawString(DrawContext* ctx, labelptr drawlabel, int passcolor, objinstptr localinst, bool drawX)
 {
    stringpart *strptr;
    char *textptr;

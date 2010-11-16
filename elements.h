@@ -145,7 +145,7 @@ enum Type {
 /* Generic element type	is a superset of all elements.			*/
 /*----------------------------------------------------------------------*/
 
-class Context;
+class DrawContext;
 class objinst;
 class generic {
 public:
@@ -153,10 +153,10 @@ public:
     int		color;
     eparamptr	passed;
     virtual ~generic();
-    void indicateparams(Context*);
+    void indicateparams(DrawContext*);
     virtual generic* copy() const = 0;
-    virtual void draw(Context*) const {}
-    virtual void indicate(Context*, eparamptr, oparamptr) const {}
+    virtual void draw(DrawContext*) const {}
+    virtual void indicate(DrawContext*, eparamptr, oparamptr) const {}
     void getBbox(XPoint* pts, float scale = 0.0) const;
     void getBbox(XPoint* pts, int extend, float scale = 0.0) const;
     void getBbox(XPoint* pts, objinst* callinst, float scale = 0.0) const;
@@ -297,11 +297,11 @@ public:
     ~graphic();
     graphic & operator=(const graphic &);
     generic* copy() const;
-    void draw(Context*) const;
-    void indicate(Context*, eparamptr, oparamptr) const;
+    void draw(DrawContext*) const;
+    void indicate(DrawContext*, eparamptr, oparamptr) const;
 protected:
     void doGetBbox(XPoint*, float scale, int extend, objinst* callinst) const;
-    bool transform(Context*) const;
+    bool transform(DrawContext*) const;
     static inline Type deftype() { return GRAPHIC; }
 };
 typedef graphic *graphicptr;
@@ -327,7 +327,7 @@ public:
     objinst & operator=(const objinst &);
 
     generic* copy() const;
-    void indicate(Context*, eparamptr, oparamptr) const;
+    void indicate(DrawContext*, eparamptr, oparamptr) const;
     static inline Type deftype() { return OBJINST; }
     bool operator==(const objinst &) const;
 protected:
@@ -354,7 +354,7 @@ public:
     ~label();
     label & operator=(const label &);
     generic* copy() const;
-    void indicate(Context*, eparamptr, oparamptr) const;
+    void indicate(DrawContext*, eparamptr, oparamptr) const;
     static inline Type deftype() { return LABEL; }
     bool operator==(const label &) const;
 protected:
@@ -380,8 +380,8 @@ public:
     polygon(int number, int x, int y);
     polygon & operator=(const polygon &);
     generic* copy() const;
-    void draw(Context*) const;
-    void indicate(Context*, eparamptr, oparamptr) const;
+    void draw(DrawContext*) const;
+    void indicate(DrawContext*, eparamptr, oparamptr) const;
     void reverse();
     static inline Type deftype() { return POLYGON; }
     bool operator==(const polygon &) const;
@@ -415,9 +415,9 @@ public:
     spline(int x, int y);
     spline & operator=(const spline &);
     generic* copy() const;
-    void draw(Context*) const;
+    void draw(DrawContext*) const;
     void calc();
-    void indicate(Context*, eparamptr, oparamptr) const;
+    void indicate(DrawContext*, eparamptr, oparamptr) const;
     void reverse();
     static inline Type deftype() { return SPLINE; }
     bool operator==(const spline &) const;
@@ -452,9 +452,9 @@ public:
     arc(int x, int y);
     arc & operator=(const arc &);
     generic* copy() const;
-    void draw(Context*) const;
+    void draw(DrawContext*) const;
     void calc();
-    void indicate(Context*, eparamptr, oparamptr) const;
+    void indicate(DrawContext*, eparamptr, oparamptr) const;
     void reverse();
     static inline Type deftype() { return ARC; }
     bool operator==(const arc &) const;
@@ -477,9 +477,9 @@ public:
     //path(const path&);
     //path & operator=(const path &);
     generic* copy() const;
-    void draw(Context*) const;
+    void draw(DrawContext*) const;
     void calc();
-    void indicate(Context*, eparamptr, oparamptr) const;
+    void indicate(DrawContext*, eparamptr, oparamptr) const;
     static inline Type deftype() { return PATH; }
     bool operator==(const path &) const;
 protected:

@@ -49,7 +49,7 @@ void Area::paintEvent(QPaintEvent*)
     p.setRenderHint(QPainter::Antialiasing, areawin->antialias);
     float x, y, spc, spc2, i, j, fpart;
     XPoint originpt;
-    Context c(&p);
+    DrawContext c(&p);
     areawin->markUpdated();
 
     if (xobjs.pagelist[areawin->page].background.name != (char *)NULL)
@@ -346,7 +346,7 @@ void Area::zoom(const QPoint & center, float scale)
     if (false) qDebug("zoom dx=%d dy=%d", ncenter.x-ucenter.x, ncenter.y-ucenter.y);
 
     // check for out of bounds and for overflow
-    Context ctx(NULL);
+    DrawContext ctx(NULL);
     if (checkbounds(&ctx) == -1 || newll.x != areawin->pcorner.x || newll.y != areawin->pcorner.y) {
         areawin->pcorner.x = savell.x;
         areawin->pcorner.y = savell.y;

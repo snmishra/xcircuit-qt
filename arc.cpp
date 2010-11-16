@@ -55,7 +55,7 @@ generic* arc::copy() const
     return new arc(*this);
 }
 
-void arc::draw(Context* ctx) const
+void arc::draw(DrawContext* ctx) const
 {
    XPoint  tmppoints[RSTEPS + 2];
 
@@ -97,7 +97,7 @@ void arc::calc()
     if (radius < 0) reversefpoints(points, number);
 }
 
-void arc::indicate(Context* ctx, eparamptr, oparamptr ops) const
+void arc::indicate(DrawContext* ctx, eparamptr, oparamptr ops) const
 {
     UDrawCircle(ctx, &position, ops->which);
 }

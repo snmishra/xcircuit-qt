@@ -537,7 +537,7 @@ void zoominbox(int x, int y)
 
    /* check for minimum scale */
 
-   Context ctx(NULL);
+   DrawContext ctx(NULL);
    if (checkbounds(&ctx) == -1) {
       areawin->pcorner = savell;
       areawin->vscale = savescale;
@@ -545,7 +545,7 @@ void zoominbox(int x, int y)
 
       /* this is a rare case where an object gets out-of-bounds */
 
-      Context ctx(NULL);
+      DrawContext ctx(NULL);
       if (checkbounds(&ctx) == -1) {
          if (beeper) XBell(100);
 	 Wprintf("Unable to scale: Delete out-of-bounds object!");
@@ -626,7 +626,7 @@ void zoomoutbox(int x, int y)
    eventmode = NORMAL_MODE;
    areawin->pcorner = newll;
 
-   Context ctx(NULL);
+   DrawContext ctx(NULL);
    if ((newll.x << 1) != (long)(areawin->pcorner.x << 1) || (newll.y << 1)
          != (long)(areawin->pcorner.y << 1) || checkbounds(&ctx) == -1) {
       areawin->vscale = savescale; 
@@ -725,7 +725,7 @@ void panbutton(u_int ptype, int x, int y, float value)
    areawin->pcorner.x = (short) newllx;
    areawin->pcorner.y = (short) newlly;
 
-   Context ctx(NULL);
+   DrawContext ctx(NULL);
    if ((newllx << 1) != (long)(areawin->pcorner.x << 1) || (newlly << 1)
            != (long)(areawin->pcorner.y << 1) || checkbounds(&ctx) == -1) {
       areawin->pcorner = savell;

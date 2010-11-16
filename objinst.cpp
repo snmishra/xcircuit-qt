@@ -128,7 +128,7 @@ void objinst::doGetBbox(XPoint * npoints, float scale, int extend, objinst *) co
 /*    passcolor is the inherited color value passed to object		*/
 /*----------------------------------------------------------------------*/
 
-void UDrawObject(Context* ctx, objinstptr theinstance, short level, int passcolor, pushlistptr *stack)
+void UDrawObject(DrawContext* ctx, objinstptr theinstance, short level, int passcolor, pushlistptr *stack)
 {
    genericptr	*areagen;
    float	tmpwidth;
@@ -249,7 +249,7 @@ void UDrawObject(Context* ctx, objinstptr theinstance, short level, int passcolo
    if (stack) pop_stack(stack);
 }
 
-void objinst::indicate(Context* ctx, eparamptr, oparamptr ops) const
+void objinst::indicate(DrawContext* ctx, eparamptr, oparamptr ops) const
 {
     UDrawCircle(ctx, &position, ops->which);
 }

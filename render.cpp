@@ -596,7 +596,7 @@ int renderbackground()
 /* Copy the rendered background pixmap to the window.	*/
 /*------------------------------------------------------*/
 
-int copybackground(Context* ctx)
+int copybackground(DrawContext* ctx)
 {
    /* Don't copy if the buffer is not ready to use */
    if (gs_state != GS_READY)

@@ -142,7 +142,7 @@ void reviseselect(short *slist, int selects, short *removed)
 /* Draw a selected item */
 /*----------------------*/
 
-void geneasydraw(Context* ctx, short instance, int mode, objectptr curobj, objinstptr curinst)
+void geneasydraw(DrawContext* ctx, short instance, int mode, objectptr curobj, objinstptr curinst)
 {
    genericptr elementptr = curobj->at(instance);
 
@@ -167,7 +167,7 @@ void geneasydraw(Context* ctx, short instance, int mode, objectptr curobj, objin
 /* Draw a selected item, including selection color */
 /*-------------------------------------------------*/
 
-void gendrawselected(Context* ctx, short *newselect, objectptr curobj, objinstptr curinst)
+void gendrawselected(DrawContext* ctx, short *newselect, objectptr curobj, objinstptr curinst)
 {
    /* Don't draw selection color when selecting for edit */
    if (eventmode == PENDING_MODE) return;
@@ -1083,7 +1083,7 @@ void startdesel(QAction*, void*, void*)
 /* Redraw all the selected objects in the select color.	*/
 /*------------------------------------------------------*/
 
-void draw_all_selected(Context* ctx)
+void draw_all_selected(DrawContext* ctx)
 {
    int j;
 

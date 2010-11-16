@@ -36,7 +36,7 @@ generic & generic::operator=(const generic & src)
 /* Draw a circle at all parameter positions	*/
 /*----------------------------------------------*/
 
-void generic::indicateparams(Context* ctx)
+void generic::indicateparams(DrawContext* ctx)
 {
     oparamptr ops;
     eparamptr epp;

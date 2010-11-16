@@ -4,26 +4,34 @@
 #include "xcircuit.h"
 #include "prototypes.h"
 
-Context::Context(QPainter * gc) :
+DrawContext::DrawContext(QPainter * gc, const UIContext * uic) :
         gccolor(0),
         gctype(0),
         gc_(gc),
+        ui(uic),
+        ownUi(uic == NULL),
         matStack(new Matrix)
 {
+    if (ownUi) ui = new UIContext;
     DCTM()->makeWCTM();
 }
 
-void Context::setPainter(QPainter * gc)
+DrawContext::~DrawContext()
+{
+    if (ownUi) delete ui;
+}
+
+void DrawContext::setPainter(QPainter * gc)
 {
     gc_ = gc;
 }
 
-void Context::UPopCTM()
+void DrawContext::UPopCTM()
 {
     Matrix::pop(matStack);
 }
 
-void Context::UPushCTM()
+void DrawContext::UPushCTM()
 {
     Matrix::push(matStack);
 }
@@ -32,7 +40,7 @@ void Context::UPushCTM()
 /* Return scale relative to window					*/
 /*----------------------------------------------------------------------*/
 
-float Context::UTopScale() const
+float DrawContext::UTopScale() const
 {
    return DCTM()->getScale();
 }
@@ -41,7 +49,7 @@ float Context::UTopScale() const
 /* Return scale relative to the top-level schematic (not the window)	*/
 /*----------------------------------------------------------------------*/
 
-float Context::UTopDrawingScale() const
+float DrawContext::UTopDrawingScale() const
 {
    Matrix lctm(*DCTM()), wctm;
 
@@ -58,7 +66,7 @@ float Context::UTopDrawingScale() const
 /* window.  Thus, there is no routine UTopDrawingRotation().		*/
 /*----------------------------------------------------------------------*/
 
-int Context::UTopRotation() const
+int DrawContext::UTopRotation() const
 {
    return DCTM()->getRotation();
 }
@@ -67,7 +75,7 @@ int Context::UTopRotation() const
 /* Return scale multiplied by length					*/
 /*----------------------------------------------------------------------*/
 
-float Context::UTopTransScale(float length) const
+float DrawContext::UTopTransScale(float length) const
 {
    return length * UTopScale();
 }
@@ -76,7 +84,7 @@ float Context::UTopTransScale(float length) const
 /* Return position offset relative to top-level				*/
 /*----------------------------------------------------------------------*/
 
-void Context::UTopOffset(int *offx, int *offy) const
+void DrawContext::UTopOffset(int *offx, int *offy) const
 {
    DCTM()->getOffset(offx, offy);
 }
@@ -85,7 +93,7 @@ void Context::UTopOffset(int *offx, int *offy) const
 /* Return postion relative to the top-level schematic (not the window)	*/
 /*----------------------------------------------------------------------*/
 
-void Context::UTopDrawingOffset(int *offx, int *offy) const
+void DrawContext::UTopDrawingOffset(int *offx, int *offy) const
 {
    Matrix lctm(*DCTM()), wctm;
    wctm.makeWCTM();
@@ -98,7 +106,7 @@ void Context::UTopDrawingOffset(int *offx, int *offy) const
 /* Adjust justification and CTM as necessary for flip invariance	*/
 /*----------------------------------------------------------------------*/
 
-short Context::flipadjust(short justify)
+short DrawContext::flipadjust(short justify)
 {
    Matrix* const CTM = DCTM();
    short tmpjust = justify & (~FLIPINV);

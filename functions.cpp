@@ -248,7 +248,7 @@ short closedistance(polyptr curpoly, XPoint *cursloc)
 /*  bounds exceed type short when mapped to X11 window space, return error.	*/ 
 /*------------------------------------------------------------------------------*/
 
-short checkbounds(Context* ctx)
+short checkbounds(DrawContext* ctx)
 {
    XPoint testpt;
    long lval;
@@ -957,7 +957,7 @@ void zoomview(QAction*, void*, void*)
 /* Basic X Graphics Routines in the User coordinate system */
 /*---------------------------------------------------------*/
 
-void UDrawSimpleLine(Context* ctx, const XPoint *pt1, const XPoint *pt2)
+void UDrawSimpleLine(DrawContext* ctx, const XPoint *pt1, const XPoint *pt2)
 {
    XPoint newpt1, newpt2;
 
@@ -969,7 +969,7 @@ void UDrawSimpleLine(Context* ctx, const XPoint *pt1, const XPoint *pt2)
 
 /*-------------------------------------------------------------------------*/
 
-void UDrawLine(Context* ctx, const XPoint *pt1, const XPoint *pt2)
+void UDrawLine(DrawContext* ctx, const XPoint *pt1, const XPoint *pt2)
 {
    float tmpwidth = ctx->UTopTransScale(xobjs.pagelist[areawin->page].wirewidth);
 
@@ -991,7 +991,7 @@ void UDrawLine(Context* ctx, const XPoint *pt1, const XPoint *pt2)
 /* negative = clockwise)).						*/
 /*----------------------------------------------------------------------*/
 
-void UDrawCircle(Context* ctx, const XPoint * upt, u_char which)
+void UDrawCircle(DrawContext* ctx, const XPoint * upt, u_char which)
 {
    XPoint wpt;
 
@@ -1022,7 +1022,7 @@ void UDrawCircle(Context* ctx, const XPoint * upt, u_char which)
 /* Add "X" at string origin						*/
 /*----------------------------------------------------------------------*/
 
-static void UDrawXAt(Context* ctx, XPoint *wpt)
+static void UDrawXAt(DrawContext* ctx, XPoint *wpt)
 {
    SetThinLineAttributes(ctx->gc(), 0, LineSolid, CapButt, JoinMiter);
    ctx->gc()->drawLine(wpt->x - 3,
@@ -1035,7 +1035,7 @@ static void UDrawXAt(Context* ctx, XPoint *wpt)
 /* Draw "X" on current level						*/
 /*----------------------------------------------------------------------*/
 
-void UDrawX(Context* ctx, labelptr curlabel)
+void UDrawX(DrawContext* ctx, labelptr curlabel)
 {
    XPoint wpt;
 
@@ -1047,7 +1047,7 @@ void UDrawX(Context* ctx, labelptr curlabel)
 /* Draw "X" on top level (only for LOCAL and GLOBAL pin labels)		*/
 /*----------------------------------------------------------------------*/
 
-void UDrawXDown(Context* ctx, labelptr curlabel)
+void UDrawXDown(DrawContext* ctx, labelptr curlabel)
 {
    XPoint wpt;
 
@@ -1152,7 +1152,7 @@ void pinadjust (short justify, short *xpoint, short *ypoint, short dir)
 /*   tpos (2nd parameter)						*/
 /*----------------------------------------------------------------------*/
 
-void UDrawTextLine(Context* ctx, labelptr curlabel, short tpos)
+void UDrawTextLine(DrawContext* ctx, labelptr curlabel, short tpos)
 {
    XPoint  points[2]; /* top and bottom of text cursor line */
    short   xdist, xbase, tmpjust;
@@ -1198,7 +1198,7 @@ void UDrawTextLine(Context* ctx, labelptr curlabel, short tpos)
 /* Draw lines for editing text when multiple characters are chosen */
 /*-----------------------------------------------------------------*/
 
-void UDrawTLine(Context* ctx, labelptr curlabel)
+void UDrawTLine(DrawContext* ctx, labelptr curlabel)
 {
    UDrawTextLine(ctx, curlabel, areawin->textpos);
    if ((areawin->textend > 0) && (areawin->textend < areawin->textpos)) {
@@ -1210,7 +1210,7 @@ void UDrawTLine(Context* ctx, labelptr curlabel)
 /* Draw an X		*/
 /*----------------------*/
 
-void UDrawXLine(Context* ctx, XPoint opt, XPoint cpt)
+void UDrawXLine(DrawContext* ctx, XPoint opt, XPoint cpt)
 {
    XPoint upt, vpt;
 
@@ -1235,7 +1235,7 @@ void UDrawXLine(Context* ctx, XPoint opt, XPoint cpt)
 
 /*-------------------------------------------------------------------------*/
 
-void UDrawBox(Context* ctx, XPoint origin, XPoint corner)
+void UDrawBox(DrawContext* ctx, XPoint origin, XPoint corner)
 {
    XPoint	worig, wcorn;
 
@@ -1261,7 +1261,7 @@ void UDrawBox(Context* ctx, XPoint origin, XPoint corner)
 /* closely reach the position "corner".					*/
 /*----------------------------------------------------------------------*/
 
-float UDrawRescaleBox(Context* ctx, const XPoint & corner)
+float UDrawRescaleBox(DrawContext* ctx, const XPoint & corner)
 {
    XPoint 	origpoints[5], newpoints[5];
    genericptr	rgen;
@@ -1283,7 +1283,7 @@ float UDrawRescaleBox(Context* ctx, const XPoint & corner)
 }
 
 /*-------------------------------------------------------------------------*/
-void UDrawBBox(Context* ctx)
+void UDrawBBox(DrawContext* ctx)
 {
    XPoint	origin;
    XPoint	worig, wcorn, corner;
@@ -1316,7 +1316,7 @@ void UDrawBBox(Context* ctx)
 /* Fill and/or draw a border around the stroking path			   */
 /*-------------------------------------------------------------------------*/
 
-void strokepath(Context* ctx, XPoint *pathlist, short number, short style, float width)
+void strokepath(DrawContext* ctx, XPoint *pathlist, short number, short style, float width)
 {
    float        tmpwidth;
    short	minwidth;
@@ -1366,7 +1366,7 @@ void strokepath(Context* ctx, XPoint *pathlist, short number, short style, float
 
 /*-------------------------------------------------------------------------*/
 
-void makesplinepath(Context* ctx, const spline * thespline, XPoint *pathlist)
+void makesplinepath(DrawContext* ctx, const spline * thespline, XPoint *pathlist)
 {
    XPoint *tmpptr = pathlist;
 

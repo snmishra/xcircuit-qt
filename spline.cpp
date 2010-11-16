@@ -144,7 +144,7 @@ generic* spline::copy() const
     return new spline(*this);
 }
 
-void spline::draw(Context* ctx) const
+void spline::draw(DrawContext* ctx) const
 {
     XPoint tmppoints[SPLINESEGS];
 
@@ -208,7 +208,7 @@ void spline::calc()
     }
 }
 
-void spline::indicate(Context* ctx, eparamptr epp, oparamptr ops) const
+void spline::indicate(DrawContext* ctx, eparamptr epp, oparamptr ops) const
 {
     int k = epp->pdata.pointno;
     UDrawCircle(ctx, ctrl + k, ops->which);
