@@ -1335,7 +1335,7 @@ void setfontval(QAction* w, void* value, labelptr settext)
    /* Font change command will always find a value since at least one	*/
    /* font has to exist for the font menu button to exist.		*/
 
-   if ((newfont = (int)findbestfont(tc, (int)value, -1, -1)) < 0) return;
+   if ((newfont = (int)findbestfont(tc, (intptr_t)value, -1, -1)) < 0) return;
 
    if (eventmode == TEXT_MODE || eventmode == ETEXT_MODE) {
       Wprintf("Font is now %s", fonts[newfont].psname);
@@ -1532,7 +1532,7 @@ void setfontencoding(QAction* w, void* value, void* settext_)
    }
    else tc = areawin->psfont;
 
-   if ((newfont = (int)findbestfont(tc, -1, -1, (int)value)) < 0) return;
+   if ((newfont = (int)findbestfont(tc, -1, -1, (intptr_t)value)) < 0) return;
 
    if (eventmode == TEXT_MODE || eventmode == ETEXT_MODE) {
       Wprintf("Font is now %s", fonts[newfont].psname);

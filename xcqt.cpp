@@ -234,7 +234,7 @@ bool CallbackFilter::eventFilter(QObject * src, QEvent * event)
             }
         }
         if (match) {
-            if (false) qDebug("  callback on object %x \"%s\" %s", (unsigned int)src, src->objectName().toLocal8Bit().data(), prop.data());
+            if (false) qDebug("  callback on object %p \"%s\" %s", src, src->objectName().toLocal8Bit().data(), prop.data());
             QVariant callbacks = w->property(prop);
             Q_ASSERT(callbacks.isValid());
             foreach (Callback c, callbacks.toList()) {
@@ -284,7 +284,7 @@ static void addEventHandler(Widget w, EventMask event, EventMask &mask, const Ev
     w->setProperty(prop, eventList);
     if (event & PointerMotionMask) {
         w->setMouseTracking(true);
-        if (false) qDebug("widget %x \"%s\" tracks mouse", (unsigned int)w, w->objectName().toLocal8Bit().data());
+        if (false) qDebug("widget %p \"%s\" tracks mouse", w, w->objectName().toLocal8Bit().data());
     }
     mask = mask & ~event;
 }
@@ -311,7 +311,7 @@ static void removeEventHandler(Widget w, EventMask event, EventMask &mask, const
     w->setProperty(prop, eventList);
     if (event & PointerMotionMask) {
         w->setMouseTracking(false);
-        if (false) qDebug("widget %x \"%s\" has stopped tracking mouse", (unsigned int)w, w->objectName().toLocal8Bit().data());
+        if (false) qDebug("widget %p \"%s\" has stopped tracking mouse", w, w->objectName().toLocal8Bit().data());
     }
 }
 
@@ -327,7 +327,7 @@ static bool invokeEventHandler(Widget w, EventMask event, EventMask mask, QEvent
 
     QList<QVariant> eventList = events.toList();
     if (! eventList.isEmpty()) {
-        if (false) qDebug("  event on object %x \"%s\" %x", (int)w, w->objectName().toLocal8Bit().data(), (int)event);
+        if (false) qDebug("  event on object %p \"%s\" %x", w, w->objectName().toLocal8Bit().data(), (int)event);
     }
     for (int i = 0; i < eventList.count(); ++i) {
         EventHandler eh = eventList[i].value<EventHandler>();
@@ -377,7 +377,7 @@ bool EventFilter::eventFilter(QObject * src, QEvent * event)
     QMouseEvent * mev;
     switch (event->type()) {
     case QEvent::MouseMove:
-        if (false) qDebug("mouse move on widget %x \"%s\"", (unsigned int)w, w->objectName().toLocal8Bit().data());
+        if (false) qDebug("mouse move on widget %p \"%s\"", w, w->objectName().toLocal8Bit().data());
         mev = (QMouseEvent*)event;
         if (mev->buttons().testFlag(Qt::LeftButton)) events = events | ButtonMotionMask | Button1MotionMask;
         if (mev->buttons().testFlag(Qt::RightButton)) events = events | ButtonMotionMask | Button2MotionMask;
@@ -873,7 +873,7 @@ static void createMenus (QMenuBar* menubar)
     stack.push(TopButtons);
     while (true) {
         menuptr menu = stack.top().menup;
-        qDebug("menu %x \"%s\"@%x", (int)menu, menu->name, (unsigned int)(menu->name));
+        qDebug("menu %p \"%s\"@%p", menu, menu->name, menu->name);
         if (stack.count() == 1) {
             // check if we're done
             if (menu->name == NULL) break;

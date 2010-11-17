@@ -1015,7 +1015,7 @@ void highlightexcl(QAction* action, int func, int value)
 
 	 default:
             for (toolbarptr titem = ToolBar; titem->name; titem++) {
-               if (func == (int)titem->passeddata) {
+               if (func == (intptr_t)titem->passeddata) {
                   button = toolbar->findChild<QAbstractButton*>(titem->name);
 	          break;
 	       }
@@ -1301,7 +1301,7 @@ void setcolor(QAction* a, void* value_, void*)
     QMenu* colorMenu = qobject_cast<QMenu*>(a->parentWidget());
     int cindex = colorMenu->actions().indexOf(a)-3;
 
-    unsigned int value = (unsigned int)value_;
+    unsigned int value = (uintptr_t)value_;
     short *scolor;
     int cval;
     bool selected = false;
@@ -1470,7 +1470,7 @@ void addtotext(QAction*, void* value, void*)
    if (value == Number(SPECIAL))
       dospecial();
    else
-      labeltext((int)value, (char *)1);
+      labeltext((intptr_t)value, (char *)1);
 }
 
 /*----------------------------------------------------------*/

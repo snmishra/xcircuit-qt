@@ -5535,7 +5535,7 @@ void printOneObject(FILE *ps, objectptr localdata, int ccolor)
                dostcount (ps, &stcount, strlen(_STR));
                fputs(_STR, ps);
             }
-            sprintf(_STR, "polygon\n", TOPOLY(savegen)->points.count());
+            sprintf(_STR, "polygon\n");
             dostcount (ps, &stcount, strlen(_STR));
 	    fputs(_STR, ps);
 	    break;

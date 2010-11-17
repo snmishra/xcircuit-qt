@@ -1579,7 +1579,7 @@ void startcatalog(QAction*, void* libmod_, void*)
 {
    if (xobjs.libtop == NULL) return;	/* No libraries defined */
 
-   unsigned int libmod = (unsigned int)libmod_;
+   unsigned int libmod = (uintptr_t)libmod_;
 
    if ((xobjs.libtop[libmod]->thisobject == NULL) ||
                 (areawin->topinstance == xobjs.libtop[libmod])) return;

@@ -1507,7 +1507,7 @@ const char *getnumericalpkey(u_int mode)
 	"p_bad"
    };
 
-   if (mode < 0 || mode > 13) return param_keys[14];
+   if (mode > 13) return param_keys[14];
    return param_keys[mode];
 }
 

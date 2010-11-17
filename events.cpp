@@ -2006,7 +2006,7 @@ int getkeysignature(XKeyEvent *event)
 /* Handle keyboard inputs */
 /*------------------------*/
 
-void keyhandler(Widget w, caddr_t clientdata, XKeyEvent *event)
+void keyhandler(Widget, caddr_t, XKeyEvent *event)
 {
    int keywstate;	/* KeySym with prepended state information	*/
    int j, func;

@@ -18,7 +18,7 @@ Plist::~Plist()
 {
     QString s;
     if (plist) {
-        for (genericptr* p = begin(); p != end(); ++p) s += QString("%1 ").arg((int)*p,0,16);
+        for (genericptr* p = begin(); p != end(); ++p) s += QString("%1 ").arg((intptr_t)*p,0,16);
     }
     if (false) qDebug("~Plist() %p [plist=%p]: %ls", this, plist, s.utf16());
     free(plist);
