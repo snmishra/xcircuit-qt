@@ -1,0 +1,7 @@
+XCircuit is a schematic capture and drawing program that has (arguably somewhat hidden) productivity-boosting features. The user interface allows quick navigation of the document hierarchy, including in-place editing of library parts. The parameter system lets you save on typing and associated mistakes. The file format is a template-based [PostScript](http://en.wikipedia.org/wiki/PostScript), allowing instant preview.
+
+XCircuit was written in C, originally for Xlib/Xt. More recent features use the embedded [Tcl](http://www.tcl.tk/) interpreter and Tk toolkit for dialogs. This code is rather large due to lack of expressiveness of the language, and low level of toolkits used. This presents a large barrier to entry to potential contributors/maintainers. Any changes require solid understanding of potentially large swatches of interdependent code.
+
+This project aims at doing a complete C++/[Qt](http://qt.nokia.com/) port of XCircuit -- every line is to be understood and refactored. The refactoring aims at utilizing language features (collections, classes with dynamic dispatch, templates, etc) and Qt framework features, as appropriate to hopefully significantly reduce code size, and decouple the modules to lower barrier to entry and potential for subtle bugs.
+
+So far it compiles under Qt, with no dependency on X11, and somewhat works on OS X using native Qt 4.7.
