@@ -190,7 +190,7 @@ void printhelppix()
        vtmp = t1 + t2 + 5;
        if (vtmp > lineheight) lineheight = vtmp;
 
-       bindings = strdup(function_binding_to_string(0, helptext[i].function).toAscii());
+       bindings = strdup(function_binding_to_string(0, helptext[i].function).toLatin1());
 
        /* Limit list to three key bindings per line */
        bptr = bindings;
@@ -242,7 +242,7 @@ void printhelppix()
        }
        XDrawString(helppix, &p, 7, vtmp, helptext[i].text,
 		strlen(helptext[i].text));
-       bindings = strdup(function_binding_to_string(0, helptext[i].function).toAscii());
+       bindings = strdup(function_binding_to_string(0, helptext[i].function).toLatin1());
        bptr = bindings;
        while (bptr != NULL) {
 	  cptr = bptr;

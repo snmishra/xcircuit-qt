@@ -41,7 +41,7 @@ enum { STIPPLES = 8 }; /* Number of predefined stipple patterns		*/
 
 static QPixmap * STIPPLE[STIPPLES*2];  /* Polygon fill-style stipple patterns, first transparent then opaque */
 
-static char STIPDATA[STIPPLES][5] = {
+static u_char STIPDATA[STIPPLES][5] = {
    "\000\004\000\001",
    "\000\005\000\012",
    "\001\012\005\010",
@@ -613,7 +613,7 @@ void XChangeProperty(Window w, Atom prop, Atom type, int format, int mode, const
 
 }
 
-Pixmap CreateBitmapFromData(char *data, unsigned int w, unsigned int h)
+Pixmap CreateBitmapFromData(u_char *data, unsigned int w, unsigned int h)
 {
     return new QBitmap(QBitmap::fromData(QSize(w,h), (const uchar*)data));
 }

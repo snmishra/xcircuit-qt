@@ -10,6 +10,9 @@
 
 #include <cmath>
 
+class object;
+typedef object *objectptr;
+
 #define NO_FREE(type) void free(type)
 
 /*

@@ -1,10 +1,10 @@
-#-------------------------------------------------
+#-*-qmake-*---------------------------------------
 #
 # Project created by QtCreator 2010-09-13T19:03:00
 #
 #-------------------------------------------------
 
-QT += core gui
+QT += core gui widgets
 
 TARGET = xcircuit
 TEMPLATE = app
@@ -13,7 +13,7 @@ macx:ICON = xcircuit.icns
 win:RC_FILE = resources.rc
 
 VERSION=3.7
-REVISION=12
+REVISION=13
 
 isEmpty(PREFIX): PREFIX=/usr/lib/xcircuit-$$VERSION
 

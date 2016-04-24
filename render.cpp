@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #ifdef TCL_WRAPPER 
 #include <tk.h>

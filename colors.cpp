@@ -5,10 +5,10 @@
 #include <QToolBar>
 #include <QToolButton>
 
+#include "xcircuit.h"
 #include "colors.h"
 #include "xcolors.h"
 #include "xcqt.h"
-#include "xcircuit.h"
 #include "prototypes.h"
 #include "menus.h"
 

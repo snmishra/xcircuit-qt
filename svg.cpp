@@ -196,7 +196,7 @@ void SVGCreateImages(int page)
           for (y = 0; y < img->image->height(); y++) {
              for (x = 0; x < img->image->width(); x++) {
                 QRgb pixel = img->image->pixel(x, y);
-                const u_char rgb[3] = { qRed(pixel), qGreen(pixel), qBlue(pixel) };
+                const int rgb[3] = { qRed(pixel), qGreen(pixel), qBlue(pixel) };
                 fwrite(rgb, 3, 1, ppf); // red,green,blue
 	     }
 	  }

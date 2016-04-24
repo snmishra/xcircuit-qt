@@ -398,8 +398,6 @@ typedef struct {
 
 /* Linked polygon list */
 
-struct object;
-typedef object *objectptr;
 
 typedef struct _Polylist *PolylistPtr;
 typedef struct _Polylist

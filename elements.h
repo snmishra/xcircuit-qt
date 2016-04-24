@@ -312,11 +312,11 @@ NO_FREE(graphicptr);
 /* Object instance type							*/
 /*----------------------------------------------------------------------*/
 
-class object;
+// class object;
 
 class objinst : public positionable {
 public:
-    object*	thisobject;
+    objectptr	thisobject;
     oparamptr	params;		/* parameter substitutions for this instance */
     BBox	bbox;		/* per-instance bounding box information */
     BBox	*schembbox;	/* Extra bounding box for pin labels */

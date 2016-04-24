@@ -44,7 +44,7 @@ Widget XtCreatePopupShell(String name, WidgetClass widget_class, Widget parent, 
 void XtPopup(Widget popup_shell, XtGrabKind grab_kind);
 char *XKeysymToString(KeySym keysym);
 void XChangeProperty(Window w, Atom prop, Atom type, int format, int mode, const unsigned char *data, int nelements);
-Pixmap CreateBitmapFromData(char *data, unsigned int w, unsigned int h);
+Pixmap CreateBitmapFromData(u_char *data, unsigned int w, unsigned int h);
 Cursor XCreatePixmapCursor(Pixmap source, Pixmap mask, QRgb, QRgb, unsigned int xhot, unsigned int yhot);
 int XDefineCursor(Window w, Cursor cursor);
 inline unsigned long BlackPixel(int) { return qRgb(0,0,0); }
@@ -56,7 +56,7 @@ inline int DisplayWidth(int) { return QApplication::desktop()->width(); }
 inline int DisplayHeight(int) { return QApplication::desktop()->height(); }
 void DrawArc(QPainter*, int x, int y, unsigned int w, unsigned int h, int a1, int a2);
 void FillPolygon(QPainter*, XPoint *points, int npoints);
-void XClearArea(Window w, int x, int y, unsigned w, unsigned h, bool exposures);
+void XClearArea(Window win, int x, int y, unsigned w, unsigned h, bool exposures);
 void SetForeground(QPainter*, unsigned long foreground);
 void SetFunction(QPainter*, int function);
 int XTextWidth(XFontStruct *font_struct, const char *string, int count);
