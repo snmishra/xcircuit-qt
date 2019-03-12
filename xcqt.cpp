@@ -41,7 +41,7 @@ enum { STIPPLES = 8 }; /* Number of predefined stipple patterns		*/
 
 static QPixmap * STIPPLE[STIPPLES*2];  /* Polygon fill-style stipple patterns, first transparent then opaque */
 
-static char STIPDATA[STIPPLES][5] = {
+static uint8_t STIPDATA[STIPPLES][5] = {
    "\000\004\000\001",
    "\000\005\000\012",
    "\001\012\005\010",
@@ -480,12 +480,12 @@ void FillPolygon(QPainter* gc, XPoint *points, int npoints)
     gc->drawPolygon(qpoints, npoints);
 }
 
-void XClearArea(Window win, int x, int y, unsigned w, unsigned h, bool exposures)
+void XClearArea(Window win, int x, int y, unsigned width, unsigned height, bool exposures)
 {
     Q_UNUSED(exposures);
     QPalette pal;
     QPainter p(win);
-    p.fillRect(x, y, w, h, pal.color(QPalette::Background));
+    p.fillRect(x, y, width, height, pal.color(QPalette::Background));
 }
 
 void SetForeground(QPainter* gc, unsigned long foreground)
@@ -613,7 +613,7 @@ void XChangeProperty(Window w, Atom prop, Atom type, int format, int mode, const
 
 }
 
-Pixmap CreateBitmapFromData(char *data, unsigned int w, unsigned int h)
+Pixmap CreateBitmapFromData(uint8_t *data, unsigned int w, unsigned int h)
 {
     return new QBitmap(QBitmap::fromData(QSize(w,h), (const uchar*)data));
 }

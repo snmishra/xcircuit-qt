@@ -25,6 +25,11 @@
 #include "colors.h"
 #include "context.h"
 
+#ifndef HAVE_VFORK
+#define vfork fork
+#endif
+
+
 static void SVGDrawString(DrawContext*, labelptr, int, objinstptr);
 
 /*----------------------------------------------------------------------*/

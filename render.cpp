@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <cinttypes>
 
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -23,11 +24,15 @@
 #include <tk.h>
 #endif
 
+#include <unistd.h>
+
 #include "context.h"
 #include "colors.h"
 #include "xcircuit.h"
 #include "prototypes.h"
 #include "xcqt.h"
+
+
 
 /*------------------------------------------------------------------------*/
 /* External Variable definitions                                          */
@@ -300,7 +305,7 @@ void start_gs()
 	 putenv(env_str2);
 #else
          setenv("DISPLAY", "0", true);
- 	 sprintf(_STR, "%ld", (long)areawin->viewport);
+ 	 sprintf(_STR, PRIuPTR, (uintptr_t)areawin->viewport);
 	 setenv("GHOSTVIEW", _STR, true);
 #endif
 	 Flush(stderr);

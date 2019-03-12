@@ -50,7 +50,7 @@ typedef unsigned int Cardinal;
 typedef unsigned long EventMask;
 typedef struct {} XComposeStatus;
 typedef struct {} _XtTranslationsRec, *XtTranslations;
-typedef long XtArgVal;
+typedef uintptr_t XtArgVal;
 
 typedef void* XtPointer;
 typedef void* XCrossingEvent;
@@ -132,8 +132,8 @@ public:
     inline const XPoint* operator+(int el) const { return begin()+el; }
     inline XPoint* operator+(int el) { return begin()+el; }
     inline pointlist & operator+=(const XPoint& other) {
-        for (int i = 0; i < count(); ++i) (*this)[i] += other; return *this;
-        return *this;
+      for (int i = 0; i < count(); ++i) (*this)[i] += other; return *this;
+      return *this;
     }
 };
 NO_FREE(pointlist*);

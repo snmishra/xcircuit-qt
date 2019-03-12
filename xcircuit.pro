@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui
+QT += core gui widgets
 
 TARGET = xcircuit
 TEMPLATE = app
@@ -42,6 +42,10 @@ DEFINES += \
     HAVE_LIBZ=1
 #INPUT_FOCUS=1
 
+mingw:INCPATH += ../kdewin/include/mingw ../kdewin/include ../build/kdewin/include ../build/kdewin
+win:INCPATH += ../kdewin/include/msvc ../kdewin/include ../build/kdewin/include ../build/kdewin
+mingw:LIBPATH += ../build/kdewin/bin
+mingw:LIBS += -lkdewin -lz
 unix:LIBS += -lz -lm
 
 SOURCES = \

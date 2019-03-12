@@ -16,13 +16,14 @@
 #include <ctime>
 #include <cctype>
 #include <stdint.h>
-#include <pwd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #ifdef XC_WIN32
 #include <winsock2.h>
 #endif
+#include <pwd.h>
+#include <unistd.h>
 #include <stdint.h>
 
 #ifdef TCL_WRAPPER 
@@ -4170,6 +4171,7 @@ void setfile(Widget button, Widget fnamewidget, caddr_t)
    else {
       Arg wargs[1];
       Widget db, di;
+      char * done = " Done ";
 
       savefile(CURRENT_PAGE); 
 
@@ -4177,7 +4179,7 @@ void setfile(Widget button, Widget fnamewidget, caddr_t)
 
       di = XtParent(button);
       db = XtNameToWidget(di, "Close");
-      XtSetArg(wargs[0], XtNlabel, "  Done  ");
+      XtSetArg(wargs[0], XtNlabel, (uintptr_t) done);
       XtSetValues(db, wargs, 1);
       if (beeper) XBell(100);
    }
